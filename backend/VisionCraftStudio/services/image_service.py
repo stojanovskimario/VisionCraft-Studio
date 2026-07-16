@@ -1,4 +1,4 @@
-from PIL import Image, ImageFilter
+from PIL import Image, ImageFilter, ImageDraw, ImageFont
 
 
 def grayscale(input_path, output_path):
@@ -50,4 +50,28 @@ blur_image(
     "../test_images/photo.jpg",
     "../test_images/photo_blur.jpg",
     10
+)
+
+def add_text(input_path, output_path, text, x, y):
+    image = Image.open(input_path)
+
+    draw = ImageDraw.Draw(image)
+
+    font = ImageFont.load_default()
+
+    draw.text(
+        (x, y),
+        text,
+        fill="white",
+        font=font
+    )
+
+    image.save(output_path)
+
+add_text(
+    "../test_images/photo.jpg",
+    "../test_images/photo_text.jpg",
+    "VisionCraftStudio",
+    50,
+    50
 )

@@ -9,6 +9,8 @@ __pycache__/
 backend/db.sqlite3
 backend/staticfiles/
 backend/media/
+backend/VisionCraftStudio/test_images
+backend/VisionCraftStudio/test_videos
 
 # Environment variables
 .env
