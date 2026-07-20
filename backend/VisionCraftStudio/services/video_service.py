@@ -1,4 +1,5 @@
 from moviepy import VideoFileClip
+from moviepy.video.fx.BlackAndWhite import BlackAndWhite
 
 def trim_video(input_path, output_path, start_time, end_time):
     clip = VideoFileClip(input_path)
@@ -68,4 +69,28 @@ speed_up(
     "../test_videos/sample.mp4",
     "../test_videos/sample_faster.mp4",
     1.2
+)
+
+def grayscale_video(input_path, output_path):
+    clip = VideoFileClip(input_path)
+
+    gray = clip.with_effects([BlackAndWhite()])
+
+    gray.write_videofile(output_path)
+
+grayscale_video(
+    "../test_videos/sample.mp4",
+    "../test_videos/sample_gray.mp4",
+)
+
+def remove_audio(input_path, output_path):
+    clip = VideoFileClip(input_path)
+
+    muted = clip.without_audio()
+
+    muted.write_videofile(output_path)
+
+remove_audio(
+    "../test_videos/sample.mp4",
+    "../test_videos/sample_noaudio.mp4"
 )

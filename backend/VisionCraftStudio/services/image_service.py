@@ -1,4 +1,4 @@
-from PIL import Image, ImageFilter, ImageDraw, ImageFont
+from PIL import Image, ImageFilter, ImageDraw, ImageFont, ImageEnhance
 
 
 def grayscale(input_path, output_path):
@@ -74,4 +74,31 @@ add_text(
     "VisionCraftStudio",
     50,
     50
+)
+
+def change_saturation(input_path, output_path, factor):
+    image = Image.open(input_path)
+
+    enhancer = ImageEnhance.Color(image)
+
+    saturated = enhancer.enhance(factor)
+
+    saturated.save(output_path)
+
+change_saturation(
+    "../test_images/photo.jpg",
+    "../test_images/photo_saturated.jpg",
+    1.3
+)
+
+def change_brightness(input_path, output_path, factor):
+    image = Image.open(input_path)
+    enhancer = ImageEnhance.Brightness(image)
+    result = enhancer.enhance(factor)
+    result.save(output_path)
+
+change_brightness(
+    "../test_images/photo.jpg",
+    "../test_images/photo_change_brightness.jpg",
+    1.2
 )
