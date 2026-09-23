@@ -1,9 +1,15 @@
 import { useState } from 'react'
 import { processVideo } from './services/api'
 
+import VideoUpload from './components/VideoUpload'
+import ThemeSelector from './components/ThemeSelector'
+import VintageSteps from './components/VintageSteps'
+import ProcessedVideo from './components/ProcessedVideo'
+
 function App() {
   const [video, setVideo] = useState(null)
   const [theme, setTheme] = useState('')
+
   const [choices, setChoices] = useState({
     grayscale: false,
     rotate: 0,
@@ -45,130 +51,30 @@ function App() {
     <div>
       <h1>VisionCraftStudio</h1>
 
-      <h2>Upload Video</h2>
-
-      <input
-        type="file"
-        accept="video/*"
-        onChange={(event) => {
-          setVideo(event.target.files[0])
-          setResult(null)
-          setError('')
-        }}
+      <VideoUpload
+        video={video}
+        setVideo={setVideo}
       />
 
-      {video && (
-        <p>
-          Selected video: {video.name}
-        </p>
-      )}
-
-      <h2>Choose Theme</h2>
-
-      <button onClick={() => setTheme('vintage')}>
-        Vintage
-      </button>
+      <ThemeSelector
+        theme={theme}
+        setTheme={setTheme}
+      />
 
       {theme === 'vintage' && (
-        <div>
-          <h2>Vintage Settings</h2>
-
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                checked={choices.grayscale}
-                onChange={(event) =>
-                  setChoices({
-                    ...choices,
-                    grayscale: event.target.checked,
-                  })
-                }
-              />
-              Make video black and white
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Rotation duration (seconds):
-              <input
-                type="number"
-                min="0"
-                step="0.1"
-                value={choices.rotationDuration}
-                onChange={(event) =>
-                  setChoices({
-                    ...choices,
-                    rotationDuration: Number(event.target.value),
-                  })
-                }
-              />
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Rotation degrees:
-              <input
-                type="number"
-                value={choices.rotate}
-                onChange={(event) =>
-                  setChoices({
-                    ...choices,
-                    rotate: Number(event.target.value),
-                  })
-                }
-              />
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Speed multiplier:
-              <input
-                type="number"
-                min="0.1"
-                step="0.1"
-                value={choices.speed}
-                onChange={(event) =>
-                  setChoices({
-                    ...choices,
-                    speed: Number(event.target.value),
-                  })
-                }
-              />
-            </label>
-          </div>
-
-          <button
-            onClick={handleProcess}
-            disabled={processing}
-          >
-            {processing ? 'Processing...' : 'Process Video'}
-          </button>
-        </div>
+        <VintageSteps
+          choices={choices}
+          setChoices={setChoices}
+          onProcess={handleProcess}
+          processing={processing}
+        />
       )}
 
       {error && (
         <p>{error}</p>
       )}
 
-      {result && (
-        <div>
-          <h2>Processed Video</h2>
-
-          <video
-            controls
-            width="600"
-            src={`http://127.0.0.1:8000${result.video_url}`}
-          />
-
-          <p>
-            Video processed successfully!
-          </p>
-        </div>
-      )}
+      <ProcessedVideo result={result} />
     </div>
   )
 }
