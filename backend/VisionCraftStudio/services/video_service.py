@@ -79,13 +79,23 @@ def process_vintage_video(input_path, output_path, choices):
     if choices.get("grayscale"):
         first_part = first_part.with_effects([BlackAndWhite()])
 
-    second_part = clip.subclipped(2, 3)
-
     rotation_angle = choices.get("rotate", 0)
+    rotation_duration = choices.get("rotationDuration", 1)
+
+    rotation_start = 2
+    rotation_in_end = rotation_start + 1
+    rotation_hold_end = rotation_in_end + rotation_duration
+    rotation_out_end = rotation_hold_end + 1
 
     if rotation_angle != 0:
 
-        def animated_rotate(get_frame, t):
+        # 0° → selected angle
+        rotation_in = clip.subclipped(
+            rotation_start,
+            rotation_in_end
+        )
+
+        def rotate_in(get_frame, t):
             angle = rotation_angle * t
             frame = get_frame(t)
 
@@ -94,28 +104,78 @@ def process_vintage_video(input_path, output_path, choices):
 
             return np.array(image)
 
-        second_part = second_part.transform(animated_rotate)
+        rotation_in = rotation_in.transform(rotate_in)
 
-    third_part = clip.subclipped(3)
+        # Stay at selected angle
+        rotation_hold = clip.subclipped(
+            rotation_in_end,
+            rotation_hold_end
+        )
+
+        def rotate_hold(get_frame, t):
+            frame = get_frame(t)
+
+            image = Image.fromarray(frame)
+            image = image.rotate(rotation_angle, expand=True)
+
+            return np.array(image)
+
+        rotation_hold = rotation_hold.transform(rotate_hold)
+
+        # Selected angle → 0°
+        rotation_out = clip.subclipped(
+            rotation_hold_end,
+            rotation_out_end
+        )
+
+        def rotate_out(get_frame, t):
+            angle = rotation_angle * (1 - t)
+            frame = get_frame(t)
+
+            image = Image.fromarray(frame)
+            image = image.rotate(angle, expand=True)
+
+            return np.array(image)
+
+        rotation_out = rotation_out.transform(rotate_out)
+
+        third_part = clip.subclipped(rotation_out_end)
+
+        parts = [
+            first_part,
+            rotation_in,
+            rotation_hold,
+            rotation_out,
+            third_part
+        ]
+
+    else:
+        third_part = clip.subclipped(2)
+
+        parts = [
+            first_part,
+            third_part
+        ]
 
     speed_factor = choices.get("speed", 1)
 
     if speed_factor != 1:
-        third_part = third_part.with_effects([
+        parts[-1] = parts[-1].with_effects([
             MultiplySpeed(speed_factor)
         ])
 
     final_video = concatenate_videoclips(
-        [first_part, second_part, third_part],
+        parts,
         method="compose"
     )
 
     final_video.write_videofile(output_path)
 
     clip.close()
-    first_part.close()
-    second_part.close()
-    third_part.close()
+
+    for part in parts:
+        part.close()
+
     final_video.close()
 
     return output_path

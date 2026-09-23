@@ -6,9 +6,10 @@ output_video = "VisionCraftStudio/test_videos/vintage_final.mp4"
 
 
 choices = {
-    "grayscale": False,
-    "rotate": 180,
-    "speed": 0.5,
+    "grayscale": True,
+    "rotate": 90,
+    "rotationDuration": 2,
+    "speed": 1.2,
     "watermark": False
 }
 
