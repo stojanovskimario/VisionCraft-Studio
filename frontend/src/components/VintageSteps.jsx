@@ -1,27 +1,61 @@
+import { useState } from 'react'
+
 function VintageSteps({ choices, setChoices, onProcess, processing }) {
+  const [step, setStep] = useState(1)
+
+  const nextStep = () => {
+    setStep(step + 1)
+  }
+
+  const previousStep = () => {
+    setStep(step - 1)
+  }
+
   return (
     <div>
-      <h2>Vintage Settings</h2>
+      <h2>Vintage Theme</h2>
 
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            checked={choices.grayscale}
-            onChange={(event) =>
+      <p>Step {step} / 4</p>
+
+      {step === 1 && (
+        <div>
+          <h3>Do you want to make the video black and white?</h3>
+
+          <button
+            onClick={() =>
               setChoices({
                 ...choices,
-                grayscale: event.target.checked,
+                grayscale: true,
               })
             }
-          />
-          Make video black and white
-        </label>
-      </div>
+          >
+            Yes
+          </button>
 
-      <div>
-        <label>
-          Rotation duration (seconds):
+          <button
+            onClick={() =>
+              setChoices({
+                ...choices,
+                grayscale: false,
+              })
+            }
+          >
+            No
+          </button>
+
+          <br />
+          <br />
+
+          <button onClick={nextStep}>
+            Next
+          </button>
+        </div>
+      )}
+
+      {step === 2 && (
+        <div>
+          <h3>How long should the rotation last?</h3>
+
           <input
             type="number"
             min="0"
@@ -34,12 +68,26 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
               })
             }
           />
-        </label>
-      </div>
 
-      <div>
-        <label>
-          Rotation degrees:
+          <span> seconds</span>
+
+          <br />
+          <br />
+
+          <button onClick={previousStep}>
+            Back
+          </button>
+
+          <button onClick={nextStep}>
+            Next
+          </button>
+        </div>
+      )}
+
+      {step === 3 && (
+        <div>
+          <h3>How many degrees should the video rotate?</h3>
+
           <input
             type="number"
             value={choices.rotate}
@@ -50,12 +98,26 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
               })
             }
           />
-        </label>
-      </div>
 
-      <div>
-        <label>
-          Speed multiplier:
+          <span>°</span>
+
+          <br />
+          <br />
+
+          <button onClick={previousStep}>
+            Back
+          </button>
+
+          <button onClick={nextStep}>
+            Next
+          </button>
+        </div>
+      )}
+
+      {step === 4 && (
+        <div>
+          <h3>How much do you want to speed up the video?</h3>
+
           <input
             type="number"
             min="0.1"
@@ -68,15 +130,24 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
               })
             }
           />
-        </label>
-      </div>
 
-      <button
-        onClick={onProcess}
-        disabled={processing}
-      >
-        {processing ? 'Processing...' : 'Process Video'}
-      </button>
+          <span>x</span>
+
+          <br />
+          <br />
+
+          <button onClick={previousStep}>
+            Back
+          </button>
+
+          <button
+            onClick={onProcess}
+            disabled={processing}
+          >
+            {processing ? 'Processing...' : 'Process Video'}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
