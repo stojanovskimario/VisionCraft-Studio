@@ -15,13 +15,19 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
     <div>
       <h2>Vintage Theme</h2>
 
-      <p>Step {step} / 4</p>
+      <p>Step {step} / 5</p>
 
       {step === 1 && (
         <div>
-          <h3>Do you want to make the video black and white?</h3>
+          <h3>Do you want to make the entire video black and white?</h3>
 
           <button
+            style={{
+              backgroundColor:
+                choices.grayscale === true ? 'green' : '',
+              color:
+                choices.grayscale === true ? 'white' : '',
+            }}
             onClick={() =>
               setChoices({
                 ...choices,
@@ -33,6 +39,12 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
           </button>
 
           <button
+            style={{
+              backgroundColor:
+                choices.grayscale === false ? 'green' : '',
+              color:
+                choices.grayscale === false ? 'white' : '',
+            }}
             onClick={() =>
               setChoices({
                 ...choices,
@@ -46,13 +58,48 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
           <br />
           <br />
 
-          <button onClick={nextStep}>
+          <button
+            onClick={nextStep}
+            disabled={choices.grayscale === null}
+          >
             Next
           </button>
         </div>
       )}
 
       {step === 2 && (
+        <div>
+          <h3>At what second should the rotation start?</h3>
+
+          <input
+            type="number"
+            min="0"
+            step="0.1"
+            value={choices.rotationStart}
+            onChange={(event) =>
+              setChoices({
+                ...choices,
+                rotationStart: Number(event.target.value),
+              })
+            }
+          />
+
+          <span> seconds</span>
+
+          <br />
+          <br />
+
+          <button onClick={previousStep}>
+            Back
+          </button>
+
+          <button onClick={nextStep}>
+            Next
+          </button>
+        </div>
+      )}
+
+      {step === 3 && (
         <div>
           <h3>How long should the rotation last?</h3>
 
@@ -84,7 +131,7 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
         </div>
       )}
 
-      {step === 3 && (
+      {step === 4 && (
         <div>
           <h3>How many degrees should the video rotate?</h3>
 
@@ -114,26 +161,105 @@ function VintageSteps({ choices, setChoices, onProcess, processing }) {
         </div>
       )}
 
-      {step === 4 && (
+      {step === 5 && (
         <div>
-          <h3>How much do you want to speed up the video?</h3>
+          <h3>Do you want to speed up part of the video?</h3>
 
-          <input
-            type="number"
-            min="0.1"
-            step="0.1"
-            value={choices.speed}
-            onChange={(event) =>
+          <button
+            style={{
+              backgroundColor:
+                choices.speed !== 1 ? 'green' : '',
+              color:
+                choices.speed !== 1 ? 'white' : '',
+            }}
+            onClick={() =>
               setChoices({
                 ...choices,
-                speed: Number(event.target.value),
+                speed: 1.5,
               })
             }
-          />
+          >
+            Yes
+          </button>
 
-          <span>x</span>
+          <button
+            style={{
+              backgroundColor:
+                choices.speed === 1 ? 'green' : '',
+              color:
+                choices.speed === 1 ? 'white' : '',
+            }}
+            onClick={() =>
+              setChoices({
+                ...choices,
+                speed: 1,
+              })
+            }
+          >
+            No
+          </button>
 
-          <br />
+          {choices.speed !== 1 && (
+            <div>
+              <br />
+
+              <label>
+                Start at:
+                <input
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  value={choices.speedStart}
+                  onChange={(event) =>
+                    setChoices({
+                      ...choices,
+                      speedStart: Number(event.target.value),
+                    })
+                  }
+                />
+                seconds
+              </label>
+
+              <br />
+
+              <label>
+                End at:
+                <input
+                  type="number"
+                  min="0"
+                  step="0.1"
+                  value={choices.speedEnd}
+                  onChange={(event) =>
+                    setChoices({
+                      ...choices,
+                      speedEnd: Number(event.target.value),
+                    })
+                  }
+                />
+                seconds
+              </label>
+
+              <br />
+
+              <label>
+                Speed:
+                <input
+                  type="number"
+                  min="0.1"
+                  step="0.1"
+                  value={choices.speed}
+                  onChange={(event) =>
+                    setChoices({
+                      ...choices,
+                      speed: Number(event.target.value),
+                    })
+                  }
+                />
+                x
+              </label>
+            </div>
+          )}
+
           <br />
 
           <button onClick={previousStep}>

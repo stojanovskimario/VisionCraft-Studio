@@ -11,10 +11,13 @@ function App() {
   const [theme, setTheme] = useState('')
 
   const [choices, setChoices] = useState({
-    grayscale: false,
-    rotate: 0,
+    grayscale: null,
+    rotationStart: 2,
     rotationDuration: 1,
+    rotate: 0,
     speed: 1,
+    speedStart: 3,
+    speedEnd: 6,
   })
 
   const [processing, setProcessing] = useState(false)

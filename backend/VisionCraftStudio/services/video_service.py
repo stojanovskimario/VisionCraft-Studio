@@ -74,22 +74,30 @@ def grayscale_video(input_path, output_path):
 def process_vintage_video(input_path, output_path, choices):
     clip = VideoFileClip(input_path)
 
-    first_part = clip.subclipped(0, 2)
-
     if choices.get("grayscale"):
-        first_part = first_part.with_effects([BlackAndWhite()])
+        clip = clip.with_effects([BlackAndWhite()])
 
-    rotation_angle = choices.get("rotate", 0)
+    parts = []
+
+    rotation_start = choices.get("rotationStart", 2)
     rotation_duration = choices.get("rotationDuration", 1)
+    rotation_angle = choices.get("rotate", 0)
 
-    rotation_start = 2
     rotation_in_end = rotation_start + 1
     rotation_hold_end = rotation_in_end + rotation_duration
     rotation_out_end = rotation_hold_end + 1
 
+
+    if rotation_start > 0:
+        before_rotation = clip.subclipped(
+            0,
+            rotation_start
+        )
+        parts.append(before_rotation)
+
+
     if rotation_angle != 0:
 
-        # 0° → selected angle
         rotation_in = clip.subclipped(
             rotation_start,
             rotation_in_end
@@ -106,7 +114,6 @@ def process_vintage_video(input_path, output_path, choices):
 
         rotation_in = rotation_in.transform(rotate_in)
 
-        # Stay at selected angle
         rotation_hold = clip.subclipped(
             rotation_in_end,
             rotation_hold_end
@@ -116,13 +123,15 @@ def process_vintage_video(input_path, output_path, choices):
             frame = get_frame(t)
 
             image = Image.fromarray(frame)
-            image = image.rotate(rotation_angle, expand=True)
+            image = image.rotate(
+                rotation_angle,
+                expand=True
+            )
 
             return np.array(image)
 
         rotation_hold = rotation_hold.transform(rotate_hold)
 
-        # Selected angle → 0°
         rotation_out = clip.subclipped(
             rotation_hold_end,
             rotation_out_end
@@ -139,37 +148,75 @@ def process_vintage_video(input_path, output_path, choices):
 
         rotation_out = rotation_out.transform(rotate_out)
 
-        third_part = clip.subclipped(rotation_out_end)
-
-        parts = [
-            first_part,
+        parts.extend([
             rotation_in,
             rotation_hold,
-            rotation_out,
-            third_part
-        ]
+            rotation_out
+        ])
+
+        video_after_rotation = rotation_out_end
 
     else:
-        third_part = clip.subclipped(2)
+        video_after_rotation = rotation_start
 
-        parts = [
-            first_part,
-            third_part
-        ]
 
     speed_factor = choices.get("speed", 1)
+    speed_start = choices.get(
+        "speedStart",
+        video_after_rotation
+    )
+    speed_end = choices.get(
+        "speedEnd",
+        speed_start + 2
+    )
 
-    if speed_factor != 1:
-        parts[-1] = parts[-1].with_effects([
+    speed_start = max(
+        speed_start,
+        video_after_rotation
+    )
+
+    if speed_factor != 1 and speed_end > speed_start:
+
+        if speed_start > video_after_rotation:
+            before_speed = clip.subclipped(
+                video_after_rotation,
+                speed_start
+            )
+            parts.append(before_speed)
+
+        speed_part = clip.subclipped(
+            speed_start,
+            speed_end
+        )
+
+        speed_part = speed_part.with_effects([
             MultiplySpeed(speed_factor)
         ])
+
+        parts.append(speed_part)
+
+        if speed_end < clip.duration:
+            after_speed = clip.subclipped(
+                speed_end
+            )
+            parts.append(after_speed)
+
+    else:
+        if video_after_rotation < clip.duration:
+            after_rotation = clip.subclipped(
+                video_after_rotation
+            )
+            parts.append(after_rotation)
+
 
     final_video = concatenate_videoclips(
         parts,
         method="compose"
     )
 
-    final_video.write_videofile(output_path)
+    final_video.write_videofile(
+        output_path
+    )
 
     clip.close()
 
