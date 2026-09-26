@@ -4,6 +4,7 @@ from moviepy.video.fx.MultiplySpeed import MultiplySpeed
 from moviepy.video.fx.BlackAndWhite import BlackAndWhite
 from PIL import Image
 import numpy as np
+from moviepy import VideoFileClip, concatenate_videoclips, ImageClip, CompositeVideoClip
 
 def trim_video(input_path, output_path, start_time, end_time):
     clip = VideoFileClip(input_path)
@@ -71,7 +72,7 @@ def grayscale_video(input_path, output_path):
     gray.close()
 
 
-def process_vintage_video(input_path, output_path, choices):
+def process_vintage_video(input_path, output_path, choices,watermark_path=None):
     clip = VideoFileClip(input_path)
 
     if choices.get("grayscale"):
@@ -208,13 +209,77 @@ def process_vintage_video(input_path, output_path, choices):
             )
             parts.append(after_rotation)
 
-
     final_video = concatenate_videoclips(
         parts,
         method="compose"
     )
 
-    final_video.write_videofile(
+    video_to_write = final_video
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        # Keep watermark reasonably small
+        max_width = int(final_video.w * 0.2)
+        max_height = int(final_video.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+
+        position = choices.get(
+            "watermarkPosition",
+            "top-right"
+        )
+
+        if position == "top-left":
+            watermark_position = (
+                margin,
+                margin
+            )
+
+        elif position == "top-right":
+            watermark_position = (
+                final_video.w - watermark_clip.w - margin,
+                margin
+            )
+
+        elif position == "bottom-left":
+            watermark_position = (
+                margin,
+                final_video.h - watermark_clip.h - margin
+            )
+
+        else:
+            watermark_position = (
+                final_video.w - watermark_clip.w - margin,
+                final_video.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            final_video.duration
+        )
+
+        watermark_clip = watermark_clip.with_position(
+            watermark_position
+        )
+
+        video_to_write = CompositeVideoClip([
+            final_video,
+            watermark_clip
+        ])
+
+    video_to_write.write_videofile(
         output_path
     )
 
@@ -222,6 +287,12 @@ def process_vintage_video(input_path, output_path, choices):
 
     for part in parts:
         part.close()
+
+    if watermark_clip:
+        watermark_clip.close()
+
+    if video_to_write is not final_video:
+        video_to_write.close()
 
     final_video.close()
 

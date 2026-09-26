@@ -12,17 +12,20 @@ function App() {
 
   const [choices, setChoices] = useState({
     grayscale: null,
-    rotationStart: 2,
-    rotationDuration: 1,
-    rotate: 0,
-    speed: 1,
-    speedStart: 3,
-    speedEnd: 6,
+  rotationStart: 2,
+  rotationDuration: 1,
+  rotate: 0,
+  speed: 1,
+  speedStart: 3,
+  speedEnd: 6,
+  watermark: false,
+  watermarkPosition: 'top-right',
   })
 
   const [processing, setProcessing] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+  const [watermark, setWatermark] = useState(null)
 
   const handleProcess = async () => {
     if (!video) {
@@ -40,7 +43,12 @@ function App() {
     setResult(null)
 
     try {
-      const data = await processVideo(video, theme, choices)
+      const data = await processVideo(
+        video,
+        theme,
+        choices,
+        watermark
+      )
       setResult(data)
     } catch (error) {
       console.error(error)
@@ -70,6 +78,8 @@ function App() {
           setChoices={setChoices}
           onProcess={handleProcess}
           processing={processing}
+          watermark={watermark}
+          setWatermark={setWatermark}
         />
       )}
 

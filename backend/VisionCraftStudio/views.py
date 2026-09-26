@@ -27,6 +27,8 @@ def process_video(request):
         )
 
     video = request.FILES.get("video")
+    watermark = request.FILES.get("watermark")
+
     theme = request.POST.get("theme")
     choices_json = request.POST.get("choices")
 
@@ -62,30 +64,68 @@ def process_video(request):
             status=400
         )
 
-    uploads_dir = os.path.join(settings.MEDIA_ROOT, "uploads")
-    processed_dir = os.path.join(settings.MEDIA_ROOT, "processed")
+    if choices.get("watermark") and not watermark:
+        return JsonResponse(
+            {"error": "Watermark was selected but no image was uploaded."},
+            status=400
+        )
+
+    uploads_dir = os.path.join(
+        settings.MEDIA_ROOT,
+        "uploads"
+    )
+
+    processed_dir = os.path.join(
+        settings.MEDIA_ROOT,
+        "processed"
+    )
 
     os.makedirs(uploads_dir, exist_ok=True)
     os.makedirs(processed_dir, exist_ok=True)
 
     file_id = uuid.uuid4().hex
 
-    input_filename = f"{file_id}_{video.name}"
+    input_filename = f"{file_id}_{os.path.basename(video.name)}"
     output_filename = f"{file_id}_vintage.mp4"
 
-    input_path = os.path.join(uploads_dir, input_filename)
-    output_path = os.path.join(processed_dir, output_filename)
+    input_path = os.path.join(
+        uploads_dir,
+        input_filename
+    )
+
+    output_path = os.path.join(
+        processed_dir,
+        output_filename
+    )
 
     with open(input_path, "wb+") as destination:
         for chunk in video.chunks():
             destination.write(chunk)
+
+    watermark_path = None
+
+    if watermark:
+        watermark_filename = (
+            f"{file_id}_watermark_"
+            f"{os.path.basename(watermark.name)}"
+        )
+
+        watermark_path = os.path.join(
+            uploads_dir,
+            watermark_filename
+        )
+
+        with open(watermark_path, "wb+") as destination:
+            for chunk in watermark.chunks():
+                destination.write(chunk)
 
     processor = ThemeProcessor()
 
     result = processor.process_vintage(
         input_path,
         output_path,
-        choices
+        choices,
+        watermark_path
     )
 
     return JsonResponse({
