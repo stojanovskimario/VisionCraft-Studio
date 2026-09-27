@@ -58,7 +58,7 @@ def process_video(request):
             status=400
         )
 
-    if theme != "vintage":
+    if theme not in ["vintage", "futuristic"]:
         return JsonResponse(
             {"error": "Unsupported theme."},
             status=400
@@ -86,7 +86,7 @@ def process_video(request):
     file_id = uuid.uuid4().hex
 
     input_filename = f"{file_id}_{os.path.basename(video.name)}"
-    output_filename = f"{file_id}_vintage.mp4"
+    output_filename = f"{file_id}_{theme}.mp4"
 
     input_path = os.path.join(
         uploads_dir,
@@ -121,12 +121,21 @@ def process_video(request):
 
     processor = ThemeProcessor()
 
-    result = processor.process_vintage(
-        input_path,
-        output_path,
-        choices,
-        watermark_path
-    )
+    if theme == "vintage":
+        result = processor.process_vintage(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+    elif theme == "futuristic":
+        result = processor.process_futuristic(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
 
     return JsonResponse({
         "success": True,

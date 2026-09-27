@@ -6,6 +6,10 @@ function ThemeSelector({ theme, setTheme }) {
       <button onClick={() => setTheme('vintage')}>
         Vintage
       </button>
+
+      <button onClick={() => setTheme('futuristic')}>
+          Futuristic
+        </button>
     </div>
   )
 }
