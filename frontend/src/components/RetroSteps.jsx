@@ -20,7 +20,7 @@ function RetroSteps({
     <div>
       <h2>Retro Theme</h2>
 
-      <p>Step {step} / 2</p>
+      <p>Step {step} / 3</p>
 
       {step === 1 && (
         <div>
@@ -146,6 +146,98 @@ function RetroSteps({
                     setChoices({
                       ...choices,
                       filmGrainIntensity:
+                        Number(
+                          event.target.value
+                        ),
+                    })
+                  }
+                />
+
+                / 10
+              </label>
+            </div>
+          )}
+
+          <br />
+          <br />
+
+          <button onClick={previousStep}>
+            Back
+          </button>
+
+          <button onClick={nextStep}>
+            Next
+          </button>
+        </div>
+      )}
+
+      {step === 3 && (
+        <div>
+          <h3>
+            Do you want to add a vignette effect?
+          </h3>
+
+          <button
+            style={{
+              backgroundColor:
+                choices.vignette === true
+                  ? 'green'
+                  : '',
+              color:
+                choices.vignette === true
+                  ? 'white'
+                  : '',
+            }}
+            onClick={() =>
+              setChoices({
+                ...choices,
+                vignette: true,
+              })
+            }
+          >
+            Yes
+          </button>
+
+          <button
+            style={{
+              backgroundColor:
+                choices.vignette === false
+                  ? 'green'
+                  : '',
+              color:
+                choices.vignette === false
+                  ? 'white'
+                  : '',
+            }}
+            onClick={() =>
+              setChoices({
+                ...choices,
+                vignette: false,
+              })
+            }
+          >
+            No
+          </button>
+
+          {choices.vignette === true && (
+            <div>
+              <br />
+
+              <label>
+                Vignette intensity:
+
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  step="1"
+                  value={
+                    choices.vignetteIntensity
+                  }
+                  onChange={(event) =>
+                    setChoices({
+                      ...choices,
+                      vignetteIntensity:
                         Number(
                           event.target.value
                         ),

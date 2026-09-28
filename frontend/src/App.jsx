@@ -33,6 +33,8 @@ function App() {
         // Retro
         filmGrain: false,
         filmGrainIntensity: 5,
+        vignette: false,
+        vignetteIntensity: 5,
     })
 
     const [processing, setProcessing] = useState(false)

@@ -692,6 +692,60 @@ def process_retro_video(
             add_film_grain
         )
 
+    if choices.get("vignette"):
+
+        vignette_intensity = choices.get(
+            "vignetteIntensity",
+            5
+        )
+
+        vignette_intensity = max(
+            1,
+            min(vignette_intensity, 10)
+        )
+
+        def add_vignette(get_frame, t):
+            frame = get_frame(t)
+
+            height, width = frame.shape[:2]
+
+            y, x = np.ogrid[
+                :height,
+                :width
+            ]
+
+            center_x = width / 2
+            center_y = height / 2
+
+            distance = np.sqrt(
+                ((x - center_x) / center_x) ** 2
+                + ((y - center_y) / center_y) ** 2
+            )
+
+            mask = 1 - (
+                distance * 0.35 * vignette_intensity
+            )
+
+            mask = np.clip(
+                mask,
+                0.2,
+                1
+            )
+
+            result = frame.astype(
+                np.float32
+            ) * mask[..., None]
+
+            return np.clip(
+                result,
+                0,
+                255
+            ).astype(np.uint8)
+
+        clip = clip.transform(
+            add_vignette
+        )
+
     clip.write_videofile(
         output_path
     )
