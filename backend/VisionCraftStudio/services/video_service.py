@@ -612,3 +612,90 @@ def process_vintage_video(input_path, output_path, choices,watermark_path=None):
     final_video.close()
 
     return output_path
+
+
+def process_retro_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    if choices.get("colorEffect"):
+
+        def retro_color(get_frame, t):
+            frame = get_frame(t)
+
+            image = Image.fromarray(frame).convert("RGB")
+
+            array = np.array(
+                image
+            ).astype(np.float32)
+
+            array[:, :, 0] *= 1.12
+            array[:, :, 1] *= 0.98
+            array[:, :, 2] *= 0.82
+
+            array = (
+                (array - 128) * 0.9
+            ) + 128
+
+            array = np.clip(
+                array,
+                0,
+                255
+            ).astype(np.uint8)
+
+            return array
+
+        clip = clip.transform(
+            retro_color
+        )
+
+    if choices.get("filmGrain"):
+
+        grain_intensity = choices.get(
+            "filmGrainIntensity",
+            5
+        )
+
+        grain_intensity = max(
+            1,
+            min(grain_intensity, 10)
+        )
+
+        def add_film_grain(get_frame, t):
+            frame = get_frame(t)
+
+            noise_strength = grain_intensity * 2.5
+
+            noise = np.random.normal(
+                0,
+                noise_strength,
+                frame.shape
+            )
+
+            result = frame.astype(
+                np.float32
+            ) + noise
+
+            result = np.clip(
+                result,
+                0,
+                255
+            ).astype(np.uint8)
+
+            return result
+
+        clip = clip.transform(
+            add_film_grain
+        )
+
+    clip.write_videofile(
+        output_path
+    )
+
+    clip.close()
+
+    return output_path

@@ -6,6 +6,7 @@ import ThemeSelector from './components/ThemeSelector'
 import VintageSteps from './components/VintageSteps'
 import ProcessedVideo from './components/ProcessedVideo'
 import FuturisticSteps from './components/FuturisticSteps'
+import RetroSteps from "./components/RetroSteps.jsx";
 
 function App() {
     const [video, setVideo] = useState(null)
@@ -28,6 +29,10 @@ function App() {
         glitchStart: 3,
         glitchDuration: 2,
         glitchIntensity: 5,
+
+        // Retro
+        filmGrain: false,
+        filmGrainIntensity: 5,
     })
 
     const [processing, setProcessing] = useState(false)
@@ -97,6 +102,15 @@ function App() {
                     setChoices={setChoices}
                     watermark={watermark}
                     setWatermark={setWatermark}
+                    onProcess={handleProcess}
+                    processing={processing}
+                />
+            )}
+
+            {theme === 'retro' && (
+                <RetroSteps
+                    choices={choices}
+                    setChoices={setChoices}
                     onProcess={handleProcess}
                     processing={processing}
                 />
