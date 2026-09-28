@@ -746,6 +746,70 @@ def process_retro_video(
             add_vignette
         )
 
+    if choices.get("watermark") and watermark_path:
+
+        watermark = ImageClip(
+            watermark_path
+        )
+
+        max_width = clip.w * 0.2
+        max_height = clip.h * 0.2
+
+        scale = min(
+            max_width / watermark.w,
+            max_height / watermark.h,
+            1
+        )
+
+        watermark = watermark.resized(
+            scale
+        )
+
+        position = choices.get(
+            "watermarkPosition",
+            "top-right"
+        )
+
+        margin = 20
+
+        if position == "top-left":
+            watermark = watermark.with_position(
+                (margin, margin)
+            )
+
+        elif position == "top-right":
+            watermark = watermark.with_position(
+                (
+                    clip.w - watermark.w - margin,
+                    margin
+                )
+            )
+
+        elif position == "bottom-left":
+            watermark = watermark.with_position(
+                (
+                    margin,
+                    clip.h - watermark.h - margin
+                )
+            )
+
+        elif position == "bottom-right":
+            watermark = watermark.with_position(
+                (
+                    clip.w - watermark.w - margin,
+                    clip.h - watermark.h - margin
+                )
+            )
+
+        watermark = watermark.with_duration(
+            clip.duration
+        )
+
+        clip = CompositeVideoClip([
+            clip,
+            watermark
+        ])
+
     clip.write_videofile(
         output_path
     )

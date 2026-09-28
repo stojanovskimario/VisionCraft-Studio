@@ -3,6 +3,8 @@ import { useState } from 'react'
 function RetroSteps({
   choices,
   setChoices,
+  watermark,
+  setWatermark,
   onProcess,
   processing
 }) {
@@ -20,7 +22,7 @@ function RetroSteps({
     <div>
       <h2>Retro Theme</h2>
 
-      <p>Step {step} / 3</p>
+      <p>Step {step} / 4</p>
 
       {step === 1 && (
         <div>
@@ -253,20 +255,135 @@ function RetroSteps({
           <br />
           <br />
 
-          <button onClick={previousStep}>
-            Back
-          </button>
+            <button onClick={previousStep}>
+                Back
+            </button>
 
-          <button
-            onClick={onProcess}
-            disabled={processing}
-          >
-            {processing
-              ? 'Processing...'
-              : 'Process Video'}
-          </button>
+            <button onClick={nextStep}>
+                Next
+            </button>
         </div>
       )}
+
+        {step === 4 && (
+            <div>
+                <h3>
+                    Do you want to add a watermark?
+                </h3>
+
+                <button
+                    style={{
+                        backgroundColor:
+                            choices.watermark === true
+                                ? 'green'
+                                : '',
+                        color:
+                            choices.watermark === true
+                                ? 'white'
+                                : '',
+                    }}
+                    onClick={() =>
+                        setChoices({
+                            ...choices,
+                            watermark: true,
+                        })
+                    }
+                >
+                    Yes
+                </button>
+
+                <button
+                    style={{
+                        backgroundColor:
+                            choices.watermark === false
+                                ? 'green'
+                                : '',
+                        color:
+                            choices.watermark === false
+                                ? 'white'
+                                : '',
+                    }}
+                    onClick={() => {
+                        setChoices({
+                            ...choices,
+                            watermark: false,
+                        })
+
+                        setWatermark(null)
+                    }}
+                >
+                    No
+                </button>
+
+                {choices.watermark === true && (
+                    <div>
+                        <br/>
+
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(event) =>
+                                setWatermark(
+                                    event.target.files[0]
+                                )
+                            }
+                        />
+
+                        <br/>
+                        <br/>
+
+                        <label>
+                            Watermark position:
+
+                            <select
+                                value={
+                                    choices.watermarkPosition
+                                }
+                                onChange={(event) =>
+                                    setChoices({
+                                        ...choices,
+                                        watermarkPosition:
+                                        event.target.value,
+                                    })
+                                }
+                            >
+                                <option value="top-left">
+                                    Top Left
+                                </option>
+
+                                <option value="top-right">
+                                    Top Right
+                                </option>
+
+                                <option value="bottom-left">
+                                    Bottom Left
+                                </option>
+
+                                <option value="bottom-right">
+                                    Bottom Right
+                                </option>
+                            </select>
+                        </label>
+                    </div>
+                )}
+
+                <br/>
+                <br/>
+
+                <button onClick={previousStep}>
+                    Back
+                </button>
+
+                <button
+                    onClick={onProcess}
+                    disabled={processing}
+                >
+                    {processing
+                        ? 'Processing...'
+                        : 'Process Video'}
+                </button>
+            </div>
+        )}
     </div>
   )
 }

@@ -113,6 +113,8 @@ function App() {
                 <RetroSteps
                     choices={choices}
                     setChoices={setChoices}
+                    watermark={watermark}
+                    setWatermark={setWatermark}
                     onProcess={handleProcess}
                     processing={processing}
                 />

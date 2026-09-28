@@ -16,5 +16,15 @@ RETRO_THEME = {
             question="Do you want to add film grain?",
             step_type="boolean"
         ),
+        ThemeStep(
+            id="vignette",
+            question="Do you want to add a vignette effect?",
+            step_type="boolean"
+        ),
+        ThemeStep(
+            id="watermark",
+            question="Do you want to add a watermark?",
+            step_type="boolean"
+        ),
     ]
 }
