@@ -668,3 +668,170 @@ def process_retro_video(
     clip.close()
 
     return output_path
+
+
+def process_cinematic_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    # 1. Gradually apply teal-and-orange color grading (0–2 seconds)
+    def cinematic_color(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        strength = min(max(t / 2, 0), 1)
+
+        # Estimate brightness and identify shadows/highlights.
+        brightness = np.mean(frame, axis=2) / 255.0
+        shadows = (1 - brightness)[..., None]
+        highlights = brightness[..., None]
+
+        graded = frame.copy()
+
+        # Cool shadows and warm highlights.
+        graded[:, :, 0] += (highlights[:, :, 0] * 20)
+        graded[:, :, 1] += (highlights[:, :, 0] * 5)
+        graded[:, :, 1] -= (shadows[:, :, 0] * 5)
+        graded[:, :, 2] += (shadows[:, :, 0] * 20)
+        graded[:, :, 2] -= (highlights[:, :, 0] * 8)
+
+        result = (
+            frame * (1 - strength)
+            + graded * strength
+        )
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(cinematic_color)
+
+    # 2. Gradually increase the vignette (2–4 seconds)
+    def cinematic_vignette(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        strength = min(max((t - 2) / 2, 0), 1)
+
+        height, width = frame.shape[:2]
+
+        y, x = np.ogrid[:height, :width]
+
+        center_x = width / 2
+        center_y = height / 2
+
+        distance = np.sqrt(
+            ((x - center_x) / center_x) ** 2
+            + ((y - center_y) / center_y) ** 2
+        )
+
+        mask = 1 - (distance * 0.25 * strength)
+        mask = np.clip(mask, 0.55, 1)
+
+        result = frame * mask[..., None]
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(cinematic_vignette)
+
+    # 3. Gradually increase contrast (4–6 seconds)
+    def cinematic_contrast(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        strength = min(max((t - 4) / 2, 0), 1)
+        contrast_factor = 1 + (0.2 * strength)
+
+        result = (frame - 128) * contrast_factor + 128
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(cinematic_contrast)
+
+    # 4. Add cinematic letterbox bars throughout the video.
+    def cinematic_letterbox(get_frame, t):
+        frame = get_frame(t).copy()
+
+        height = frame.shape[0]
+        bar_height = max(1, int(height * 0.08))
+
+        frame[:bar_height, :, :] = 0
+        frame[-bar_height:, :, :] = 0
+
+        return frame
+
+    clip = clip.transform(cinematic_letterbox)
+
+    # Optional watermark, matching the other themes.
+    video_to_write = clip
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+
+        position = choices.get(
+            "watermarkPosition",
+            "top-right"
+        )
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+
+        elif position == "top-right":
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                margin
+            )
+
+        elif position == "bottom-left":
+            watermark_position = (
+                margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            clip.duration
+        )
+
+        watermark_clip = watermark_clip.with_position(
+            watermark_position
+        )
+
+        video_to_write = CompositeVideoClip([
+            clip,
+            watermark_clip
+        ])
+
+    try:
+        video_to_write.write_videofile(output_path)
+    finally:
+        if video_to_write is not clip:
+            video_to_write.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path

@@ -7,6 +7,7 @@ import VintageSteps from './components/VintageSteps'
 import ProcessedVideo from './components/ProcessedVideo'
 import FuturisticSteps from './components/FuturisticSteps'
 import RetroSteps from "./components/RetroSteps.jsx";
+import CinematicSteps from './components/CinematicSteps.jsx'
 
 function App() {
     const [video, setVideo] = useState(null)
@@ -117,6 +118,17 @@ function App() {
                     setWatermark={setWatermark}
                     onProcess={handleProcess}
                     processing={processing}
+                />
+            )}
+
+            {theme === 'cinematic' && (
+                <CinematicSteps
+                    choices={choices}
+                    setChoices={setChoices}
+                    onProcess={handleProcess}
+                    processing={processing}
+                    watermark={watermark}
+                    setWatermark={setWatermark}
                 />
             )}
 

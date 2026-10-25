@@ -1,4 +1,5 @@
-function ThemeSelector({theme, setTheme}) {
+
+function ThemeSelector({ theme, setTheme }) {
     return (
         <div>
             <h2>Choose Theme</h2>
@@ -13,6 +14,10 @@ function ThemeSelector({theme, setTheme}) {
 
             <button onClick={() => setTheme('retro')}>
                 Retro
+            </button>
+
+            <button onClick={() => setTheme('cinematic')}>
+                Cinematic
             </button>
         </div>
     )
