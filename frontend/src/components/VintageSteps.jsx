@@ -1,4 +1,3 @@
-import { useState } from 'react'
 
 function VintageSteps({
   choices,
@@ -6,449 +5,120 @@ function VintageSteps({
   watermark,
   setWatermark,
   onProcess,
-  processing,
+  processing
 }) {
-  const [step, setStep] = useState(1)
-
-  const nextStep = () => {
-    setStep(step + 1)
-  }
-
-  const previousStep = () => {
-    setStep(step - 1)
-  }
-
   return (
     <div>
       <h2>Vintage Theme</h2>
 
-      <p>Step {step} / 6</p>
+      <h3>This theme will change your video in the following ways:</h3>
 
-      {step === 1 && (
-        <div>
-          <h3>Do you want to make the entire video black and white?</h3>
+      <ul>
+        <li>
+          Convert the entire video to black and white.
+        </li>
+        <li>
+          Starting at 2 seconds, rotate the video to
+          90° over 1 second, hold that angle for
+          1 second, then return to its original
+          orientation over 1 second.
+        </li>
+        <li>
+          Speed up the section from 5 to 7 seconds
+          to 1.5× its original speed, then return
+          to normal speed.
+        </li>
+      </ul>
 
-          <button
-            style={{
-              backgroundColor:
-                choices.grayscale === true ? 'green' : '',
-              color:
-                choices.grayscale === true ? 'white' : '',
-            }}
-            onClick={() =>
-              setChoices({
-                ...choices,
-                grayscale: true,
-              })
-            }
-          >
-            Yes
-          </button>
+      <hr />
 
-          <button
-            style={{
-              backgroundColor:
-                choices.grayscale === false ? 'green' : '',
-              color:
-                choices.grayscale === false ? 'white' : '',
-            }}
-            onClick={() =>
-              setChoices({
-                ...choices,
-                grayscale: false,
-              })
-            }
-          >
-            No
-          </button>
+      <h3>Optional watermark</h3>
 
-          <br />
-          <br />
+      <label>
+        <input
+          type="checkbox"
+          checked={choices.watermark === true}
+          onChange={(event) => {
+            const enabled = event.target.checked
 
-          <button
-            onClick={nextStep}
-            disabled={choices.grayscale === null}
-          >
-            Next
-          </button>
-        </div>
-      )}
+            setChoices({
+              ...choices,
+              watermark: enabled
+            })
 
-      {step === 2 && (
-        <div>
-          <h3>At what second should the rotation start?</h3>
-
-          <input
-            type="number"
-            min="0"
-            step="0.1"
-            value={choices.rotationStart}
-            onChange={(event) =>
-              setChoices({
-                ...choices,
-                rotationStart: Number(event.target.value),
-              })
-            }
-          />
-
-          <span> seconds</span>
-
-          <br />
-          <br />
-
-          <button onClick={previousStep}>
-            Back
-          </button>
-
-          <button onClick={nextStep}>
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 3 && (
-        <div>
-          <h3>How long should the rotation last?</h3>
-
-          <input
-            type="number"
-            min="0"
-            step="0.1"
-            value={choices.rotationDuration}
-            onChange={(event) =>
-              setChoices({
-                ...choices,
-                rotationDuration: Number(event.target.value),
-              })
-            }
-          />
-
-          <span> seconds</span>
-
-          <br />
-          <br />
-
-          <button onClick={previousStep}>
-            Back
-          </button>
-
-          <button onClick={nextStep}>
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 4 && (
-        <div>
-          <h3>How many degrees should the video rotate?</h3>
-
-          <input
-            type="number"
-            value={choices.rotate}
-            onChange={(event) =>
-              setChoices({
-                ...choices,
-                rotate: Number(event.target.value),
-              })
-            }
-          />
-
-          <span>°</span>
-
-          <br />
-          <br />
-
-          <button onClick={previousStep}>
-            Back
-          </button>
-
-          <button onClick={nextStep}>
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 5 && (
-        <div>
-          <h3>Do you want to speed up part of the video?</h3>
-
-          <button
-            style={{
-              backgroundColor:
-                choices.speed !== 1 ? 'green' : '',
-              color:
-                choices.speed !== 1 ? 'white' : '',
-            }}
-            onClick={() =>
-              setChoices({
-                ...choices,
-                speed: 1.5,
-              })
-            }
-          >
-            Yes
-          </button>
-
-          <button
-            style={{
-              backgroundColor:
-                choices.speed === 1 ? 'green' : '',
-              color:
-                choices.speed === 1 ? 'white' : '',
-            }}
-            onClick={() =>
-              setChoices({
-                ...choices,
-                speed: 1,
-              })
-            }
-          >
-            No
-          </button>
-
-          {choices.speed !== 1 && (
-            <div>
-              <br />
-
-              <label>
-                Start at:
-                <input
-                  type="number"
-                  min="0"
-                  step="0.1"
-                  value={choices.speedStart}
-                  onChange={(event) =>
-                    setChoices({
-                      ...choices,
-                      speedStart: Number(event.target.value),
-                    })
-                  }
-                />
-                seconds
-              </label>
-
-              <br />
-
-              <label>
-                End at:
-                <input
-                  type="number"
-                  min="0"
-                  step="0.1"
-                  value={choices.speedEnd}
-                  onChange={(event) =>
-                    setChoices({
-                      ...choices,
-                      speedEnd: Number(event.target.value),
-                    })
-                  }
-                />
-                seconds
-              </label>
-
-              <br />
-
-              <label>
-                Speed:
-                <input
-                  type="number"
-                  min="0.1"
-                  step="0.1"
-                  value={choices.speed}
-                  onChange={(event) =>
-                    setChoices({
-                      ...choices,
-                      speed: Number(event.target.value),
-                    })
-                  }
-                />
-                x
-              </label>
-            </div>
-          )}
-
-          <br />
-          <br />
-
-          <button onClick={previousStep}>
-            Back
-          </button>
-
-          <button onClick={nextStep}>
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 6 && (
-        <div>
-          <h3>Do you want to add a watermark?</h3>
-
-          <button
-            style={{
-              backgroundColor:
-                choices.watermark === true ? 'green' : '',
-              color:
-                choices.watermark === true ? 'white' : '',
-            }}
-            onClick={() =>
-              setChoices({
-                ...choices,
-                watermark: true,
-              })
-            }
-          >
-            Yes
-          </button>
-
-          <button
-            style={{
-              backgroundColor:
-                choices.watermark === false ? 'green' : '',
-              color:
-                choices.watermark === false ? 'white' : '',
-            }}
-            onClick={() => {
-              setChoices({
-                ...choices,
-                watermark: false,
-              })
-
+            if (!enabled) {
               setWatermark(null)
-            }}
-          >
-            No
-          </button>
+            }
+          }}
+        />
+        Add a watermark
+      </label>
 
-          {choices.watermark === true && (
-            <div>
-              <br />
+      {choices.watermark === true && (
+        <div>
+          <br />
 
-              <label>
-                Upload watermark:
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) =>
-                    setWatermark(event.target.files[0])
-                  }
-                />
-              </label>
+          <label>
+            Upload watermark:
 
-              {watermark && (
-                <p>
-                  Selected watermark: {watermark.name}
-                </p>
-              )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event) =>
+                setWatermark(
+                  event.target.files?.[0] ?? null
+                )
+              }
+            />
+          </label>
 
-              <br />
-
-              <h4>Where should the watermark appear?</h4>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'top-left'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'top-left'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'top-left',
-                  })
-                }
-              >
-                Top Left
-              </button>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'top-right'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'top-right'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'top-right',
-                  })
-                }
-              >
-                Top Right
-              </button>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'bottom-left'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'bottom-left'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'bottom-left',
-                  })
-                }
-              >
-                Bottom Left
-              </button>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'bottom-right'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'bottom-right'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'bottom-right',
-                  })
-                }
-              >
-                Bottom Right
-              </button>
-            </div>
+          {watermark && (
+            <p>
+              Selected watermark: {watermark.name}
+            </p>
           )}
 
           <br />
-          <br />
 
-          <button onClick={previousStep}>
-            Back
-          </button>
+          <label>
+            Watermark position:
 
-          <button
-            onClick={onProcess}
-            disabled={
-              processing ||
-              (choices.watermark === true && !watermark)
-            }
-          >
-            {processing ? 'Processing...' : 'Process Video'}
-          </button>
+            <select
+              value={
+                choices.watermarkPosition || 'top-right'
+              }
+              onChange={(event) =>
+                setChoices({
+                  ...choices,
+                  watermarkPosition: event.target.value
+                })
+              }
+            >
+              <option value="top-left">Top Left</option>
+              <option value="top-right">Top Right</option>
+              <option value="bottom-left">Bottom Left</option>
+              <option value="bottom-right">Bottom Right</option>
+            </select>
+          </label>
         </div>
       )}
+
+      <hr />
+
+      <p>
+        Review the effects above before applying the
+        Vintage theme to your video.
+      </p>
+
+      <button
+        onClick={onProcess}
+        disabled={
+          processing ||
+          (choices.watermark === true && !watermark)
+        }
+      >
+        {processing ? 'Processing...' : 'Apply Vintage'}
+      </button>
     </div>
   )
 }

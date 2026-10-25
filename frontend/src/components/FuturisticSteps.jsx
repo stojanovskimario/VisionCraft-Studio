@@ -8,463 +8,143 @@ function FuturisticSteps({
   onProcess,
   processing
 }) {
-  const [step, setStep] = useState(1)
+  const [confirmed, setConfirmed] = useState(false)
 
-  const nextStep = () => {
-    setStep(step + 1)
+  const futuristicChoices = {
+    ...choices,
+    colorEffect: true,
+    glitch: true,
+    glitchStart: 2,
+    glitchDuration: 2,
+    glitchIntensity: 5,
+    speed: 1.3,
+    speedStart: 5,
+    speedEnd: 7
   }
 
-  const previousStep = () => {
-    setStep(step - 1)
+  const handleApply = () => {
+    setConfirmed(true)
+    onProcess(futuristicChoices)
   }
 
   return (
     <div>
       <h2>Futuristic Theme</h2>
 
-      <p>Step {step} / 4</p>
+      <h3>
+        This theme will change your video in the following ways:
+      </h3>
 
-      {step === 1 && (
-        <div>
-          <h3>Do you want to apply a futuristic color effect?</h3>
+      <ul>
+        <li>
+          Apply a futuristic color effect to the entire video,
+          with enhanced blue tones and increased contrast.
+        </li>
+        <li>
+          Apply a glitch effect starting at 2 seconds,
+          lasting 2 seconds, with an intensity of 5/10.
+        </li>
+        <li>
+          Speed up the section from 5 to 7 seconds
+          to 1.3× its original speed, then continue
+          at normal speed.
+        </li>
+      </ul>
 
-            <button
-                style={{
-                    backgroundColor:
-                        choices.colorEffect === true ? 'green' : '',
-                    color:
-                        choices.colorEffect === true ? 'white' : '',
-                }}
-                onClick={() =>
-                    setChoices({
-                        ...choices,
-                        colorEffect: true,
-                    })
-                }
-            >
-                Yes
-            </button>
+      <hr />
 
-            <button
-                style={{
-                    backgroundColor:
-                        choices.colorEffect === false ? 'green' : '',
-                    color:
-                        choices.colorEffect === false ? 'white' : '',
-                }}
-                onClick={() =>
-                    setChoices({
-                        ...choices,
-                        colorEffect: false,
-                    })
-                }
-            >
-                No
-            </button>
+      <h3>Optional watermark</h3>
 
-          <br />
-          <br />
+      <label>
+        <input
+          type="checkbox"
+          checked={choices.watermark === true}
+          onChange={(event) => {
+            const enabled = event.target.checked
 
-          <button onClick={nextStep}>
-            Next
-          </button>
-        </div>
-      )}
+            setChoices({
+              ...choices,
+              watermark: enabled
+            })
 
-      {step === 2 && (
-  <div>
-    <h3>Do you want to add a glitch effect?</h3>
-
-    <button
-      style={{
-        backgroundColor:
-          choices.glitch === true ? 'green' : '',
-        color:
-          choices.glitch === true ? 'white' : '',
-      }}
-      onClick={() =>
-        setChoices({
-          ...choices,
-          glitch: true,
-        })
-      }
-    >
-      Yes
-    </button>
-
-    <button
-      style={{
-        backgroundColor:
-          choices.glitch === false ? 'green' : '',
-        color:
-          choices.glitch === false ? 'white' : '',
-      }}
-      onClick={() =>
-        setChoices({
-          ...choices,
-          glitch: false,
-        })
-      }
-    >
-      No
-    </button>
-
-    {choices.glitch && (
-      <div>
-        <br />
-
-        <label>
-          Start at:
-          <input
-            type="number"
-            min="0"
-            step="0.1"
-            value={choices.glitchStart}
-            onChange={(event) =>
-              setChoices({
-                ...choices,
-                glitchStart: Number(event.target.value),
-              })
-            }
-          />
-          seconds
-        </label>
-
-        <br />
-
-        <label>
-          Duration:
-          <input
-            type="number"
-            min="0.1"
-            step="0.1"
-            value={choices.glitchDuration}
-            onChange={(event) =>
-              setChoices({
-                ...choices,
-                glitchDuration: Number(event.target.value),
-              })
-            }
-          />
-          seconds
-        </label>
-
-        <br />
-
-        <label>
-          Intensity:
-          <input
-            type="number"
-            min="1"
-            max="10"
-            step="1"
-            value={choices.glitchIntensity}
-            onChange={(event) =>
-              setChoices({
-                ...choices,
-                glitchIntensity: Number(event.target.value),
-              })
-            }
-          />
-          / 10
-        </label>
-      </div>
-    )}
-
-    <br />
-    <br />
-
-    <button onClick={previousStep}>
-      Back
-    </button>
-
-    <button onClick={nextStep}>
-      Next
-    </button>
-  </div>
-)}
-
-      {step === 3 && (
-        <div>
-          <h3>Do you want to speed up part of the video?</h3>
-
-            <button
-                style={{
-                    backgroundColor:
-                        choices.speed !== 1 ? 'green' : '',
-                    color:
-                        choices.speed !== 1 ? 'white' : '',
-                }}
-                onClick={() =>
-                    setChoices({
-                        ...choices,
-                        speed: 1.5,
-                    })
-                }
-            >
-                Yes
-            </button>
-
-            <button
-                style={{
-                    backgroundColor:
-                        choices.speed === 1 ? 'green' : '',
-                    color:
-                        choices.speed === 1 ? 'white' : '',
-                }}
-                onClick={() =>
-                    setChoices({
-                        ...choices,
-                        speed: 1,
-                    })
-                }
-            >
-                No
-            </button>
-
-          {choices.speed !== 1 && (
-            <div>
-              <br />
-
-              <label>
-                Start at:
-                <input
-                  type="number"
-                  min="0"
-                  step="0.1"
-                  value={choices.speedStart || 0}
-                  onChange={(event) =>
-                    setChoices({
-                      ...choices,
-                      speedStart: Number(event.target.value),
-                    })
-                  }
-                />
-                seconds
-              </label>
-
-              <br />
-
-              <label>
-                End at:
-                <input
-                  type="number"
-                  min="0"
-                  step="0.1"
-                  value={choices.speedEnd || 0}
-                  onChange={(event) =>
-                    setChoices({
-                      ...choices,
-                      speedEnd: Number(event.target.value),
-                    })
-                  }
-                />
-                seconds
-              </label>
-
-              <br />
-
-              <label>
-                Speed:
-                <input
-                  type="number"
-                  min="0.1"
-                  step="0.1"
-                  value={choices.speed}
-                  onChange={(event) =>
-                    setChoices({
-                      ...choices,
-                      speed: Number(event.target.value),
-                    })
-                  }
-                />
-                x
-              </label>
-            </div>
-          )}
-
-          <br />
-          <br />
-
-          <button onClick={previousStep}>
-            Back
-          </button>
-
-          <button onClick={nextStep}>
-            Next
-          </button>
-        </div>
-      )}
-
-      {step === 4 && (
-        <div>
-          <h3>Do you want to add a watermark?</h3>
-
-          <button
-            style={{
-              backgroundColor:
-                choices.watermark === true ? 'green' : '',
-              color:
-                choices.watermark === true ? 'white' : '',
-            }}
-            onClick={() =>
-              setChoices({
-                ...choices,
-                watermark: true,
-              })
-            }
-          >
-            Yes
-          </button>
-
-          <button
-            style={{
-              backgroundColor:
-                choices.watermark === false ? 'green' : '',
-              color:
-                choices.watermark === false ? 'white' : '',
-            }}
-            onClick={() => {
-              setChoices({
-                ...choices,
-                watermark: false,
-              })
-
+            if (!enabled) {
               setWatermark(null)
-            }}
-          >
-            No
-          </button>
+            }
+          }}
+        />
+        Add a watermark
+      </label>
 
-          {choices.watermark === true && (
-            <div>
-              <br />
+      {choices.watermark === true && (
+        <div>
+          <br />
 
-              <label>
-                Upload watermark:
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) =>
-                    setWatermark(event.target.files[0])
-                  }
-                />
-              </label>
+          <label>
+            Upload watermark:
 
-              {watermark && (
-                <p>
-                  Selected watermark: {watermark.name}
-                </p>
-              )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(event) =>
+                setWatermark(
+                  event.target.files?.[0] ?? null
+                )
+              }
+            />
+          </label>
 
-              <br />
-
-              <h4>Where should the watermark appear?</h4>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'top-left'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'top-left'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'top-left',
-                  })
-                }
-              >
-                Top Left
-              </button>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'top-right'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'top-right'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'top-right',
-                  })
-                }
-              >
-                Top Right
-              </button>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'bottom-left'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'bottom-left'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'bottom-left',
-                  })
-                }
-              >
-                Bottom Left
-              </button>
-
-              <button
-                style={{
-                  backgroundColor:
-                    choices.watermarkPosition === 'bottom-right'
-                      ? 'green'
-                      : '',
-                  color:
-                    choices.watermarkPosition === 'bottom-right'
-                      ? 'white'
-                      : '',
-                }}
-                onClick={() =>
-                  setChoices({
-                    ...choices,
-                    watermarkPosition: 'bottom-right',
-                  })
-                }
-              >
-                Bottom Right
-              </button>
-            </div>
+          {watermark && (
+            <p>
+              Selected watermark: {watermark.name}
+            </p>
           )}
 
           <br />
-          <br />
 
-          <button onClick={previousStep}>
-            Back
-          </button>
+          <label>
+            Watermark position:
 
-          <button
-            onClick={onProcess}
-            disabled={
-              processing ||
-              (choices.watermark === true && !watermark)
-            }
-          >
-            {processing ? 'Processing...' : 'Process Video'}
-          </button>
+            <select
+              value={
+                choices.watermarkPosition || 'top-right'
+              }
+              onChange={(event) =>
+                setChoices({
+                  ...choices,
+                  watermarkPosition: event.target.value
+                })
+              }
+            >
+              <option value="top-left">Top Left</option>
+              <option value="top-right">Top Right</option>
+              <option value="bottom-left">Bottom Left</option>
+              <option value="bottom-right">Bottom Right</option>
+            </select>
+          </label>
         </div>
       )}
+
+      <hr />
+
+      <p>
+        Review the effects above before applying the
+        Futuristic theme to your video.
+      </p>
+
+      <button
+        onClick={handleApply}
+        disabled={
+          processing ||
+          confirmed ||
+          (choices.watermark === true && !watermark)
+        }
+      >
+        {processing
+          ? 'Processing...'
+          : confirmed
+            ? 'Processing requested...'
+            : 'Apply Futuristic'}
+      </button>
     </div>
   )
 }

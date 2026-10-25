@@ -80,227 +80,129 @@ def process_futuristic_video(
 ):
     clip = VideoFileClip(input_path)
 
+    def futuristic_color(get_frame, t):
+        frame = get_frame(t)
 
-    if choices.get("colorEffect"):
+        image = Image.fromarray(frame).convert("RGB")
+        array = np.array(image).astype(np.float32)
 
-        def futuristic_color(get_frame, t):
-            frame = get_frame(t)
+        array[:, :, 0] *= 0.75
+        array[:, :, 2] *= 1.25
 
-            image = Image.fromarray(frame).convert("RGB")
+        array = (array - 128) * 1.1 + 128
 
-            array = np.array(image).astype(np.float32)
+        array = np.clip(
+            array,
+            0,
+            255
+        ).astype(np.uint8)
 
-            array[:, :, 0] *= 0.75
+        return array
 
-            array[:, :, 2] *= 1.25
+    clip = clip.transform(futuristic_color)
 
-            array = (array - 128) * 1.1 + 128
-
-            array = np.clip(
-                array,
-                0,
-                255
-            ).astype(np.uint8)
-
-            return array
-
-        clip = clip.transform(
-            futuristic_color
-        )
-
-
-    glitch_start = choices.get(
-        "glitchStart",
-        0
-    )
-
-    glitch_duration = choices.get(
-        "glitchDuration",
-        2
-    )
-
-    glitch_intensity = choices.get(
-        "glitchIntensity",
-        5
-    )
-
+    glitch_start = 2
+    glitch_duration = 2
+    glitch_intensity = 5
     glitch_end = min(
         glitch_start + glitch_duration,
         clip.duration
     )
 
-    glitch_intensity = max(
-        1,
-        min(glitch_intensity, 10)
-    )
+    def futuristic_glitch(get_frame, t):
+        frame = get_frame(t)
 
-    if choices.get("glitch"):
+        if t < glitch_start or t >= glitch_end:
+            return frame
 
-        def futuristic_glitch(
-            get_frame,
-            t
-        ):
-            frame = get_frame(t)
+        result = frame.copy()
+        height, width, _ = result.shape
 
-            if (
-                t < glitch_start
-                or t > glitch_end
-            ):
-                return frame
+        shift = max(
+            1,
+            int(width * 0.01 * glitch_intensity)
+        )
 
-            result = frame.copy()
+        result[:, :, 0] = np.roll(
+            result[:, :, 0],
+            shift,
+            axis=1
+        )
 
-            height, width, _ = result.shape
+        result[:, :, 2] = np.roll(
+            result[:, :, 2],
+            -shift,
+            axis=1
+        )
 
-            shift = max(
-                1,
-                int(
-                    width
-                    * 0.01
-                    * glitch_intensity
+        slice_height = max(
+            2,
+            height // (20 - glitch_intensity)
+        )
+
+        for y in range(0, height, slice_height):
+            if np.random.random() < 0.35:
+                slice_end = min(
+                    y + slice_height,
+                    height
                 )
-            )
 
-            result[:, :, 0] = np.roll(
-                result[:, :, 0],
-                shift,
-                axis=1
-            )
-
-            result[:, :, 2] = np.roll(
-                result[:, :, 2],
-                -shift,
-                axis=1
-            )
-
-            slice_height = max(
-                2,
-                height // (
-                    20 - glitch_intensity
+                slice_shift = np.random.randint(
+                    -shift,
+                    shift + 1
                 )
-            )
 
-            for y in range(
-                0,
-                height,
-                slice_height
-            ):
+                result[y:slice_end] = np.roll(
+                    result[y:slice_end],
+                    slice_shift,
+                    axis=1
+                )
 
-                if np.random.random() < 0.35:
+        return result
 
-                    slice_end = min(
-                        y + slice_height,
-                        height
-                    )
+    clip = clip.transform(futuristic_glitch)
 
-                    slice_shift = np.random.randint(
-                        -shift,
-                        shift + 1
-                    )
+    speed_factor = 1.3
+    speed_start = 5
+    speed_end = min(7, clip.duration)
 
-                    result[
-                        y:slice_end
-                    ] = np.roll(
-                        result[
-                            y:slice_end
-                        ],
-                        slice_shift,
-                        axis=1
-                    )
+    parts = []
 
-            return result
-
-        clip = clip.transform(
-            futuristic_glitch
+    if speed_start > 0:
+        parts.append(
+            clip.subclipped(0, speed_start)
         )
 
-
-    speed_factor = choices.get(
-        "speed",
-        1
-    )
-
-    if speed_factor != 1:
-
-        speed_start = choices.get(
-            "speedStart",
-            0
-        )
-
-        speed_end = choices.get(
-            "speedEnd",
-            speed_start + 2
-        )
-
-        speed_start = max(
-            0,
-            speed_start
-        )
-
-        speed_end = min(
-            clip.duration,
+    if speed_end > speed_start:
+        speed_part = clip.subclipped(
+            speed_start,
             speed_end
         )
 
-        if speed_end > speed_start:
+        speed_part = speed_part.with_effects([
+            MultiplySpeed(speed_factor)
+        ])
 
-            parts = []
+        parts.append(speed_part)
 
-            if speed_start > 0:
-                before_speed = clip.subclipped(
-                    0,
-                    speed_start
-                )
+    if speed_end < clip.duration:
+        parts.append(
+            clip.subclipped(speed_end)
+        )
 
-                parts.append(
-                    before_speed
-                )
+    final_video = concatenate_videoclips(
+        parts,
+        method="compose"
+    )
 
-            speed_part = clip.subclipped(
-                speed_start,
-                speed_end
-            )
-
-            speed_part = speed_part.with_effects([
-                MultiplySpeed(
-                    speed_factor
-                )
-            ])
-
-            parts.append(
-                speed_part
-            )
-
-            if speed_end < clip.duration:
-                after_speed = clip.subclipped(
-                    speed_end
-                )
-
-                parts.append(
-                    after_speed
-                )
-
-            clip = concatenate_videoclips(parts, method="compose")
-
-    video_to_write = clip
+    video_to_write = final_video
     watermark_clip = None
 
-    if (
-        watermark_path
-        and choices.get("watermark")
-    ):
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
 
-        watermark_clip = ImageClip(
-            watermark_path
-        )
-
-        max_width = int(
-            clip.w * 0.2
-        )
-
-        max_height = int(
-            clip.h * 0.2
-        )
+        max_width = int(final_video.w * 0.2)
+        max_height = int(final_video.h * 0.2)
 
         scale = min(
             max_width / watermark_clip.w,
@@ -310,9 +212,7 @@ def process_futuristic_video(
 
         if scale < 1:
             watermark_clip = watermark_clip.resized(
-                width=int(
-                    watermark_clip.w * scale
-                )
+                width=int(watermark_clip.w * scale)
             )
 
         margin = 20
@@ -323,43 +223,28 @@ def process_futuristic_video(
         )
 
         if position == "top-left":
-
-            watermark_position = (
-                margin,
-                margin
-            )
+            watermark_position = (margin, margin)
 
         elif position == "top-right":
-
             watermark_position = (
-                clip.w
-                - watermark_clip.w
-                - margin,
+                final_video.w - watermark_clip.w - margin,
                 margin
             )
 
         elif position == "bottom-left":
-
             watermark_position = (
                 margin,
-                clip.h
-                - watermark_clip.h
-                - margin
+                final_video.h - watermark_clip.h - margin
             )
 
         else:
-
             watermark_position = (
-                clip.w
-                - watermark_clip.w
-                - margin,
-                clip.h
-                - watermark_clip.h
-                - margin
+                final_video.w - watermark_clip.w - margin,
+                final_video.h - watermark_clip.h - margin
             )
 
         watermark_clip = watermark_clip.with_duration(
-            clip.duration
+            final_video.duration
         )
 
         watermark_clip = watermark_clip.with_position(
@@ -367,22 +252,24 @@ def process_futuristic_video(
         )
 
         video_to_write = CompositeVideoClip([
-            clip,
+            final_video,
             watermark_clip
         ])
 
-
-    video_to_write.write_videofile(
-        output_path
-    )
+    video_to_write.write_videofile(output_path)
 
     clip.close()
+
+    for part in parts:
+        part.close()
 
     if watermark_clip:
         watermark_clip.close()
 
-    if video_to_write is not clip:
+    if video_to_write is not final_video:
         video_to_write.close()
+
+    final_video.close()
 
     return output_path
 
@@ -390,14 +277,13 @@ def process_futuristic_video(
 def process_vintage_video(input_path, output_path, choices,watermark_path=None):
     clip = VideoFileClip(input_path)
 
-    if choices.get("grayscale"):
-        clip = clip.with_effects([BlackAndWhite()])
+    clip = clip.with_effects([BlackAndWhite()])
 
     parts = []
 
-    rotation_start = choices.get("rotationStart", 2)
-    rotation_duration = choices.get("rotationDuration", 1)
-    rotation_angle = choices.get("rotate", 0)
+    rotation_start = 2
+    rotation_duration = 1
+    rotation_angle = 90
 
     rotation_in_end = rotation_start + 1
     rotation_hold_end = rotation_in_end + rotation_duration
@@ -475,16 +361,9 @@ def process_vintage_video(input_path, output_path, choices,watermark_path=None):
     else:
         video_after_rotation = rotation_start
 
-
-    speed_factor = choices.get("speed", 1)
-    speed_start = choices.get(
-        "speedStart",
-        video_after_rotation
-    )
-    speed_end = choices.get(
-        "speedEnd",
-        speed_start + 2
-    )
+    speed_factor = 1.5
+    speed_start = 5
+    speed_end = 7
 
     speed_start = max(
         speed_start,
@@ -535,7 +414,6 @@ def process_vintage_video(input_path, output_path, choices,watermark_path=None):
     if watermark_path and choices.get("watermark"):
         watermark_clip = ImageClip(watermark_path)
 
-        # Keep watermark reasonably small
         max_width = int(final_video.w * 0.2)
         max_height = int(final_video.h * 0.2)
 
@@ -622,197 +500,170 @@ def process_retro_video(
 ):
     clip = VideoFileClip(input_path)
 
-    if choices.get("colorEffect"):
+    def retro_color(get_frame, t):
+        frame = get_frame(t)
 
-        def retro_color(get_frame, t):
-            frame = get_frame(t)
+        image = Image.fromarray(frame).convert("RGB")
 
-            image = Image.fromarray(frame).convert("RGB")
+        array = np.array(
+            image
+        ).astype(np.float32)
 
-            array = np.array(
-                image
-            ).astype(np.float32)
+        array[:, :, 0] *= 1.12
+        array[:, :, 1] *= 0.98
+        array[:, :, 2] *= 0.82
 
-            array[:, :, 0] *= 1.12
-            array[:, :, 1] *= 0.98
-            array[:, :, 2] *= 0.82
+        array = (
+            (array - 128) * 0.9
+        ) + 128
 
-            array = (
-                (array - 128) * 0.9
-            ) + 128
+        array = np.clip(
+            array,
+            0,
+            255
+        ).astype(np.uint8)
 
-            array = np.clip(
-                array,
-                0,
-                255
-            ).astype(np.uint8)
+        return array
 
-            return array
+    clip = clip.transform(retro_color)
 
-        clip = clip.transform(
-            retro_color
+    grain_intensity = 5
+
+    def add_film_grain(get_frame, t):
+        frame = get_frame(t)
+
+        noise_strength = grain_intensity * 2.5
+
+        noise = np.random.normal(
+            0,
+            noise_strength,
+            frame.shape
         )
 
-    if choices.get("filmGrain"):
+        result = frame.astype(
+            np.float32
+        ) + noise
 
-        grain_intensity = choices.get(
-            "filmGrainIntensity",
-            5
+        result = np.clip(
+            result,
+            0,
+            255
+        ).astype(np.uint8)
+
+        return result
+
+    clip = clip.transform(add_film_grain)
+
+    vignette_intensity = 1
+
+    def add_vignette(get_frame, t):
+        frame = get_frame(t)
+
+        height, width = frame.shape[:2]
+
+        y, x = np.ogrid[:height, :width]
+
+        center_x = width / 2
+        center_y = height / 2
+
+        distance = np.sqrt(
+            ((x - center_x) / center_x) ** 2
+            + ((y - center_y) / center_y) ** 2
         )
 
-        grain_intensity = max(
-            1,
-            min(grain_intensity, 10)
+        mask = 1 - (
+            distance * 0.35 * vignette_intensity
         )
 
-        def add_film_grain(get_frame, t):
-            frame = get_frame(t)
-
-            noise_strength = grain_intensity * 2.5
-
-            noise = np.random.normal(
-                0,
-                noise_strength,
-                frame.shape
-            )
-
-            result = frame.astype(
-                np.float32
-            ) + noise
-
-            result = np.clip(
-                result,
-                0,
-                255
-            ).astype(np.uint8)
-
-            return result
-
-        clip = clip.transform(
-            add_film_grain
-        )
-
-    if choices.get("vignette"):
-
-        vignette_intensity = choices.get(
-            "vignetteIntensity",
-            5
-        )
-
-        vignette_intensity = max(
-            1,
-            min(vignette_intensity, 10)
-        )
-
-        def add_vignette(get_frame, t):
-            frame = get_frame(t)
-
-            height, width = frame.shape[:2]
-
-            y, x = np.ogrid[
-                :height,
-                :width
-            ]
-
-            center_x = width / 2
-            center_y = height / 2
-
-            distance = np.sqrt(
-                ((x - center_x) / center_x) ** 2
-                + ((y - center_y) / center_y) ** 2
-            )
-
-            mask = 1 - (
-                distance * 0.35 * vignette_intensity
-            )
-
-            mask = np.clip(
-                mask,
-                0.2,
-                1
-            )
-
-            result = frame.astype(
-                np.float32
-            ) * mask[..., None]
-
-            return np.clip(
-                result,
-                0,
-                255
-            ).astype(np.uint8)
-
-        clip = clip.transform(
-            add_vignette
-        )
-
-    if choices.get("watermark") and watermark_path:
-
-        watermark = ImageClip(
-            watermark_path
-        )
-
-        max_width = clip.w * 0.2
-        max_height = clip.h * 0.2
-
-        scale = min(
-            max_width / watermark.w,
-            max_height / watermark.h,
+        mask = np.clip(
+            mask,
+            0.2,
             1
         )
 
-        watermark = watermark.resized(
-            scale
+        result = frame.astype(
+            np.float32
+        ) * mask[..., None]
+
+        return np.clip(
+            result,
+            0,
+            255
+        ).astype(np.uint8)
+
+    clip = clip.transform(add_vignette)
+
+    video_to_write = clip
+    watermark_clip = None
+
+    if choices.get("watermark") and watermark_path:
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
         )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
 
         position = choices.get(
             "watermarkPosition",
             "top-right"
         )
 
-        margin = 20
-
         if position == "top-left":
-            watermark = watermark.with_position(
-                (margin, margin)
+            watermark_position = (
+                margin,
+                margin
             )
 
         elif position == "top-right":
-            watermark = watermark.with_position(
-                (
-                    clip.w - watermark.w - margin,
-                    margin
-                )
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                margin
             )
 
         elif position == "bottom-left":
-            watermark = watermark.with_position(
-                (
-                    margin,
-                    clip.h - watermark.h - margin
-                )
+            watermark_position = (
+                margin,
+                clip.h - watermark_clip.h - margin
             )
 
-        elif position == "bottom-right":
-            watermark = watermark.with_position(
-                (
-                    clip.w - watermark.w - margin,
-                    clip.h - watermark.h - margin
-                )
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
             )
 
-        watermark = watermark.with_duration(
+        watermark_clip = watermark_clip.with_duration(
             clip.duration
         )
 
-        clip = CompositeVideoClip([
+        watermark_clip = watermark_clip.with_position(
+            watermark_position
+        )
+
+        video_to_write = CompositeVideoClip([
             clip,
-            watermark
+            watermark_clip
         ])
 
-    clip.write_videofile(
-        output_path
-    )
+    video_to_write.write_videofile(output_path)
+
+    if video_to_write is not clip:
+        video_to_write.close()
+
+    if watermark_clip:
+        watermark_clip.close()
 
     clip.close()
 
