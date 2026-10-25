@@ -678,20 +678,17 @@ def process_cinematic_video(
 ):
     clip = VideoFileClip(input_path)
 
-    # 1. Gradually apply teal-and-orange color grading (0–2 seconds)
     def cinematic_color(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
         strength = min(max(t / 2, 0), 1)
 
-        # Estimate brightness and identify shadows/highlights.
         brightness = np.mean(frame, axis=2) / 255.0
         shadows = (1 - brightness)[..., None]
         highlights = brightness[..., None]
 
         graded = frame.copy()
 
-        # Cool shadows and warm highlights.
         graded[:, :, 0] += (highlights[:, :, 0] * 20)
         graded[:, :, 1] += (highlights[:, :, 0] * 5)
         graded[:, :, 1] -= (shadows[:, :, 0] * 5)
@@ -707,7 +704,6 @@ def process_cinematic_video(
 
     clip = clip.transform(cinematic_color)
 
-    # 2. Gradually increase the vignette (2–4 seconds)
     def cinematic_vignette(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
@@ -734,7 +730,6 @@ def process_cinematic_video(
 
     clip = clip.transform(cinematic_vignette)
 
-    # 3. Gradually increase contrast (4–6 seconds)
     def cinematic_contrast(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
@@ -747,7 +742,6 @@ def process_cinematic_video(
 
     clip = clip.transform(cinematic_contrast)
 
-    # 4. Add cinematic letterbox bars throughout the video.
     def cinematic_letterbox(get_frame, t):
         frame = get_frame(t).copy()
 
@@ -761,7 +755,6 @@ def process_cinematic_video(
 
     clip = clip.transform(cinematic_letterbox)
 
-    # Optional watermark, matching the other themes.
     video_to_write = clip
     watermark_clip = None
 
@@ -835,3 +828,315 @@ def process_cinematic_video(
         clip.close()
 
     return output_path
+
+
+def process_noir_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    # 1. Convert to black and white.
+    clip = clip.with_effects([BlackAndWhite()])
+
+    # 2. Gradually increase contrast during the first 3 seconds.
+    def noir_contrast(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        strength = min(max(t / 3, 0), 1)
+        contrast_factor = 1 + (0.4 * strength)
+
+        result = (frame - 128) * contrast_factor + 128
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(noir_contrast)
+
+    # 3. Gradually apply a strong vignette during seconds 2–4.
+    def noir_vignette(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        strength = min(max((t - 2) / 2, 0), 1)
+
+        height, width = frame.shape[:2]
+        y, x = np.ogrid[:height, :width]
+
+        center_x = width / 2
+        center_y = height / 2
+
+        distance = np.sqrt(
+            ((x - center_x) / center_x) ** 2
+            + ((y - center_y) / center_y) ** 2
+        )
+
+        mask = 1 - (distance * 0.45 * strength)
+        mask = np.clip(mask, 0.3, 1)
+
+        result = frame * mask[..., None]
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(noir_vignette)
+
+    # 4. Add subtle film grain throughout the video.
+    def noir_grain(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        noise = np.random.normal(
+            0,
+            7,
+            frame.shape[:2] + (1,)
+        )
+
+        result = frame + noise
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(noir_grain)
+
+    # 5. Optional watermark.
+    video_to_write = clip
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+
+        position = choices.get(
+            "watermarkPosition",
+            "top-right"
+        )
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+
+        elif position == "top-right":
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                margin
+            )
+
+        elif position == "bottom-left":
+            watermark_position = (
+                margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            clip.duration
+        ).with_position(watermark_position)
+
+        video_to_write = CompositeVideoClip([
+            clip,
+            watermark_clip
+        ])
+
+    try:
+        video_to_write.write_videofile(output_path)
+    finally:
+        if video_to_write is not clip:
+            video_to_write.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path
+
+
+def process_vhs_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    # 1. Apply faded VHS colors throughout the video.
+    def vhs_color(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        # Slightly desaturate the image.
+        gray = np.mean(frame, axis=2, keepdims=True)
+        frame = gray + (frame - gray) * 0.75
+
+        # Give the image a warm, faded tint.
+        frame[:, :, 0] *= 1.08
+        frame[:, :, 1] *= 1.02
+        frame[:, :, 2] *= 0.92
+
+        # Reduce contrast for a faded tape look.
+        frame = (frame - 128) * 0.9 + 128
+
+        return np.clip(frame, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(vhs_color)
+
+    # 2. Add horizontal scanlines throughout the video.
+    def vhs_scanlines(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        # Darken every third row slightly.
+        frame[::3, :, :] *= 0.82
+
+        return np.clip(frame, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(vhs_scanlines)
+
+    # 3. Add a short glitch from seconds 2–4.
+    glitch_start = 2
+    glitch_end = min(4, clip.duration)
+    glitch_intensity = 5
+
+    def vhs_glitch(get_frame, t):
+        frame = get_frame(t)
+
+        if t < glitch_start or t >= glitch_end:
+            return frame
+
+        result = frame.copy()
+        height, width, _ = result.shape
+
+        shift = max(1, int(width * 0.01 * glitch_intensity))
+
+        # Offset red and blue channels.
+        result[:, :, 0] = np.roll(
+            result[:, :, 0], shift, axis=1
+        )
+
+        result[:, :, 2] = np.roll(
+            result[:, :, 2], -shift, axis=1
+        )
+
+        # Shift occasional horizontal strips.
+        slice_height = max(2, height // 15)
+
+        for y in range(0, height, slice_height):
+            if np.random.random() < 0.25:
+                end_y = min(y + slice_height, height)
+
+                slice_shift = np.random.randint(
+                    -shift, shift + 1
+                )
+
+                result[y:end_y] = np.roll(
+                    result[y:end_y],
+                    slice_shift,
+                    axis=1
+                )
+
+        return result
+
+    clip = clip.transform(vhs_glitch)
+
+    # 4. Add subtle analog noise throughout the video.
+    def vhs_noise(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        noise = np.random.normal(
+            0,
+            4,
+            frame.shape[:2] + (1,)
+        )
+
+        result = frame + noise
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(vhs_noise)
+
+    # 5. Optional watermark.
+    video_to_write = clip
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+
+        position = choices.get(
+            "watermarkPosition",
+            "top-right"
+        )
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+
+        elif position == "top-right":
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                margin
+            )
+
+        elif position == "bottom-left":
+            watermark_position = (
+                margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            clip.duration
+        ).with_position(watermark_position)
+
+        video_to_write = CompositeVideoClip([
+            clip,
+            watermark_clip
+        ])
+
+    try:
+        video_to_write.write_videofile(output_path)
+    finally:
+        if video_to_write is not clip:
+            video_to_write.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path
+
