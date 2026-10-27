@@ -1,15 +1,10 @@
-from moviepy import VideoFileClip, concatenate_videoclips
 from moviepy.video.fx.MirrorX import MirrorX
-from moviepy.video.fx.MultiplySpeed import MultiplySpeed
 from moviepy.video.fx.BlackAndWhite import BlackAndWhite
-from PIL import Image
+from moviepy import VideoFileClip, concatenate_videoclips, ImageClip, CompositeVideoClip
+from moviepy.video.fx.MultiplySpeed import MultiplySpeed
 from PIL import Image, ImageFilter
 import numpy as np
-from moviepy import VideoFileClip, concatenate_videoclips, ImageClip, CompositeVideoClip
-from moviepy import VideoFileClip, concatenate_videoclips, ImageClip, CompositeVideoClip
-from moviepy.video.fx.MultiplySpeed import MultiplySpeed
-from PIL import Image
-import numpy as np
+from moviepy import VideoFileClip, ImageClip, CompositeVideoClip
 
 def trim_video(input_path, output_path, start_time, end_time):
     clip = VideoFileClip(input_path)
@@ -1441,5 +1436,160 @@ def process_action_video(
 
     return output_path
 
+
+def process_cyberpunk_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    def cyberpunk_colors(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+        strength = min(max(t / 2, 0), 1)
+
+        red = frame[:, :, 0]
+        green = frame[:, :, 1]
+        blue = frame[:, :, 2]
+
+        result = frame.copy()
+        result[:, :, 0] = red * (1 + 0.12 * strength)
+        result[:, :, 1] = green * (1 - 0.08 * strength)
+        result[:, :, 2] = blue * (1 + 0.30 * strength)
+
+        cyan_mask = np.minimum(green, blue) / 255.0
+        result[:, :, 1] += cyan_mask * 18 * strength
+        result[:, :, 2] += cyan_mask * 18 * strength
+
+        luminance = (
+            0.299 * result[:, :, 0]
+            + 0.587 * result[:, :, 1]
+            + 0.114 * result[:, :, 2]
+        )
+        shadow_mask = np.clip((100 - luminance) / 100, 0, 1)
+        result *= (1 - 0.28 * shadow_mask[:, :, None])
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(cyberpunk_colors)
+
+    def cyberpunk_contrast(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+        strength = min(max((t - 2) / 2, 0), 1)
+        contrast = 1 + 0.35 * strength
+
+        result = (frame - 128) * contrast + 128
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(cyberpunk_contrast)
+
+    def cyberpunk_glitch(get_frame, t):
+        frame = get_frame(t).copy()
+
+        if not 4 <= t <= 5:
+            return frame
+
+        height, width = frame.shape[:2]
+        result = frame.copy()
+
+        shift = 6
+        result[:, shift:, 0] = frame[:, :-shift, 0]
+        result[:, :-shift, 2] = frame[:, shift:, 2]
+
+        band_y = int((t * 137) % max(height - 12, 1))
+        band_height = min(8, height - band_y)
+
+        if band_height > 0:
+            band = result[band_y:band_y + band_height].copy()
+            result[band_y:band_y + band_height] = np.roll(
+                band, int(12 * np.sin(t * 90)), axis=1
+            )
+
+        return result
+
+    clip = clip.transform(cyberpunk_glitch)
+
+    def cyberpunk_glow(get_frame, t):
+        frame = get_frame(t)
+
+        if t < 5:
+            return frame
+
+        strength = min(max((t - 5) / 2, 0), 1)
+
+        image = Image.fromarray(frame).convert("RGB")
+        blurred = image.filter(ImageFilter.GaussianBlur(radius=8))
+
+        original_array = np.array(image).astype(np.float32)
+        blurred_array = np.array(blurred).astype(np.float32)
+
+        brightness = np.mean(original_array, axis=2, keepdims=True)
+        mask = np.clip((brightness - 100) / 155, 0, 1)
+
+        result = original_array + blurred_array * mask * 0.22 * strength
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(cyberpunk_glow)
+
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+        position = choices.get("watermarkPosition", "top-right")
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+        elif position == "top-right":
+            watermark_position = (
+                clip.w - watermark_clip.w - margin, margin
+            )
+        elif position == "bottom-left":
+            watermark_position = (
+                margin, clip.h - watermark_clip.h - margin
+            )
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            clip.duration
+        ).with_position(watermark_position)
+
+        final_clip = CompositeVideoClip([clip, watermark_clip])
+    else:
+        final_clip = clip
+
+    try:
+        final_clip.write_videofile(output_path)
+    finally:
+        if final_clip is not clip:
+            final_clip.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path
 
 

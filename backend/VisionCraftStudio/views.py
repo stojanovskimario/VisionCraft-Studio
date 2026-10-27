@@ -58,7 +58,8 @@ def process_video(request):
             status=400
         )
 
-    if theme not in ["vintage", "futuristic", "retro", "cinematic", "noir", "vhs", "dreamy", "action"]:
+    if theme not in ["vintage", "futuristic", "retro", "cinematic", "noir", "vhs", "dreamy", "action",
+                     "cyberpunk"]:
         return JsonResponse(
             {"error": "Unsupported theme."},
             status=400
@@ -177,9 +178,16 @@ def process_video(request):
             watermark_path
         )
 
-
     elif theme == "action":
         result = processor.process_action(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+    elif theme == "cyberpunk":
+        result = processor.process_cyberpunk(
             input_path,
             output_path,
             choices,

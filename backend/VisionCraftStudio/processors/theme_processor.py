@@ -6,7 +6,8 @@ from VisionCraftStudio.services.video_service import (
     process_noir_video,
     process_vhs_video,
     process_dreamy_video,
-    process_action_video
+    process_action_video,
+    process_cyberpunk_video
 )
 
 
@@ -111,7 +112,6 @@ class ThemeProcessor:
             watermark_path
         )
 
-
     def process_action(
         self,
         input_path,
@@ -120,6 +120,20 @@ class ThemeProcessor:
         watermark_path=None
     ):
         return process_action_video(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+    def process_cyberpunk(
+        self,
+        input_path,
+        output_path,
+        choices,
+        watermark_path=None
+    ):
+        return process_cyberpunk_video(
             input_path,
             output_path,
             choices,

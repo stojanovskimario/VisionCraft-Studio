@@ -36,6 +36,10 @@ function ThemeSelector({ theme, setTheme }) {
                 Action
             </button>
 
+            <button onClick={() => setTheme('cyberpunk')}>
+                Cyberpunk
+            </button>
+
         </div>
     )
 }
