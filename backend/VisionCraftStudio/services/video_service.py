@@ -3,8 +3,13 @@ from moviepy.video.fx.MirrorX import MirrorX
 from moviepy.video.fx.MultiplySpeed import MultiplySpeed
 from moviepy.video.fx.BlackAndWhite import BlackAndWhite
 from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
 from moviepy import VideoFileClip, concatenate_videoclips, ImageClip, CompositeVideoClip
+from moviepy import VideoFileClip, concatenate_videoclips, ImageClip, CompositeVideoClip
+from moviepy.video.fx.MultiplySpeed import MultiplySpeed
+from PIL import Image
+import numpy as np
 
 def trim_video(input_path, output_path, start_time, end_time):
     clip = VideoFileClip(input_path)
@@ -838,10 +843,8 @@ def process_noir_video(
 ):
     clip = VideoFileClip(input_path)
 
-    # 1. Convert to black and white.
     clip = clip.with_effects([BlackAndWhite()])
 
-    # 2. Gradually increase contrast during the first 3 seconds.
     def noir_contrast(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
@@ -854,7 +857,6 @@ def process_noir_video(
 
     clip = clip.transform(noir_contrast)
 
-    # 3. Gradually apply a strong vignette during seconds 2–4.
     def noir_vignette(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
@@ -880,7 +882,6 @@ def process_noir_video(
 
     clip = clip.transform(noir_vignette)
 
-    # 4. Add subtle film grain throughout the video.
     def noir_grain(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
@@ -896,7 +897,6 @@ def process_noir_video(
 
     clip = clip.transform(noir_grain)
 
-    # 5. Optional watermark.
     video_to_write = clip
     watermark_clip = None
 
@@ -976,38 +976,31 @@ def process_vhs_video(
 ):
     clip = VideoFileClip(input_path)
 
-    # 1. Apply faded VHS colors throughout the video.
     def vhs_color(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
-        # Slightly desaturate the image.
         gray = np.mean(frame, axis=2, keepdims=True)
         frame = gray + (frame - gray) * 0.75
 
-        # Give the image a warm, faded tint.
         frame[:, :, 0] *= 1.08
         frame[:, :, 1] *= 1.02
         frame[:, :, 2] *= 0.92
 
-        # Reduce contrast for a faded tape look.
         frame = (frame - 128) * 0.9 + 128
 
         return np.clip(frame, 0, 255).astype(np.uint8)
 
     clip = clip.transform(vhs_color)
 
-    # 2. Add horizontal scanlines throughout the video.
     def vhs_scanlines(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
-        # Darken every third row slightly.
         frame[::3, :, :] *= 0.82
 
         return np.clip(frame, 0, 255).astype(np.uint8)
 
     clip = clip.transform(vhs_scanlines)
 
-    # 3. Add a short glitch from seconds 2–4.
     glitch_start = 2
     glitch_end = min(4, clip.duration)
     glitch_intensity = 5
@@ -1023,7 +1016,6 @@ def process_vhs_video(
 
         shift = max(1, int(width * 0.01 * glitch_intensity))
 
-        # Offset red and blue channels.
         result[:, :, 0] = np.roll(
             result[:, :, 0], shift, axis=1
         )
@@ -1032,7 +1024,6 @@ def process_vhs_video(
             result[:, :, 2], -shift, axis=1
         )
 
-        # Shift occasional horizontal strips.
         slice_height = max(2, height // 15)
 
         for y in range(0, height, slice_height):
@@ -1053,7 +1044,6 @@ def process_vhs_video(
 
     clip = clip.transform(vhs_glitch)
 
-    # 4. Add subtle analog noise throughout the video.
     def vhs_noise(get_frame, t):
         frame = get_frame(t).astype(np.float32)
 
@@ -1069,7 +1059,6 @@ def process_vhs_video(
 
     clip = clip.transform(vhs_noise)
 
-    # 5. Optional watermark.
     video_to_write = clip
     watermark_clip = None
 
@@ -1139,4 +1128,318 @@ def process_vhs_video(
         clip.close()
 
     return output_path
+
+
+def process_dreamy_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    def dreamy_brightness(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        strength = min(max(t / 2, 0), 1)
+        result = frame + (20 * strength)
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(dreamy_brightness)
+
+    def dreamy_soft_focus(get_frame, t):
+        frame = get_frame(t)
+
+        strength = min(max((t - 2) / 2, 0), 1)
+
+        if strength <= 0:
+            return frame
+
+        original = Image.fromarray(frame).convert("RGB")
+        blurred = original.filter(
+            ImageFilter.GaussianBlur(radius=3)
+        )
+
+        original_array = np.array(original).astype(np.float32)
+        blurred_array = np.array(blurred).astype(np.float32)
+
+        result = (
+            original_array * (1 - strength * 0.45)
+            + blurred_array * (strength * 0.45)
+        )
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(dreamy_soft_focus)
+
+    def dreamy_saturation(get_frame, t):
+        frame = get_frame(t)
+
+        strength = min(max((t - 4) / 2, 0), 1)
+
+        if strength <= 0:
+            return frame
+
+        image = Image.fromarray(frame).convert("RGB")
+        gray = np.array(
+            image.convert("L")
+        ).astype(np.float32)[..., None]
+
+        color = np.array(image).astype(np.float32)
+
+        result = gray + (color - gray) * (1 + 0.25 * strength)
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(dreamy_saturation)
+
+    def dreamy_glow(get_frame, t):
+        frame = get_frame(t)
+        image = Image.fromarray(frame).convert("RGB")
+
+        blurred = image.filter(ImageFilter.GaussianBlur(radius=8))
+
+        original_array = np.array(image).astype(np.float32)
+        blurred_array = np.array(blurred).astype(np.float32)
+
+        brightness = np.mean(original_array, axis=2, keepdims=True)
+        mask = np.clip((brightness - 130) / 125, 0, 1)
+
+        result = original_array + blurred_array * mask * 0.18
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(dreamy_glow)
+
+    video_to_write = clip
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+        position = choices.get(
+            "watermarkPosition",
+            "top-right"
+        )
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+        elif position == "top-right":
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                margin
+            )
+        elif position == "bottom-left":
+            watermark_position = (
+                margin,
+                clip.h - watermark_clip.h - margin
+            )
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            clip.duration
+        ).with_position(watermark_position)
+
+        video_to_write = CompositeVideoClip([
+            clip,
+            watermark_clip
+        ])
+
+    try:
+        video_to_write.write_videofile(output_path)
+    finally:
+        if video_to_write is not clip:
+            video_to_write.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path
+
+
+def process_action_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    def action_zoom(get_frame, t):
+        frame = get_frame(t)
+
+        strength = min(max(t / 2, 0), 1)
+        zoom_factor = 1 + 0.12 * strength
+
+        height, width = frame.shape[:2]
+        new_width = int(width * zoom_factor)
+        new_height = int(height * zoom_factor)
+
+        image = Image.fromarray(frame).resize(
+            (new_width, new_height),
+            Image.Resampling.LANCZOS
+        )
+
+        left = (new_width - width) // 2
+        top = (new_height - height) // 2
+
+        return np.array(
+            image.crop((left, top, left + width, top + height))
+        )
+
+    clip = clip.transform(action_zoom)
+
+    def action_shake(get_frame, t):
+        frame = get_frame(t)
+
+        if not 2 <= t <= 4:
+            return frame
+
+        height, width = frame.shape[:2]
+
+        offset_x = int(5 * np.sin(t * 35))
+        offset_y = int(4 * np.sin(t * 29))
+
+        image = Image.fromarray(frame)
+
+        expanded = image.resize(
+            (width + 20, height + 20),
+            Image.Resampling.LANCZOS
+        )
+
+        left = 10 + offset_x
+        top = 10 + offset_y
+
+        return np.array(
+            expanded.crop((left, top, left + width, top + height))
+        )
+
+    clip = clip.transform(action_shake)
+
+    def action_contrast(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+        contrast = 1.15
+
+        result = (frame - 128) * contrast + 128
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(action_contrast)
+
+    start = 4
+    end = min(6, clip.duration)
+
+    if end > start:
+        before = clip.subclipped(0, start)
+        action_section = clip.subclipped(start, end).with_effects(
+            [MultiplySpeed(1.5)]
+        )
+
+        if end < clip.duration:
+            after = clip.subclipped(end, clip.duration)
+            video_clips = [before, action_section, after]
+        else:
+            video_clips = [before, action_section]
+
+        video_to_write = concatenate_videoclips(
+            video_clips,
+            method="compose"
+        )
+    else:
+        video_clips = [clip]
+        video_to_write = clip
+
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(video_to_write.w * 0.2)
+        max_height = int(video_to_write.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+        position = choices.get("watermarkPosition", "top-right")
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+        elif position == "top-right":
+            watermark_position = (
+                video_to_write.w - watermark_clip.w - margin,
+                margin
+            )
+        elif position == "bottom-left":
+            watermark_position = (
+                margin,
+                video_to_write.h - watermark_clip.h - margin
+            )
+        else:
+            watermark_position = (
+                video_to_write.w - watermark_clip.w - margin,
+                video_to_write.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            video_to_write.duration
+        ).with_position(watermark_position)
+
+        final_clip = CompositeVideoClip(
+            [video_to_write, watermark_clip]
+        )
+    else:
+        final_clip = video_to_write
+
+    try:
+        final_clip.write_videofile(output_path)
+    finally:
+        if final_clip is not video_to_write:
+            final_clip.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        if video_to_write is not clip:
+            video_to_write.close()
+
+        for part in video_clips:
+            if part is not clip:
+                part.close()
+
+        clip.close()
+
+    return output_path
+
+
 

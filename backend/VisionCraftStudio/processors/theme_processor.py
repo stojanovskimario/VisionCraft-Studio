@@ -4,7 +4,9 @@ from VisionCraftStudio.services.video_service import (
     process_retro_video,
     process_cinematic_video,
     process_noir_video,
-    process_vhs_video
+    process_vhs_video,
+    process_dreamy_video,
+    process_action_video
 )
 
 
@@ -94,3 +96,33 @@ class ThemeProcessor:
             choices,
             watermark_path
         )
+
+    def process_dreamy(
+        self,
+        input_path,
+        output_path,
+        choices,
+        watermark_path=None
+    ):
+        return process_dreamy_video(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+
+    def process_action(
+        self,
+        input_path,
+        output_path,
+        choices,
+        watermark_path=None
+    ):
+        return process_action_video(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+

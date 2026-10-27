@@ -27,6 +27,15 @@ function ThemeSelector({ theme, setTheme }) {
             <button onClick={() => setTheme('vhs')}>
                 VHS
             </button>
+
+            <button onClick={() => setTheme('dreamy')}>
+                Dreamy
+            </button>
+
+            <button onClick={() => setTheme('action')}>
+                Action
+            </button>
+
         </div>
     )
 }

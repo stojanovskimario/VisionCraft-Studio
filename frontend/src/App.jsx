@@ -10,6 +10,8 @@ import RetroSteps from "./components/RetroSteps.jsx";
 import CinematicSteps from './components/CinematicSteps.jsx'
 import NoirSteps from "./components/NoirSteps.jsx";
 import VHSSteps from "./components/VHSSteps.jsx";
+import DreamySteps from './components/DreamySteps'
+import ActionSteps from "./components/ActionSteps.jsx";
 
 function App() {
     const [video, setVideo] = useState(null)
@@ -147,6 +149,28 @@ function App() {
 
             {theme === 'vhs' && (
                 <VHSSteps
+                    choices={choices}
+                    setChoices={setChoices}
+                    onProcess={handleProcess}
+                    processing={processing}
+                    watermark={watermark}
+                    setWatermark={setWatermark}
+                />
+            )}
+
+            {theme === 'dreamy' && (
+                <DreamySteps
+                    choices={choices}
+                    setChoices={setChoices}
+                    onProcess={handleProcess}
+                    processing={processing}
+                    watermark={watermark}
+                    setWatermark={setWatermark}
+                />
+            )}
+
+            {theme === 'action' && (
+                <ActionSteps
                     choices={choices}
                     setChoices={setChoices}
                     onProcess={handleProcess}
