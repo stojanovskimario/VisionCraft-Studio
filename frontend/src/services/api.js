@@ -22,3 +22,29 @@ export async function processVideo(video, theme, choices, watermark) {
 
   return data
 }
+
+
+export async function processEffect(video, effectId, choices, watermark) {
+    const formData = new FormData()
+
+    formData.append('video', video)
+    formData.append('effect_id', effectId)
+    formData.append('choices', JSON.stringify(choices))
+
+    if (watermark) {
+        formData.append('watermark', watermark)
+    }
+
+    const response = await fetch('/api/process-effect/', {
+        method: 'POST',
+        body: formData,
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Failed to process effect.')
+    }
+
+    return data
+}

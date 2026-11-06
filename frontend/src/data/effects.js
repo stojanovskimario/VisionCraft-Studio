@@ -1,0 +1,51 @@
+
+export const effects = [
+    {
+        id: 'underwater',
+        name: 'Underwater',
+        family: 'underwater',
+        description: 'A cinematic underwater atmosphere with turquoise tones, floating bubbles and soft light rays.',
+        thumbnail: '/effects/underwater/underwater.jpg',
+        preview: '/effects/underwater/underwater.gif',
+    },
+    {
+        id: 'deep_ocean',
+        name: 'Deep Ocean',
+        family: 'underwater',
+        description: 'Dark blue color grading that creates the atmosphere of the deep ocean.',
+        thumbnail: '/effects/underwater/deep_ocean.jpg',
+        preview: '/effects/underwater/deep_ocean.gif',
+    },
+    {
+        id: 'tropical_water',
+        name: 'Tropical Water',
+        family: 'underwater',
+        description: 'Bright turquoise and tropical blue tones with gentle water movement.',
+        thumbnail: '/effects/underwater/tropical_water.jpg',
+        preview: '/effects/underwater/tropical_water.gif',
+    },
+    {
+        id: 'arctic_water',
+        name: 'Arctic Water',
+        family: 'underwater',
+        description: 'Cool icy blue tones inspired by frozen waters and arctic environments.',
+        thumbnail: '/effects/underwater/arctic_water.jpg',
+        preview: '/effects/underwater/arctic_water.gif',
+    },
+    {
+        id: 'abyss',
+        name: 'Abyss',
+        family: 'underwater',
+        description: 'A dark, mysterious underwater appearance with deep shadows and muted colors.',
+        thumbnail: '/effects/underwater/abyss.jpg',
+        preview: '/effects/underwater/abyss.gif',
+    },
+    {
+        id: 'coral_reef',
+        name: 'Coral Reef',
+        family: 'underwater',
+        description: 'A vibrant underwater look with richer colors and tropical lighting.',
+        thumbnail: '/effects/underwater/coral_reef.jpg',
+        preview: '/effects/underwater/coral_reef.gif',
+    },
+]
