@@ -2,12 +2,17 @@
 from VisionCraftStudio.config.effects import EFFECTS
 
 from VisionCraftStudio.processors.families.underwater_processor import (
-    process_underwater_effect
+    process_underwater_effect,
+)
+
+from VisionCraftStudio.processors.families.vintage_processor import (
+    process_vintage_family,
 )
 
 
 FAMILY_PROCESSORS = {
     "underwater": process_underwater_effect,
+    "vintage": process_vintage_family,
 }
 
 

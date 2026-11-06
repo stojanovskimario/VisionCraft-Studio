@@ -100,5 +100,167 @@ EFFECTS = {
             "light_rays": True,
             "soft_focus": 0.7
         }
+    },
+    #VINTAGE
+    "vintage_classic": {
+        "id": "vintage_classic",
+        "name": "Classic Vintage",
+        "family": "vintage",
+        "description": "A timeless black and white vintage film appearance.",
+        "config": {
+            "color_mode": "grayscale",
+            "contrast": 1.05,
+            "brightness": 1.0,
+            "film_grain": 3,
+            "vignette": 2,
+            "rotation": {
+                "angle": 90,
+                "start_percent": 20,
+                "rotate_in_percent": 5,
+                "hold_percent": 15,
+                "rotate_out_percent": 5,
+            },
+            "speed": {
+                "factor": 1.25,
+                "start_percent": 55,
+                "end_percent": 75
+            }
+        }
+    },
+
+    "vintage_super8": {
+        "id": "vintage_super8",
+        "name": "70s Super 8",
+        "family": "vintage",
+        "description": "Warm colors inspired by old Super 8 home movies.",
+        "config": {
+            "color_mode": "warm",
+            "contrast": 0.95,
+            "brightness": 1.05,
+            "film_grain": 6,
+            "vignette": 3,
+            "flicker": 3,
+            "rotation": {
+                "angle": 45,
+                "start_percent": 20,
+                "in_percent": 5,
+                "hold_percent": 5,
+                "out_percent": 5
+            },
+            "speed": {
+                "factor": 1.5,
+                "start_percent": 55,
+                "end_percent": 75
+            }
+        }
+    },
+
+    "vintage_faded": {
+        "id": "vintage_faded",
+        "name": "Faded Memories",
+        "family": "vintage",
+        "description": "Soft, washed-out colors with a nostalgic appearance.",
+        "config": {
+            "color_mode": "faded",
+            "contrast": 0.80,
+            "brightness": 1.08,
+            "film_grain": 2,
+            "vignette": 1,
+            "soft_focus": 1.5,
+            "rotation": {
+                "angle": 0,
+                "start_percent": 20,
+                "in_percent": 5,
+                "hold_percent": 5,
+                "out_percent": 5
+            },
+            "speed": {
+                "factor": 1.4,
+                "start_percent": 55,
+                "end_percent": 90
+            }
+        }
+    },
+
+    "vintage_sepia": {
+        "id": "vintage_sepia",
+        "name": "Sepia",
+        "family": "vintage",
+        "description": "Classic brown-toned old photograph styling.",
+        "config": {
+            "color_mode": "sepia",
+            "contrast": 0.95,
+            "brightness": 1.0,
+            "film_grain": 3,
+            "vignette": 4,
+            "rotation": {
+                "angle": 90,
+                "start_percent": 40,
+                "rotate_in_percent": 5,
+                "hold_percent": 25,
+                "rotate_out_percent": 5,
+            },
+            "speed": {
+                "factor": 1.25,
+                "start_percent": 65,
+                "end_percent": 85
+            }
+        }
+    },
+
+    "vintage_old_reel": {
+        "id": "vintage_old_reel",
+        "name": "Old Film Reel",
+        "family": "vintage",
+        "description": "Aged black and white footage with authentic film imperfections.",
+        "config": {
+            "color_mode": "grayscale",
+            "contrast": 1.05,
+            "brightness": 1.0,
+            "film_grain": 7,
+            "vignette": 3,
+            "flicker": 5,
+            "dust": 6,
+            "scratches": 5,
+            "rotation": {
+                "angle": 90,
+                "start_percent": 30,
+                "rotate_in_percent": 5,
+                "hold_percent": 35,
+                "rotate_out_percent": 5,
+            },
+            "speed": {
+                "factor": 1.5,
+                "start_percent": 55,
+                "end_percent": 75
+            }
+        }
+    },
+
+    "vintage_golden": {
+        "id": "vintage_golden",
+        "name": "Golden Light Leak",
+        "family": "vintage",
+        "description": "Warm golden highlights with a nostalgic film appearance.",
+        "config": {
+            "color_mode": "golden",
+            "contrast": 0.95,
+            "brightness": 1.08,
+            "film_grain": 3,
+            "vignette": 2,
+            "light_leak": 5,
+            "rotation": {
+                "angle": 45,
+                "start_percent": 40,
+                "in_percent": 5,
+                "hold_percent": 10,
+                "out_percent": 5
+            },
+            "speed": {
+                "factor": 1.25,
+                "start_percent": 10,
+                "end_percent": 30
+            }
+        }
     }
 }

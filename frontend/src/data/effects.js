@@ -48,4 +48,55 @@ export const effects = [
         thumbnail: '/effects/underwater/coral_reef.jpg',
         preview: '/effects/underwater/coral_reef.gif',
     },
+    //VINTAGE
+
+    {
+        id: 'vintage_classic',
+        name: 'Classic Vintage',
+        family: 'vintage',
+        description: 'A timeless black-and-white film appearance with subtle grain, vignette and gentle rotation.',
+        thumbnail: '/effects/vintage/vintage_classic.jpg',
+        preview: '/effects/vintage/vintage_classic.gif',
+    },
+    {
+        id: 'vintage_super8',
+        name: '70s Super 8',
+        family: 'vintage',
+        description: 'Warm, nostalgic Super 8 footage with noticeable film grain and subtle flickering.',
+        thumbnail: '/effects/vintage/vintage_super8.jpg',
+        preview: '/effects/vintage/vintage_super8.gif',
+    },
+    {
+        id: 'vintage_faded',
+        name: 'Faded Memories',
+        family: 'vintage',
+        description: 'Soft, faded colors and reduced contrast for an aged photograph-like appearance.',
+        thumbnail: '/effects/vintage/vintage_faded.jpg',
+        preview: '/effects/vintage/vintage_faded.gif',
+    },
+    {
+        id: 'vintage_sepia',
+        name: 'Sepia',
+        family: 'vintage',
+        description: 'A classic brown-toned monochrome look with film grain and darkened edges.',
+        thumbnail: '/effects/vintage/vintage_sepia.jpg',
+        preview: '/effects/vintage/vintage_sepia.gif',
+    },
+    {
+        id: 'vintage_old_reel',
+        name: 'Old Film Reel',
+        family: 'vintage',
+        description: 'An aged black-and-white film reel with strong grain, dust particles and scratches.',
+        thumbnail: '/effects/vintage/vintage_old_reel.jpg',
+        preview: '/effects/vintage/vintage_old_reel.gif',
+    },
+    {
+        id: 'vintage_golden',
+        name: 'Golden Light Leak',
+        family: 'vintage',
+        description: 'Warm golden tones with animated light leaks and a nostalgic film atmosphere.',
+        thumbnail: '/effects/vintage/vintage_golden.jpg',
+        preview: '/effects/vintage/vintage_golden.gif',
+    },
+
 ]
