@@ -1891,4 +1891,270 @@ def process_silent_film_video(
 
     return output_path
 
+def process_underwater_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
 
+    duration = clip.duration
+    width = clip.w
+    height = clip.h
+
+    def underwater_color(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        strength = min(max(t / min(2, duration), 0), 1)
+
+        result = frame.copy()
+
+        result[:, :, 0] *= 0.88
+        result[:, :, 1] *= 1.04
+        result[:, :, 2] *= 1.18
+
+        result = (
+            frame * (1 - strength)
+            + result * strength
+        )
+
+        result = (result - 128) * 0.94 + 128
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(underwater_color)
+
+    def underwater_distortion(get_frame, t):
+        frame = get_frame(t)
+
+        progress = min(max(
+            (t / duration - 0.2) / 0.2,
+            0
+        ), 1)
+
+        if progress <= 0:
+            return frame
+
+        height, width = frame.shape[:2]
+
+        y, x = np.indices((height, width), dtype=np.float32)
+
+        amplitude = 2.5 * progress
+
+        map_x = x + (
+            np.sin(y * 0.035 + t * 2.5) * amplitude
+            + np.sin(y * 0.012 - t * 1.5) * amplitude * 0.5
+        )
+
+        map_y = y + (
+            np.sin(x * 0.025 + t * 1.8) * amplitude * 0.4
+        )
+
+        map_x = np.clip(
+            np.rint(map_x).astype(np.int32),
+            0,
+            width - 1
+        )
+
+        map_y = np.clip(
+            np.rint(map_y).astype(np.int32),
+            0,
+            height - 1
+        )
+
+        return frame[map_y, map_x]
+
+    clip = clip.transform(underwater_distortion)
+
+    def underwater_particles(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        progress = min(max(
+            (t / duration - 0.4) / 0.2,
+            0
+        ), 1)
+
+        if progress <= 0:
+            return frame.astype(np.uint8)
+
+        height, width = frame.shape[:2]
+
+        y, x = np.ogrid[:height, :width]
+
+        result = frame.copy()
+
+        rng = np.random.default_rng(42)
+
+        particle_count = max(
+            12,
+            min(40, (width * height) // 30000)
+        )
+
+        for i in range(particle_count):
+            base_x = int(rng.integers(0, width))
+            base_y = int(rng.integers(0, height))
+
+            radius = int(rng.integers(1, 4))
+
+            speed = rng.uniform(12, 30)
+
+            particle_x = int(
+                base_x + np.sin(t * 1.5 + i) * 5
+            ) % width
+
+            particle_y = int(
+                (base_y - t * speed) % height
+            )
+
+            distance = np.sqrt(
+                (x - particle_x) ** 2
+                + (y - particle_y) ** 2
+            )
+
+            mask = distance <= radius
+
+            alpha = 0.35 * progress
+
+            particle_color = np.array(
+                [150, 220, 255],
+                dtype=np.float32
+            )
+
+            result[mask] = (
+                result[mask] * (1 - alpha)
+                + particle_color * alpha
+            )
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(underwater_particles)
+
+    def underwater_light_rays(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        height, width = frame.shape[:2]
+
+        y, x = np.mgrid[0:height, 0:width]
+
+        ray_pattern = (
+            np.sin(
+                (x * 0.012)
+                + (y * 0.006)
+                + (t * 0.5)
+            )
+            + 1
+        ) / 2
+
+        ray_mask = np.clip(
+            (ray_pattern - 0.65) * 0.12,
+            0,
+            0.035
+        )
+
+        brightness_variation = (
+            1 + 0.015 * np.sin(t * 2)
+        )
+
+        result = (
+            frame * brightness_variation
+            + ray_mask[:, :, None]
+            * np.array([100, 180, 220], dtype=np.float32)
+        )
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(underwater_light_rays)
+
+    def underwater_soft_focus(get_frame, t):
+        frame = get_frame(t)
+
+        image = Image.fromarray(frame).convert("RGB")
+
+        blurred = image.filter(
+            ImageFilter.GaussianBlur(radius=1.2)
+        )
+
+        original = np.array(image).astype(np.float32)
+        blurred_array = np.array(blurred).astype(np.float32)
+
+        result = (
+            original * 0.85
+            + blurred_array * 0.15
+        )
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(underwater_soft_focus)
+
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(width * 0.2)
+        max_height = int(height * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+
+        position = choices.get(
+            "watermarkPosition",
+            "top-right"
+        )
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+
+        elif position == "top-right":
+            watermark_position = (
+                width - watermark_clip.w - margin,
+                margin
+            )
+
+        elif position == "bottom-left":
+            watermark_position = (
+                margin,
+                height - watermark_clip.h - margin
+            )
+
+        else:
+            watermark_position = (
+                width - watermark_clip.w - margin,
+                height - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            duration
+        ).with_position(watermark_position)
+
+        final_clip = CompositeVideoClip([
+            clip,
+            watermark_clip
+        ])
+
+    else:
+        final_clip = clip
+
+    try:
+        final_clip.write_videofile(output_path)
+    finally:
+        if final_clip is not clip:
+            final_clip.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path

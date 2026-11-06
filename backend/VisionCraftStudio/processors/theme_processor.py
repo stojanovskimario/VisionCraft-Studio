@@ -9,7 +9,8 @@ from VisionCraftStudio.services.video_service import (
     process_action_video,
     process_cyberpunk_video,
     process_travel_video,
-    process_silent_film_video
+    process_silent_film_video,
+    process_underwater_video
 )
 
 
@@ -164,6 +165,20 @@ class ThemeProcessor:
         watermark_path=None
     ):
         return process_silent_film_video(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+    def process_underwater(
+        self,
+        input_path,
+        output_path,
+        choices,
+        watermark_path=None
+    ):
+        return process_underwater_video(
             input_path,
             output_path,
             choices,

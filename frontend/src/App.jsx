@@ -15,6 +15,7 @@ import ActionSteps from "./components/ActionSteps.jsx";
 import CyberpunkSteps from "./components/CyberpunkSteps.jsx";
 import TravelSteps from "./components/TravelSteps.jsx";
 import SilentFilmSteps from "./components/SilentFilmSteps.jsx";
+import UnderwaterSteps from "./components/UnderwaterSteps.jsx";
 
 function App() {
     const [video, setVideo] = useState(null)
@@ -207,6 +208,17 @@ function App() {
 
             {theme === 'silent_film' && (
                 <SilentFilmSteps
+                    choices={choices}
+                    setChoices={setChoices}
+                    onProcess={handleProcess}
+                    processing={processing}
+                    watermark={watermark}
+                    setWatermark={setWatermark}
+                />
+            )}
+
+            {theme === 'underwater' && (
+                <UnderwaterSteps
                     choices={choices}
                     setChoices={setChoices}
                     onProcess={handleProcess}

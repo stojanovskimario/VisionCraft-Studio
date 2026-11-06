@@ -48,6 +48,10 @@ function ThemeSelector({ theme, setTheme }) {
                 Silent Film
             </button>
 
+            <button onClick={() => setTheme('underwater')}>
+                Underwater
+            </button>
+
         </div>
     )
 }
