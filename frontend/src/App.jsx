@@ -13,6 +13,8 @@ import VHSSteps from "./components/VHSSteps.jsx";
 import DreamySteps from './components/DreamySteps'
 import ActionSteps from "./components/ActionSteps.jsx";
 import CyberpunkSteps from "./components/CyberpunkSteps.jsx";
+import TravelSteps from "./components/TravelSteps.jsx";
+import SilentFilmSteps from "./components/SilentFilmSteps.jsx";
 
 function App() {
     const [video, setVideo] = useState(null)
@@ -183,6 +185,28 @@ function App() {
 
             {theme === 'cyberpunk' && (
                 <CyberpunkSteps
+                    choices={choices}
+                    setChoices={setChoices}
+                    onProcess={handleProcess}
+                    processing={processing}
+                    watermark={watermark}
+                    setWatermark={setWatermark}
+                />
+            )}
+
+            {theme === 'travel' && (
+                <TravelSteps
+                    choices={choices}
+                    setChoices={setChoices}
+                    onProcess={handleProcess}
+                    processing={processing}
+                    watermark={watermark}
+                    setWatermark={setWatermark}
+                />
+            )}
+
+            {theme === 'silent_film' && (
+                <SilentFilmSteps
                     choices={choices}
                     setChoices={setChoices}
                     onProcess={handleProcess}

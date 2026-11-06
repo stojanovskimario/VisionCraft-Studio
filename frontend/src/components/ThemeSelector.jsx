@@ -40,6 +40,14 @@ function ThemeSelector({ theme, setTheme }) {
                 Cyberpunk
             </button>
 
+            <button onClick={() => setTheme('travel')}>
+                Travel
+            </button>
+
+            <button onClick={() => setTheme('silent_film')}>
+                Silent Film
+            </button>
+
         </div>
     )
 }

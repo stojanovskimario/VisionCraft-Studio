@@ -59,7 +59,7 @@ def process_video(request):
         )
 
     if theme not in ["vintage", "futuristic", "retro", "cinematic", "noir", "vhs", "dreamy", "action",
-                     "cyberpunk"]:
+                     "cyberpunk", "travel", "silent_film"]:
         return JsonResponse(
             {"error": "Unsupported theme."},
             status=400
@@ -193,6 +193,23 @@ def process_video(request):
             choices,
             watermark_path
         )
+
+    elif theme == "travel":
+        result = processor.process_travel(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+    elif theme == "silent_film":
+        result = processor.process_silent_film(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
 
 
 

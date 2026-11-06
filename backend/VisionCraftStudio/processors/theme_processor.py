@@ -7,7 +7,9 @@ from VisionCraftStudio.services.video_service import (
     process_vhs_video,
     process_dreamy_video,
     process_action_video,
-    process_cyberpunk_video
+    process_cyberpunk_video,
+    process_travel_video,
+    process_silent_film_video
 )
 
 
@@ -139,4 +141,34 @@ class ThemeProcessor:
             choices,
             watermark_path
         )
+
+    def process_travel(
+        self,
+        input_path,
+        output_path,
+        choices,
+        watermark_path=None
+    ):
+        return process_travel_video(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+    def process_silent_film(
+        self,
+        input_path,
+        output_path,
+        choices,
+        watermark_path=None
+    ):
+        return process_silent_film_video(
+            input_path,
+            output_path,
+            choices,
+            watermark_path
+        )
+
+
 

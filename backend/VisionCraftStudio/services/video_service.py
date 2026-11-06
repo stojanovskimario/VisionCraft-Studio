@@ -1593,3 +1593,302 @@ def process_cyberpunk_video(
     return output_path
 
 
+def process_travel_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    def travel_saturation(get_frame, t):
+        frame = get_frame(t)
+        strength = min(max(t / 2, 0), 1)
+
+        image = Image.fromarray(frame).convert("RGB")
+        original = np.array(image).astype(np.float32)
+        gray = np.array(image.convert("L")).astype(np.float32)[..., None]
+
+        result = gray + (original - gray) * (1 + 0.3 * strength)
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(travel_saturation)
+
+    def travel_warmth(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+        strength = min(max((t - 2) / 2, 0), 1)
+
+        result = frame.copy()
+        result[:, :, 0] += 18 * strength
+        result[:, :, 1] += 6 * strength
+        result[:, :, 2] -= 10 * strength
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(travel_warmth)
+
+    def travel_zoom(get_frame, t):
+        frame = get_frame(t)
+        strength = min(max((t - 4) / 2, 0), 1)
+
+        if strength <= 0:
+            return frame
+
+        zoom_factor = 1 + 0.08 * strength
+        height, width = frame.shape[:2]
+
+        new_width = int(width * zoom_factor)
+        new_height = int(height * zoom_factor)
+
+        image = Image.fromarray(frame).resize(
+            (new_width, new_height),
+            Image.Resampling.LANCZOS
+        )
+
+        left = (new_width - width) // 2
+        top = (new_height - height) // 2
+
+        return np.array(
+            image.crop((left, top, left + width, top + height))
+        )
+
+    clip = clip.transform(travel_zoom)
+
+    fade_duration = min(2, clip.duration)
+
+    def travel_fade(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+        fade_start = clip.duration - fade_duration
+
+        if t <= fade_start:
+            return frame.astype(np.uint8)
+
+        strength = min(max(
+            (t - fade_start) / fade_duration, 0
+        ), 1)
+
+        result = frame * (1 - strength)
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(travel_fade)
+
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+        position = choices.get("watermarkPosition", "top-right")
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+        elif position == "top-right":
+            watermark_position = (
+                clip.w - watermark_clip.w - margin, margin
+            )
+        elif position == "bottom-left":
+            watermark_position = (
+                margin, clip.h - watermark_clip.h - margin
+            )
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            clip.duration
+        ).with_position(watermark_position)
+
+        final_clip = CompositeVideoClip([clip, watermark_clip])
+    else:
+        final_clip = clip
+
+    try:
+        final_clip.write_videofile(output_path)
+    finally:
+        if final_clip is not clip:
+            final_clip.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path
+
+
+def process_silent_film_video(
+    input_path,
+    output_path,
+    choices,
+    watermark_path=None
+):
+    clip = VideoFileClip(input_path)
+
+    def silent_film_grayscale(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+        strength = min(max(t / 2, 0), 1)
+
+        gray = (
+            0.299 * frame[:, :, 0]
+            + 0.587 * frame[:, :, 1]
+            + 0.114 * frame[:, :, 2]
+        )
+
+        result = (
+            frame * (1 - strength)
+            + gray[:, :, None] * strength
+        )
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(silent_film_grayscale)
+
+    def silent_film_scratches(get_frame, t):
+        frame = get_frame(t).copy()
+
+        if not 2 <= t <= 4:
+            return frame
+
+        height, width = frame.shape[:2]
+
+        rng = np.random.default_rng(int(t * 24))
+
+        for _ in range(max(1, width // 300)):
+            x = int(rng.integers(0, width))
+            y_start = int(rng.integers(0, max(1, height // 2)))
+            length = int(rng.integers(
+                max(1, height // 8),
+                max(2, height // 2)
+            ))
+
+            y_end = min(height, y_start + length)
+            frame[y_start:y_end, x:x + 1] = np.minimum(
+                frame[y_start:y_end, x:x + 1].astype(np.uint16) + 70,
+                255
+            ).astype(np.uint8)
+
+        for _ in range(max(10, (height * width) // 50000)):
+            x = int(rng.integers(0, width))
+            y = int(rng.integers(0, height))
+            frame[y, x] = 255
+
+        return frame
+
+    clip = clip.transform(silent_film_scratches)
+
+    def silent_film_flicker(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+
+        if not 4 <= t <= 6:
+            return frame.astype(np.uint8)
+
+        strength = min(max((t - 4) / 2, 0), 1)
+        flicker = 1 + 0.08 * strength * np.sin(t * 38)
+
+        result = frame * flicker
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(silent_film_flicker)
+
+    def silent_film_texture(get_frame, t):
+        frame = get_frame(t).astype(np.float32)
+        height, width = frame.shape[:2]
+
+        rng = np.random.default_rng(int(t * 24) + 1000)
+        grain = rng.normal(0, 5, (height, width, 1))
+
+        y, x = np.ogrid[:height, :width]
+        center_x = (width - 1) / 2
+        center_y = (height - 1) / 2
+
+        distance = np.sqrt(
+            ((x - center_x) / max(center_x, 1)) ** 2
+            + ((y - center_y) / max(center_y, 1)) ** 2
+        )
+
+        vignette = np.clip(1 - 0.35 * distance, 0.55, 1)
+
+        result = frame * vignette[:, :, None] + grain
+
+        return np.clip(result, 0, 255).astype(np.uint8)
+
+    clip = clip.transform(silent_film_texture)
+
+    watermark_clip = None
+
+    if watermark_path and choices.get("watermark"):
+        watermark_clip = ImageClip(watermark_path)
+
+        max_width = int(clip.w * 0.2)
+        max_height = int(clip.h * 0.2)
+
+        scale = min(
+            max_width / watermark_clip.w,
+            max_height / watermark_clip.h,
+            1
+        )
+
+        if scale < 1:
+            watermark_clip = watermark_clip.resized(
+                width=int(watermark_clip.w * scale)
+            )
+
+        margin = 20
+        position = choices.get("watermarkPosition", "top-right")
+
+        if position == "top-left":
+            watermark_position = (margin, margin)
+        elif position == "top-right":
+            watermark_position = (
+                clip.w - watermark_clip.w - margin, margin
+            )
+        elif position == "bottom-left":
+            watermark_position = (
+                margin, clip.h - watermark_clip.h - margin
+            )
+        else:
+            watermark_position = (
+                clip.w - watermark_clip.w - margin,
+                clip.h - watermark_clip.h - margin
+            )
+
+        watermark_clip = watermark_clip.with_duration(
+            clip.duration
+        ).with_position(watermark_position)
+
+        final_clip = CompositeVideoClip([clip, watermark_clip])
+    else:
+        final_clip = clip
+
+    try:
+        final_clip.write_videofile(output_path)
+    finally:
+        if final_clip is not clip:
+            final_clip.close()
+
+        if watermark_clip is not None:
+            watermark_clip.close()
+
+        clip.close()
+
+    return output_path
+
+
