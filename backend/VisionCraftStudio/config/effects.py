@@ -262,5 +262,122 @@ EFFECTS = {
                 "end_percent": 30
             }
         }
+    },
+    # FUTURISTIC
+    "cyberpunk_neon": {
+        "id": "cyberpunk_neon",
+        "name": "Cyberpunk Neon",
+        "family": "futuristic",
+        "description": "A vibrant cyberpunk look with cool blue shadows, magenta highlights and a subtle neon glow.",
+        "config": {
+            "red": 1.08,
+            "green": 0.88,
+            "blue": 1.20,
+            "contrast": 1.12,
+            "brightness": 1.02,
+            "glow": 0.35,
+            "glow_radius": 8,
+            "scan_lines": 0,
+            "rgb_shift": 2,
+            "glitch_intensity": 0
+        }
+    },
+
+    "hologram": {
+        "id": "hologram",
+        "name": "Hologram",
+        "family": "futuristic",
+        "description": "A holographic appearance with cool cyan and purple tones, luminous highlights and subtle horizontal scan lines.",
+        "config": {
+            "red": 0.88,
+            "green": 1.12,
+            "blue": 1.25,
+            "contrast": 0.96,
+            "brightness": 1.08,
+            "glow": 0.30,
+            "glow_radius": 10,
+            "scan_lines": 0.16,
+            "rgb_shift": 2,
+            "glitch_intensity": 0
+        }
+    },
+
+    "digital_glitch": {
+        "id": "digital_glitch",
+        "name": "Digital Glitch",
+        "family": "futuristic",
+        "description": "A digital distortion effect with RGB separation and intermittent visual interference.",
+        "config": {
+            "red": 1.02,
+            "green": 1.0,
+            "blue": 1.08,
+            "contrast": 1.12,
+            "brightness": 1.0,
+            "glow": 0.10,
+            "glow_radius": 5,
+            "scan_lines": 0.10,
+            "rgb_shift": 2,
+            "glitch_intensity": 4,
+            "glitch_duration": 1.0,
+            "glitch_interval": 5.0,
+            "glitch_offset": 2.0
+        }
+    },
+
+    "matrix": {
+        "id": "matrix",
+        "name": "Matrix",
+        "family": "futuristic",
+        "description": "A digital-inspired green appearance with deep shadows and subtle monitor scan lines.",
+        "config": {
+            "red": 0.92,
+            "green": 1.08,
+            "blue": 0.96,
+            "contrast": 1.08,
+            "brightness": 1.0,
+            "glow": 0.10,
+            "glow_radius": 7,
+            "scan_lines": 0.12,
+            "rgb_shift": 1,
+            "glitch_intensity": 0
+        }
+    },
+
+    "sci_fi_blue": {
+        "id": "sci_fi_blue",
+        "name": "Sci-Fi Blue",
+        "family": "futuristic",
+        "description": "A cinematic futuristic look with cold blue tones, crisp contrast and soft atmospheric lighting.",
+        "config": {
+            "red": 0.78,
+            "green": 0.96,
+            "blue": 1.28,
+            "contrast": 1.10,
+            "brightness": 1.04,
+            "glow": 0.28,
+            "glow_radius": 12,
+            "scan_lines": 0,
+            "rgb_shift": 1,
+            "glitch_intensity": 0
+        }
+    },
+
+    "plasma": {
+        "id": "plasma",
+        "name": "Plasma",
+        "family": "futuristic",
+        "description": "A vivid energy-inspired appearance with purple shadows, magenta tones and luminous cyan highlights.",
+        "config": {
+            "red": 1.12,
+            "green": 0.88,
+            "blue": 1.18,
+            "contrast": 1.08,
+            "brightness": 1.04,
+            "glow": 0.35,
+            "glow_radius": 12,
+            "scan_lines": 0,
+            "rgb_shift": 2,
+            "glitch_intensity": 0
+        }
     }
 }

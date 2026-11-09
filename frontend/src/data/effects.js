@@ -99,4 +99,55 @@ export const effects = [
         preview: '/effects/vintage/vintage_golden.gif',
     },
 
+    // FUTURISTIC
+
+    {
+        id: 'cyberpunk_neon',
+        name: 'Cyberpunk Neon',
+        family: 'futuristic',
+        description: 'A vibrant cyberpunk appearance with blue shadows, magenta highlights and neon glow.',
+        thumbnail: '/effects/futuristic/cyberpunk_neon.jpg',
+        preview: '/effects/futuristic/cyberpunk_neon.gif',
+    },
+    {
+        id: 'hologram',
+        name: 'Hologram',
+        family: 'futuristic',
+        description: 'A holographic appearance with cyan and purple tones, luminous highlights and digital scan lines.',
+        thumbnail: '/effects/futuristic/hologram.jpg',
+        preview: '/effects/futuristic/hologram.gif',
+    },
+    {
+        id: 'digital_glitch',
+        name: 'Digital Glitch',
+        family: 'futuristic',
+        description: 'A digital distortion effect with RGB separation and intermittent visual interference.',
+        thumbnail: '/effects/futuristic/digital_glitch.jpg',
+        preview: '/effects/futuristic/digital_glitch.gif',
+    },
+    {
+        id: 'matrix',
+        name: 'Matrix',
+        family: 'futuristic',
+        description: 'A digital-inspired green appearance with deep shadows and subtle monitor scan lines.',
+        thumbnail: '/effects/futuristic/matrix.jpg',
+        preview: '/effects/futuristic/matrix.gif',
+    },
+    {
+        id: 'sci_fi_blue',
+        name: 'Sci-Fi Blue',
+        family: 'futuristic',
+        description: 'A cinematic futuristic look with cold blue tones, crisp contrast and atmospheric lighting.',
+        thumbnail: '/effects/futuristic/sci_fi_blue.jpg',
+        preview: '/effects/futuristic/sci_fi_blue.gif',
+    },
+    {
+        id: 'plasma',
+        name: 'Plasma',
+        family: 'futuristic',
+        description: 'A vivid energy-inspired appearance with purple shadows, magenta tones and luminous cyan highlights.',
+        thumbnail: '/effects/futuristic/plasma.jpg',
+        preview: '/effects/futuristic/plasma.gif',
+    },
+
 ]

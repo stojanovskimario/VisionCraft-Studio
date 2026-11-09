@@ -6,6 +6,7 @@ import './EffectLibrary.css'
 const familyNames = {
     underwater: 'Underwater Effects',
     vintage: 'Vintage Effects',
+    futuristic: 'Futuristic Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {
