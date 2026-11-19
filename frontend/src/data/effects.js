@@ -17,12 +17,12 @@ export const effects = [
         preview: '/effects/underwater/deep_ocean.gif',
     },
     {
-        id: 'tropical_water',
-        name: 'Tropical Water',
+        id: 'bioluminescent_lagoon',
+        name: 'Bioluminescent Lagoon',
         family: 'underwater',
-        //description: 'Bright turquoise and tropical blue tones with gentle water movement.',
-        thumbnail: '/effects/underwater/tropical_water.jpg',
-        preview: '/effects/underwater/tropical_water.gif',
+        //description: 'A mysterious nighttime underwater atmosphere with glowing turquoise and emerald particles, deep navy tones and subtle violet illumination.',
+        thumbnail: '/effects/underwater/bioluminescent_lagoon.jpg',
+        preview: '/effects/underwater/bioluminescent_lagoon.gif',
     },
     {
         id: 'arctic_water',

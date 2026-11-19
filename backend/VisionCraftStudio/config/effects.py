@@ -34,22 +34,36 @@ EFFECTS = {
         }
     },
 
-    "tropical_water": {
-        "id": "tropical_water",
-        "name": "Tropical Water",
+    "bioluminescent_lagoon": {
+        "id": "bioluminescent_lagoon",
+        "name": "Bioluminescent Lagoon",
         "family": "underwater",
-        "description": "Bright tropical turquoise water with vibrant colors and warm lighting.",
+        "description": "A mysterious nighttime underwater atmosphere with glowing turquoise and emerald particles, deep navy tones and subtle violet illumination.",
         "config": {
-            "red": 0.95,
-            "green": 1.12,
-            "blue": 1.20,
-            "contrast": 0.96,
-            "distortion": 2.0,
-            "bubbles": True,
-            "light_rays": True,
-            "soft_focus": 0.8
+            "effect_type": "bioluminescent",
+
+            "red": 0.52,
+            "green": 0.82,
+            "blue": 1.18,
+
+            "contrast": 1.08,
+            "brightness": 0.72,
+
+            "glow_threshold": 75,
+            "glow_range": 100,
+            "glow_radius": 12,
+            "glow_color": [15, 230, 175],
+            "glow_intensity": 1.0,
+
+            "violet_color": [125, 45, 210],
+            "violet_intensity": 0.30,
+
+            "particle_count": 35,
+            "particle_speed": 18,
+            "particle_glow_radius": 5
         }
     },
+
 
     "arctic_water": {
         "id": "arctic_water",

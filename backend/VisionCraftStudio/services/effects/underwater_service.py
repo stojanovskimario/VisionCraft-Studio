@@ -1,4 +1,4 @@
-
+import math
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
@@ -154,7 +154,181 @@ def apply_underwater_soft_focus(frame, config):
     return np.array(result)
 
 
+def apply_bioluminescent_lagoon(frame, t, config):
+
+    height, width = frame.shape[:2]
+
+    original = frame.astype(np.float32)
+
+    # Create a deep navy and teal nighttime color grade.
+    gray = (
+        original[:, :, 0] * 0.299 +
+        original[:, :, 1] * 0.587 +
+        original[:, :, 2] * 0.114
+    )
+
+    result = original.copy()
+
+    result[:, :, 0] *= config.get("red", 0.52)
+    result[:, :, 1] *= config.get("green", 0.82)
+    result[:, :, 2] *= config.get("blue", 1.18)
+
+    contrast = config.get("contrast", 1.08)
+    brightness = config.get("brightness", 0.72)
+
+    result = (result - 128) * contrast + 128
+    result *= brightness
+
+    # Identify brighter details that will appear bioluminescent.
+    threshold = config.get("glow_threshold", 75)
+    glow_range = max(1, config.get("glow_range", 100))
+
+    glow_mask = np.clip(
+        (gray - threshold) / glow_range,
+        0,
+        1
+    )
+
+    mask_image = Image.fromarray(
+        (glow_mask * 255).astype(np.uint8)
+    )
+
+    blurred_mask = mask_image.filter(
+        ImageFilter.GaussianBlur(
+            radius=config.get("glow_radius", 12)
+        )
+    )
+
+    glow = (
+        np.asarray(blurred_mask).astype(np.float32) / 255.0
+    )
+
+    # Add turquoise and emerald light.
+    glow_color = np.array(
+        config.get("glow_color", [15, 230, 175]),
+        dtype=np.float32
+    )
+
+    result += (
+        glow[:, :, np.newaxis] *
+        glow_color *
+        config.get("glow_intensity", 1.0)
+    )
+
+    # Add subtle violet accents to brighter areas.
+    violet_mask = np.clip(
+        (glow_mask - 0.45) * 1.8,
+        0,
+        1
+    )
+
+    violet_color = np.array(
+        config.get("violet_color", [125, 45, 210]),
+        dtype=np.float32
+    )
+
+    result += (
+        violet_mask[:, :, np.newaxis] *
+        violet_color *
+        config.get("violet_intensity", 0.30)
+    )
+
+    result = np.clip(result, 0, 255).astype(np.uint8)
+
+    # Create small floating bioluminescent particles.
+    particle_count = config.get("particle_count", 35)
+    particle_speed = config.get("particle_speed", 18)
+
+    rng = np.random.default_rng(42)
+
+    particle_x = rng.uniform(0, width, particle_count)
+    particle_y = rng.uniform(0, height, particle_count)
+
+    particle_sizes = rng.integers(
+        2, 5, particle_count
+    )
+
+    particle_phases = rng.uniform(
+        0, 2 * np.pi, particle_count
+    )
+
+    glow_layer = Image.new(
+        "RGBA", (width, height), (0, 0, 0, 0)
+    )
+
+    sharp_layer = Image.new(
+        "RGBA", (width, height), (0, 0, 0, 0)
+    )
+
+    glow_draw = ImageDraw.Draw(glow_layer)
+    sharp_draw = ImageDraw.Draw(sharp_layer)
+
+    for index in range(particle_count):
+
+        x = int(
+            particle_x[index] +
+            math.sin(t * 0.6 + particle_phases[index]) * 8
+        ) % width
+
+        y = int(
+            particle_y[index] -
+            t * particle_speed *
+            (0.5 + particle_phases[index] / (2 * np.pi))
+        ) % height
+
+        radius = int(particle_sizes[index])
+
+        glow_draw.ellipse(
+            (
+                x - radius * 2,
+                y - radius * 2,
+                x + radius * 2,
+                y + radius * 2
+            ),
+            fill=(20, 255, 195, 100)
+        )
+
+        sharp_draw.ellipse(
+            (
+                x - radius,
+                y - radius,
+                x + radius,
+                y + radius
+            ),
+            fill=(125, 255, 225, 175)
+        )
+
+    # Add soft halos first, followed by sharper particles.
+    base_image = Image.fromarray(result).convert("RGBA")
+
+    glow_layer = glow_layer.filter(
+        ImageFilter.GaussianBlur(
+            radius=config.get("particle_glow_radius", 5)
+        )
+    )
+
+    result_image = Image.alpha_composite(
+        base_image,
+        glow_layer
+    )
+
+    result_image = Image.alpha_composite(
+        result_image,
+        sharp_layer
+    )
+
+    return np.array(result_image.convert("RGB"))
+
+
+
 def apply_underwater_effect(frame, t, duration, config):
+
+    if config.get("effect_type") == "bioluminescent":
+        return apply_bioluminescent_lagoon(
+            frame,
+            t,
+            config
+        )
 
     frame = apply_underwater_color(frame, config)
 
@@ -175,3 +349,4 @@ def apply_underwater_effect(frame, t, duration, config):
     )
 
     return frame
+
