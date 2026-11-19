@@ -160,7 +160,6 @@ def apply_bioluminescent_lagoon(frame, t, config):
 
     original = frame.astype(np.float32)
 
-    # Create a deep navy and teal nighttime color grade.
     gray = (
         original[:, :, 0] * 0.299 +
         original[:, :, 1] * 0.587 +
@@ -179,7 +178,6 @@ def apply_bioluminescent_lagoon(frame, t, config):
     result = (result - 128) * contrast + 128
     result *= brightness
 
-    # Identify brighter details that will appear bioluminescent.
     threshold = config.get("glow_threshold", 75)
     glow_range = max(1, config.get("glow_range", 100))
 
@@ -203,7 +201,6 @@ def apply_bioluminescent_lagoon(frame, t, config):
         np.asarray(blurred_mask).astype(np.float32) / 255.0
     )
 
-    # Add turquoise and emerald light.
     glow_color = np.array(
         config.get("glow_color", [15, 230, 175]),
         dtype=np.float32
@@ -215,7 +212,6 @@ def apply_bioluminescent_lagoon(frame, t, config):
         config.get("glow_intensity", 1.0)
     )
 
-    # Add subtle violet accents to brighter areas.
     violet_mask = np.clip(
         (glow_mask - 0.45) * 1.8,
         0,
@@ -235,7 +231,6 @@ def apply_bioluminescent_lagoon(frame, t, config):
 
     result = np.clip(result, 0, 255).astype(np.uint8)
 
-    # Create small floating bioluminescent particles.
     particle_count = config.get("particle_count", 35)
     particle_speed = config.get("particle_speed", 18)
 
@@ -298,7 +293,6 @@ def apply_bioluminescent_lagoon(frame, t, config):
             fill=(125, 255, 225, 175)
         )
 
-    # Add soft halos first, followed by sharper particles.
     base_image = Image.fromarray(result).convert("RGBA")
 
     glow_layer = glow_layer.filter(

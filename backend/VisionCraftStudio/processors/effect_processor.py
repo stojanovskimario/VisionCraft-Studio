@@ -13,11 +13,16 @@ from VisionCraftStudio.processors.families.futuristic_processor import (
     process_futuristic_effect
 )
 
+from VisionCraftStudio.processors.families.retro_processor import (
+    process_retro_family,
+)
+
 
 FAMILY_PROCESSORS = {
     "underwater": process_underwater_effect,
     "vintage": process_vintage_family,
     "futuristic": process_futuristic_effect,
+    "retro": process_retro_family,
 }
 
 

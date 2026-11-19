@@ -151,4 +151,58 @@ export const effects = [
     },
 
 
+    // RETRO
+
+    {
+        id: 'analog_memories',
+        name: 'Analog Memories',
+        family: 'retro',
+        //description: 'Creates a nostalgic film appearance with warm colors, subtle grain and softly darkened edges.',
+        thumbnail: '/effects/retro/analog_memories.jpg',
+        preview: '/effects/retro/analog_memories.gif',
+    },
+    {
+        id: 'crt_television',
+        name: 'CRT Television',
+        family: 'retro',
+        //description: 'Recreates an old television display with curved distortion, glowing phosphors, scanlines and subtle flickering.',
+        thumbnail: '/effects/retro/crt_television.jpg',
+        preview: '/effects/retro/crt_television.gif',
+    },
+    {
+        id: 'camcorder_90s',
+        name: '90s Camcorder',
+        family: 'retro',
+        //description: 'Recreates the nostalgic look of 1990s home videos with warm tones, recording noise and timestamp overlays.',
+        thumbnail: '/effects/retro/camcorder_90s.jpg',
+        preview: '/effects/retro/camcorder_90s.gif',
+    },
+    {
+        id: 'y2k_digital',
+        name: 'Y2K Digital Camera',
+        family: 'retro',
+        //description: 'Mimics early-2000s digital photography with cool highlights, boosted contrast and subtle digital noise.',
+        thumbnail: '/effects/retro/y2k_digital.jpg',
+        preview: '/effects/retro/y2k_digital.gif',
+    },
+    {
+        id: 'synthwave',
+        name: 'Synthwave',
+        family: 'retro',
+        //description: 'Transforms footage with vibrant neon colors, purple shadows, magenta highlights and a glowing 1980s aesthetic.',
+        thumbnail: '/effects/retro/synthwave.jpg',
+        preview: '/effects/retro/synthwave.gif',
+    },
+    {
+        id: 'comic_book',
+        name: 'Comic Book',
+        family: 'retro',
+        //description: 'Transforms footage into a vibrant comic-book illustration with bold outlines, simplified colors and halftone shading.',
+        thumbnail: '/effects/retro/comic_book.jpg',
+        preview: '/effects/retro/comic_book.gif',
+    },
+
+
+
+
 ]

@@ -415,7 +415,124 @@ EFFECTS = {
             "pulse_period": 4.0,
             "pulse_intensity": 0.10
         }
+    },
+
+    # RETRO
+
+    "analog_memories": {
+        "id": "analog_memories",
+        "name": "Analog Memories",
+        "family": "retro",
+        "description": "A nostalgic analog film appearance with warm colors, natural film grain and softly darkened edges.",
+        "config": {
+            "effect_type": "analog_memories",
+            "red": 1.12,
+            "green": 0.98,
+            "blue": 0.82,
+            "contrast": 0.90,
+            "grain_intensity": 5,
+            "vignette_intensity": 1.0
+        }
+    },
+
+    "crt_television": {
+        "id": "crt_television",
+        "name": "CRT Television",
+        "family": "retro",
+        "description": "An old television display with curved screen distortion, glowing RGB pixels, scanlines and subtle flickering.",
+        "config": {
+            "effect_type": "crt_television",
+            "red": 0.90,
+            "green": 1.02,
+            "blue": 1.12,
+            "contrast": 1.12,
+            "curvature": 0.06,
+            "scanline_strength": 0.18,
+            "rgb_shift": 1,
+            "glow_radius": 2,
+            "glow_intensity": 0.18,
+            "flicker": 0.025
+        }
+    },
+
+    "camcorder_90s": {
+        "id": "camcorder_90s",
+        "name": "90s Camcorder",
+        "family": "retro",
+        "description": "A nostalgic 1990s home-video recording with timestamp overlays, analog noise and characteristic camcorder colors.",
+        "config": {
+            "effect_type": "camcorder_90s",
+            "red": 1.05,
+            "green": 1.04,
+            "blue": 0.90,
+            "contrast": 0.96,
+            "warmth": 1.05,
+            "green_tint": 1.04,
+            "blue_tint": 0.88,
+            "color_bleed": 2,
+            "noise_intensity": 4,
+            "show_timestamp": True
+        }
+    },
+
+    "y2k_digital": {
+        "id": "y2k_digital",
+        "name": "Y2K Digital Camera",
+        "family": "retro",
+        "description": "An early-2000s digital camera aesthetic with cool highlights, boosted contrast, digital noise and soft flash-like brightness.",
+        "config": {
+            "effect_type": "y2k_digital",
+            "red": 0.94,
+            "green": 1.02,
+            "blue": 1.12,
+            "contrast": 1.05,
+            "brightness": 1.04,
+            "contrast_boost": 1.10,
+            "blue_highlights": 1.10,
+            "noise_intensity": 3,
+            "glow_radius": 3,
+            "glow_intensity": 0.20
+        }
+    },
+
+    "synthwave": {
+        "id": "synthwave",
+        "name": "Synthwave",
+        "family": "retro",
+        "description": "A vibrant 1980s-inspired neon appearance with purple shadows, magenta highlights and luminous colors.",
+        "config": {
+            "effect_type": "synthwave",
+            "red": 1.15,
+            "green": 0.78,
+            "blue": 1.30,
+            "contrast": 1.12,
+            "glow_radius": 8,
+            "glow_intensity": 0.30,
+            "pulse_intensity": 0.06
+        }
+    },
+
+    "comic_book": {
+        "id": "comic_book",
+        "name": "Comic Book",
+        "family": "retro",
+        "description": "A bold comic-book illustration with vibrant colors, thick ink outlines, reduced color palettes and halftone shading.",
+        "config": {
+            "effect_type": "comic_book",
+            "red": 1.08,
+            "green": 1.02,
+            "blue": 1.05,
+            "contrast": 1.15,
+            "saturation": 1.25,
+            "smoothing": 0.6,
+            "palette_colors": 12,
+            "edge_threshold": 45,
+            "outline_strength": 0.85,
+            "dot_size": 6,
+            "dot_intensity": 0.25
+        }
     }
+
 
 
 }
