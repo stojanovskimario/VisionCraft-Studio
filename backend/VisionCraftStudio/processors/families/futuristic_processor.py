@@ -29,7 +29,8 @@ def process_futuristic_effect(
             lambda get_frame, t: apply_futuristic_effect(
                 get_frame(t),
                 t,
-                config
+                config,
+                get_frame
             )
         )
 

@@ -302,82 +302,106 @@ EFFECTS = {
         }
     },
 
-    "digital_glitch": {
-        "id": "digital_glitch",
-        "name": "Digital Glitch",
+    "thermal_vision": {
+        "id": "thermal_vision",
+        "name": "Thermal Vision",
         "family": "futuristic",
-        "description": "A digital distortion effect with RGB separation and intermittent visual interference.",
+        "description": "Transforms footage into an infrared thermal view with deep purple shadows, red and orange midtones, and bright yellow highlights.",
         "config": {
-            "red": 1.02,
-            "green": 1.0,
-            "blue": 1.08,
-            "contrast": 1.12,
-            "brightness": 1.0,
-            "glow": 0.10,
-            "glow_radius": 5,
-            "scan_lines": 0.10,
-            "rgb_shift": 2,
-            "glitch_intensity": 4,
-            "glitch_duration": 1.0,
-            "glitch_interval": 5.0,
-            "glitch_offset": 2.0
+            "effect_type": "thermal",
+            "thermal_contrast": 1.15,
+            "thermal_brightness": 1.0,
+            "glow": 0.18,
+            "glow_radius": 8
         }
     },
 
-    "matrix": {
-        "id": "matrix",
-        "name": "Matrix",
+    "cybernetic_vision": {
+        "id": "cybernetic_vision",
+        "name": "Cybernetic Vision",
         "family": "futuristic",
-        "description": "A digital-inspired green appearance with deep shadows and subtle monitor scan lines.",
+        "description": "A futuristic digital vision effect with bright cyan neon outlines, glowing edges and cool blue cinematic grading.",
         "config": {
+            "effect_type": "cybernetic",
+            "red": 0.72,
+            "green": 0.95,
+            "blue": 1.25,
+            "contrast": 1.18,
+            "brightness": 0.88,
+            "edge_threshold": 18,
+            "edge_strength": 4.0,
+            "edge_color": [25, 220, 255],
+            "edge_brightness": 1.5,
+            "edge_glow_radius": 5,
+            "edge_glow_intensity": 0.9,
+            "glow_color": [0, 110, 255],
+            "pulse_period": 4.0,
+            "pulse_intensity": 0.12,
+            "glow": 0.10,
+            "glow_radius": 6
+        }
+    },
+
+    "time_rift": {
+        "id": "time_rift",
+        "name": "Time Rift",
+        "family": "futuristic",
+        "description": "A temporal distortion effect with cyan and violet motion echoes trailing behind moving objects.",
+        "config": {
+            "effect_type": "time_rift",
             "red": 0.92,
-            "green": 1.08,
-            "blue": 0.96,
+            "green": 0.96,
+            "blue": 1.12,
             "contrast": 1.08,
             "brightness": 1.0,
-            "glow": 0.10,
+            "echo_delays": [0.08, 0.16, 0.24],
+            "echo_strengths": [0.38, 0.27, 0.17],
+            "motion_threshold": 14,
+            "motion_range": 45,
+            "motion_blur": 3,
+            "pulse_period": 3.5,
+            "pulse_intensity": 0.035
+        }
+    },
+
+    "wireframe": {
+        "id": "wireframe",
+        "name": "Wireframe Reality",
+        "family": "futuristic",
+        "description": "A digital simulation aesthetic with glowing violet wireframe outlines, electric pink highlights and a deep purple geometric grid.",
+        "config": {
+            "effect_type": "wireframe",
+
+            "base_brightness": 0.68,
+            "base_saturation": 0.72,
+
+            "base_red": 0.92,
+            "base_green": 0.72,
+            "base_blue": 1.12,
+
+            "edge_threshold": 22,
+            "edge_strength": 3.2,
+            "edge_thickness": 3,
+            "edge_intensity": 1.15,
+
             "glow_radius": 7,
-            "scan_lines": 0.12,
-            "rgb_shift": 1,
-            "glitch_intensity": 0
-        }
-    },
+            "glow_intensity": 0.75,
 
-    "sci_fi_blue": {
-        "id": "sci_fi_blue",
-        "name": "Sci-Fi Blue",
-        "family": "futuristic",
-        "description": "A cinematic futuristic look with cold blue tones, crisp contrast and soft atmospheric lighting.",
-        "config": {
-            "red": 0.78,
-            "green": 0.96,
-            "blue": 1.28,
-            "contrast": 1.10,
-            "brightness": 1.04,
-            "glow": 0.28,
-            "glow_radius": 12,
-            "scan_lines": 0,
-            "rgb_shift": 1,
-            "glitch_intensity": 0
-        }
-    },
+            "edge_color": [185, 75, 255],
+            "glow_color": [105, 25, 220],
+            "highlight_color": [255, 45, 170],
 
-    "plasma": {
-        "id": "plasma",
-        "name": "Plasma",
-        "family": "futuristic",
-        "description": "A vivid energy-inspired appearance with purple shadows, magenta tones and luminous cyan highlights.",
-        "config": {
-            "red": 1.12,
-            "green": 0.88,
-            "blue": 1.18,
-            "contrast": 1.08,
-            "brightness": 1.04,
-            "glow": 0.35,
-            "glow_radius": 12,
-            "scan_lines": 0,
-            "rgb_shift": 2,
-            "glitch_intensity": 0
+            "highlight_threshold": 110,
+            "highlight_intensity": 0.55,
+
+            "grid_spacing": 48,
+            "grid_intensity": 0.30,
+            "grid_color": [95, 35, 160],
+
+            "pulse_period": 4.0,
+            "pulse_intensity": 0.10
         }
     }
+
+
 }
