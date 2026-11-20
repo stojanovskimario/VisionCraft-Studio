@@ -17,12 +17,17 @@ from VisionCraftStudio.processors.families.retro_processor import (
     process_retro_family,
 )
 
+from VisionCraftStudio.processors.families.cinematic_processor import (
+    process_cinematic_family,
+)
+
 
 FAMILY_PROCESSORS = {
     "underwater": process_underwater_effect,
     "vintage": process_vintage_family,
     "futuristic": process_futuristic_effect,
     "retro": process_retro_family,
+    "cinematic": process_cinematic_family,
 }
 
 

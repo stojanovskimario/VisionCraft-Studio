@@ -203,6 +203,59 @@ export const effects = [
     },
 
 
+    // CINEMATIC
+
+    {
+        id: 'hollywood_blockbuster',
+        name: 'Hollywood Blockbuster',
+        family: 'cinematic',
+        //description: 'Gives footage a polished blockbuster look with teal shadows, warm highlights, and punchy contrast.',
+        thumbnail: '/effects/cinematic/hollywood_blockbuster.jpg',
+        preview: '/effects/cinematic/hollywood_blockbuster.gif',
+    },
+    {
+        id: 'dark_moody',
+        name: 'Dark & Moody',
+        family: 'cinematic',
+        //description: 'Creates a brooding look with cool shadows, muted colors, darkened edges, and fine film grain.',
+        thumbnail: '/effects/cinematic/dark_moody.jpg',
+        preview: '/effects/cinematic/dark_moody.gif',
+    },
+    {
+        id: 'golden_hour',
+        name: 'Golden Hour Cinema',
+        family: 'cinematic',
+        //description: 'Adds warm sunset tones and a soft glow around bright areas.',
+        thumbnail: '/effects/cinematic/golden_hour.jpg',
+        preview: '/effects/cinematic/golden_hour.gif',
+    },
+    {
+        id: 'anamorphic',
+        name: 'Anamorphic Cinema',
+        family: 'cinematic',
+        //description: 'Adds widescreen black bars, cool highlights, and subtle horizontal flares around bright light sources.',
+        thumbnail: '/effects/cinematic/anamorphic.jpg',
+        preview: '/effects/cinematic/anamorphic.gif',
+    },
+    {
+        id: 'indie_film',
+        name: 'Indie Film',
+        family: 'cinematic',
+        //description: 'Gives footage a soft independent-film look with muted pastels, lifted blacks, and fine grain.',
+        thumbnail: '/effects/cinematic/indie_film.jpg',
+        preview: '/effects/cinematic/indie_film.gif',
+    },
+    {
+        id: 'technicolor_pop',
+        name: 'Technicolor Pop',
+        family: 'cinematic',
+        //description: 'Makes reds, greens, and blues pop while giving orange tones a gentler boost and keeping whites and grays neutral.',
+        thumbnail: '/effects/cinematic/technicolor_pop.jpg',
+        preview: '/effects/cinematic/technicolor_pop.gif',
+    },
+
+
+
 
 
 ]

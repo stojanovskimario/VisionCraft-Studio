@@ -7,7 +7,8 @@ const familyNames = {
     underwater: 'Underwater Effects',
     vintage: 'Vintage Effects',
     futuristic: 'Futuristic Effects',
-    retro: 'Retro Effects'
+    retro: 'Retro Effects',
+    cinematic: 'Cinematic Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {

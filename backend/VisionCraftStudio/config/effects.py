@@ -531,8 +531,124 @@ EFFECTS = {
             "dot_size": 6,
             "dot_intensity": 0.25
         }
-    }
+    },
 
+    # CINEMATIC
 
+    "hollywood_blockbuster": {
+        "id": "hollywood_blockbuster",
+        "name": "Hollywood Blockbuster",
+        "family": "cinematic",
+        "description": "A polished cinematic look with teal shadows, warm highlights, strong contrast and subtle vignette.",
+        "config": {
+            "effect_type": "hollywood_blockbuster",
+            "red": 1.02,
+            "green": 1.0,
+            "blue": 1.02,
+            "contrast": 1.14,
+            "brightness": 1.0,
+            "saturation": 1.08,
+            "split_strength": 0.9,
+            "vignette": 0.16,
+        },
+    },
+
+    "dark_moody": {
+        "id": "dark_moody",
+        "name": "Dark & Moody",
+        "family": "cinematic",
+        "description": "A mysterious film appearance with cool shadows, muted colors, deep contrast and fine grain.",
+        "config": {
+            "effect_type": "dark_moody",
+            "red": 0.96,
+            "green": 0.98,
+            "blue": 1.04,
+            "contrast": 1.18,
+            "brightness": 0.91,
+            "saturation": 0.70,
+            "split_strength": 0.85,
+            "vignette": 0.26,
+            "grain": 3.0,
+        },
+    },
+
+    "golden_hour": {
+        "id": "golden_hour",
+        "name": "Golden Hour Cinema",
+        "family": "cinematic",
+        "description": "Warm golden tones, glowing highlights and soft cinematic bloom inspired by sunset lighting.",
+        "config": {
+            "effect_type": "golden_hour",
+            "red": 1.10,
+            "green": 1.04,
+            "blue": 0.90,
+            "contrast": 0.98,
+            "brightness": 1.04,
+            "saturation": 1.12,
+            "split_strength": 0.9,
+            "bloom_radius": 10,
+            "bloom_intensity": 0.35,
+            "bloom_threshold": 155,
+        },
+    },
+
+    "anamorphic": {
+        "id": "anamorphic",
+        "name": "Anamorphic Cinema",
+        "family": "cinematic",
+        "description": "A widescreen cinematic appearance with letterbox bars, cool highlights, bloom and horizontal lens flares.",
+        "config": {
+            "effect_type": "anamorphic",
+            "red": 0.96,
+            "green": 1.0,
+            "blue": 1.10,
+            "contrast": 1.10,
+            "brightness": 1.0,
+            "split_strength": 0.65,
+            "bloom_radius": 9,
+            "bloom_intensity": 0.30,
+            "flare_strength": 0.28,
+            "flare_threshold": 225,
+            "letterbox": True,
+            "bar_ratio": 0.12,
+        },
+    },
+
+    "indie_film": {
+        "id": "indie_film",
+        "name": "Indie Film",
+        "family": "cinematic",
+        "description": "A natural independent-film aesthetic with soft contrast, faded blacks, pastel colors and fine grain.",
+        "config": {
+            "effect_type": "indie_film",
+            "red": 1.04,
+            "green": 1.02,
+            "blue": 0.98,
+            "contrast": 0.90,
+            "brightness": 1.02,
+            "saturation": 0.82,
+            "black_lift": 12,
+            "split_strength": 0.55,
+            "grain": 2.5,
+        },
+    },
+
+    "technicolor_pop": {
+        "id": "technicolor_pop",
+        "name": "Technicolor Pop",
+        "family": "cinematic",
+        "description": (
+            "A vivid classic-cinema look with rich colors, clean whites, "
+            "and punchy contrast."
+        ),
+        "config": {
+            "effect_type": "technicolor_pop",
+            "red_boost": 0.36,
+            "orange_boost": 0.06,
+            "green_boost": 0.30,
+            "blue_boost": 0.32,
+            "contrast": 1.06,
+        },
+    },
 
 }
