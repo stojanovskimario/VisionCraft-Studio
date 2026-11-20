@@ -305,6 +305,55 @@ export const effects = [
         preview: '/effects/noir/red_evidence.gif',
     },
 
+    // VHS
 
+    {
+        id: 'classic_vhs',
+        name: 'Classic VHS',
+        family: 'vhs',
+        //description: 'Adds faded tape colors, scanlines, a short RGB glitch, and analog noise.',
+        thumbnail: '/effects/vhs/classic_vhs.jpg',
+        preview: '/effects/vhs/classic_vhs.gif',
+    },
+    {
+        id: 'vhs_tracking_error',
+        name: 'Tracking Error',
+        family: 'vhs',
+        //description: 'Moves a damaged tracking band through the picture, tearing parts of the image sideways.',
+        thumbnail: '/effects/vhs/vhs_tracking_error.jpg',
+        preview: '/effects/vhs/vhs_tracking_error.gif',
+    },
+    {
+        id: 'vhs_chroma_bleed',
+        name: 'Chroma Bleed',
+        family: 'vhs',
+        //description: 'Smears color sideways without blurring brightness detail.',
+        thumbnail: '/effects/vhs/vhs_chroma_bleed.jpg',
+        preview: '/effects/vhs/vhs_chroma_bleed.gif',
+    },
+    {
+        id: 'vhs_long_play',
+        name: 'Long Play',
+        family: 'vhs',
+        //description: 'Softens fine detail and washes out colors for a low-quality tape look.',
+        thumbnail: '/effects/vhs/vhs_long_play.jpg',
+        preview: '/effects/vhs/vhs_long_play.gif',
+    },
+    {
+        id: 'vhs_vertical_hold',
+        name: 'Vertical Hold',
+        family: 'vhs',
+        //description: 'Briefly rolls the whole picture vertically, then returns it to normal.',
+        thumbnail: '/effects/vhs/vhs_vertical_hold.jpg',
+        preview: '/effects/vhs/vhs_vertical_hold.gif',
+    },
+    {
+        id: 'vhs_tape_leader',
+        name: 'Tape Leader',
+        family: 'vhs',
+        //description: 'Fades from a short color-bar opening into faded videotape footage.',
+        thumbnail: '/effects/vhs/vhs_tape_leader.jpg',
+        preview: '/effects/vhs/vhs_tape_leader.gif',
+    },
 
 ]

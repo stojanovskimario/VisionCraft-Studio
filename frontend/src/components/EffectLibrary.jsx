@@ -10,6 +10,7 @@ const familyNames = {
     retro: 'Retro Effects',
     cinematic: 'Cinematic Effects',
     noir: 'Noir Effects',
+    vhs: 'VHS Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {
