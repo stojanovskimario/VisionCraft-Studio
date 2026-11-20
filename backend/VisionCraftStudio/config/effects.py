@@ -827,4 +827,96 @@ EFFECTS = {
         },
     },
 
+    # DREAMY
+
+    "dreamy_lucid": {
+        "id": "dreamy_lucid",
+        "name": "Lucid Dream",
+        "family": "dreamy",
+        "description": "Lifted midtones, clearer detail, and richer natural colors without a tint.",
+        "config": {
+            "effect_type": "dreamy_grade",
+            "tone_curve": [0, 0.115, 0.34, 0.62, 0.83, 0.952, 1],
+            "saturation": 1.09,
+            "vibrance": 0.28,
+            "clarity": 0.52,
+        },
+    },
+    "dreamy_peach_daylight": {
+        "id": "dreamy_peach_daylight",
+        "name": "Peach Daylight",
+        "family": "dreamy",
+        "description": "Peach-and-cream highlights with nearly neutral shadows.",
+        "config": {
+            "effect_type": "dreamy_grade",
+            "tone_curve": [0, 0.14, 0.35, 0.615, 0.83, 0.948, 0.995],
+            "saturation": 1.06,
+            "vibrance": 0.16,
+            "clarity": 0.38,
+            "highlight_tint": [0.170, 0.045, -0.115],
+        },
+    },
+    "dreamy_sunbreak": {
+        "id": "dreamy_sunbreak",
+        "name": "Sunbreak",
+        "family": "dreamy",
+        "description": (
+            "Gradually opens up the midtones, like sunlight emerging "
+            "from behind a cloud."
+        ),
+        "config": {
+            "effect_type": "dreamy_grade",
+            "tone_curve": [0, 0.12, 0.29, 0.53, 0.76, 0.93, 1],
+            "saturation": 1.04,
+            "vibrance": 0.14,
+            "clarity": 0.45,
+            "sunbreak_strength": 0.32,
+            "sunbreak_start_seconds": 0.4,
+            "sunbreak_end_seconds": 2.2,
+        },
+    },
+    "dreamy_wildflower": {
+        "id": "dreamy_wildflower",
+        "name": "Wildflower",
+        "family": "dreamy",
+        "description": "Selectively enriches greens and pinks, giving leaves and petals more life.",
+        "config": {
+            "effect_type": "dreamy_grade",
+            "tone_curve": [0, 0.12, 0.32, 0.575, 0.81, 0.95, 1],
+            "saturation": 1.065,
+            "vibrance": 0.12,
+            "clarity": 0.44,
+            "hue_accents": [(115, 52, 0.67), (314, 57, 0.79)],
+        },
+    },
+    "dreamy_pearl_daylight": {
+        "id": "dreamy_pearl_daylight",
+        "name": "Pearl Daylight",
+        "family": "dreamy",
+        "description": "A bright, airy high-key grade with softer whites and restrained pastels.",
+        "config": {
+            "effect_type": "dreamy_grade",
+            "tone_curve": [0.023, 0.24, 0.46, 0.71, 0.87, 0.962, 1],
+            "saturation": 0.94,
+            "vibrance": 0.075,
+            "clarity": 0.30,
+        },
+    },
+    "dreamy_window_light": {
+        "id": "dreamy_window_light",
+        "name": "Window Light",
+        "family": "dreamy",
+        "description": "A soft directional lift from the upper left, fading gradually across the frame.",
+        "config": {
+            "effect_type": "dreamy_grade",
+            "tone_curve": [0, 0.12, 0.305, 0.55, 0.775, 0.937, 1],
+            "saturation": 1.05,
+            "vibrance": 0.13,
+            "clarity": 0.43,
+            "window_strength": 0.48,
+            "window_side": "left",
+            "highlight_tint": [0.045, 0.012, -0.035],
+        },
+    },
+
 }

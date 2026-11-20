@@ -356,4 +356,55 @@ export const effects = [
         preview: '/effects/vhs/vhs_tape_leader.gif',
     },
 
+        // DREAMY
+
+    {
+        id: 'dreamy_lucid',
+        name: 'Lucid Dream',
+        family: 'dreamy',
+        //description: 'Lifts midtones, sharpens fine detail, and enriches natural colors without adding a tint.',
+        thumbnail: '/effects/dreamy/dreamy_lucid.jpg',
+        preview: '/effects/dreamy/dreamy_lucid.gif',
+    },
+    {
+        id: 'dreamy_peach_daylight',
+        name: 'Peach Daylight',
+        family: 'dreamy',
+        //description: 'Adds peach-and-cream warmth to highlights while keeping shadows nearly neutral.',
+        thumbnail: '/effects/dreamy/dreamy_peach_daylight.jpg',
+        preview: '/effects/dreamy/dreamy_peach_daylight.gif',
+    },
+    {
+        id: 'dreamy_sunbreak',
+        name: 'Sunbreak',
+        family: 'dreamy',
+        //description: 'Gradually brightens the shot like sunlight coming out from behind a cloud.',
+        thumbnail: '/effects/dreamy/dreamy_sunbreak.jpg',
+        preview: '/effects/dreamy/dreamy_sunbreak.gif',
+    },
+    {
+        id: 'dreamy_wildflower',
+        name: 'Wildflower',
+        family: 'dreamy',
+        //description: 'Selectively enriches greens and pinks so foliage and flowers stand out.',
+        thumbnail: '/effects/dreamy/dreamy_wildflower.jpg',
+        preview: '/effects/dreamy/dreamy_wildflower.gif',
+    },
+    {
+        id: 'dreamy_pearl_daylight',
+        name: 'Pearl Daylight',
+        family: 'dreamy',
+        //description: 'Creates a bright, airy look with softer whites and restrained pastels.',
+        thumbnail: '/effects/dreamy/dreamy_pearl_daylight.jpg',
+        preview: '/effects/dreamy/dreamy_pearl_daylight.gif',
+    },
+    {
+        id: 'dreamy_window_light',
+        name: 'Window Light',
+        family: 'dreamy',
+        //description: 'Brightens one side of the frame like soft window light, fading toward the other side.',
+        thumbnail: '/effects/dreamy/dreamy_window_light.jpg',
+        preview: '/effects/dreamy/dreamy_window_light.gif',
+    },
+
 ]
