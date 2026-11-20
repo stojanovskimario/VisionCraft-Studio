@@ -407,4 +407,55 @@ export const effects = [
         preview: '/effects/dreamy/dreamy_window_light.gif',
     },
 
+    // ACTION
+
+    {
+        id: 'classic_action',
+        name: 'Classic Action',
+        family: 'action',
+        //description: 'Adds a gradual zoom, a burst of shake, and a short 1.5× speed-up.',
+        thumbnail: '/effects/action/classic_action.jpg',
+        preview: '/effects/action/classic_action.gif',
+    },
+    {
+        id: 'action_impact_zoom',
+        name: 'Impact Zoom',
+        family: 'action',
+        //description: 'Punches in toward the center, then pulls back to the original framing.',
+        thumbnail: '/effects/action/action_impact_zoom.jpg',
+        preview: '/effects/action/action_impact_zoom.gif',
+    },
+    {
+        id: 'action_slow_mo',
+        name: 'Slow-Mo Moment',
+        family: 'action',
+        //description: 'Slows the middle of the shot to 0.55× before returning to normal speed.',
+        thumbnail: '/effects/action/action_slow_mo.jpg',
+        preview: '/effects/action/action_slow_mo.gif',
+    },
+    {
+        id: 'action_whip_tilt',
+        name: 'Whip Tilt',
+        family: 'action',
+        //description: 'Swings the picture in both directions before settling level.',
+        thumbnail: '/effects/action/action_whip_tilt.jpg',
+        preview: '/effects/action/action_whip_tilt.gif',
+    },
+    {
+        id: 'action_velocity_streak',
+        name: 'Velocity Streak',
+        family: 'action',
+        //description: 'Adds a burst of outward blur near the edges while keeping the center clear.',
+        thumbnail: '/effects/action/action_velocity_streak.jpg',
+        preview: '/effects/action/action_velocity_streak.gif',
+    },
+    {
+        id: 'action_double_rush',
+        name: 'Double Rush',
+        family: 'action',
+        //description: 'Creates two speed bursts with normal playback between them.',
+        thumbnail: '/effects/action/action_double_rush.jpg',
+        preview: '/effects/action/action_double_rush.gif',
+    },
+
 ]

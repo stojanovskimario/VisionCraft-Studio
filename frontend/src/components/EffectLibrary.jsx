@@ -12,6 +12,7 @@ const familyNames = {
     noir: 'Noir Effects',
     vhs: 'VHS Effects',
     dreamy: 'Dreamy Effects',
+    action: 'Action Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {

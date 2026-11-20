@@ -919,4 +919,113 @@ EFFECTS = {
         },
     },
 
+    # ACTION
+
+    "classic_action": {
+        "id": "classic_action",
+        "name": "Classic Action",
+        "family": "action",
+        "description": "A gradual zoom, a burst of camera shake, and a short 1.5x speed-up.",
+        "config": {
+            "effect_type": "classic_action",
+            "zoom_seconds": 2.0,
+            "zoom_amount": 0.20,
+            "shake_start_seconds": 2.0,
+            "shake_end_seconds": 3.5,
+            "shake_x_pixels": 5,
+            "shake_y_pixels": 4,
+            "contrast": 1.15,
+            "speed_unit": "seconds",
+            "speed_windows": [(4.0, 6.0, 1.5)],
+            "action_accents": {
+                "shake_taper_seconds": 0.20,
+            },
+        },
+    },
+    "action_impact_zoom": {
+        "id": "action_impact_zoom",
+        "name": "Impact Zoom",
+        "family": "action",
+        "description": "Punches in quickly toward the center, then pulls back to the original framing.",
+        "config": {
+            "effect_type": "action_impact_zoom",
+            "start_fraction": 0.28,
+            "end_fraction": 0.58,
+            "zoom_amount": 0.34,
+            "contrast": 1.10,
+            "action_accents": {
+                "recoil_amount": 0.028,
+                "recoil_seconds": 0.24,
+            },
+        },
+    },
+    "action_slow_mo": {
+        "id": "action_slow_mo",
+        "name": "Slow-Mo Moment",
+        "family": "action",
+        "description": "Slows the middle of the clip to 0.55x, then returns to normal speed.",
+        "config": {
+            "effect_type": "action_slow_mo",
+            "contrast": 1.08,
+            "speed_unit": "fraction",
+            "speed_windows": [(0.35, 0.65, 0.55)],
+            "action_accents": {
+                "slow_highlight_softness": 0.045,
+                "slow_highlight_fade_seconds": 0.16,
+            },
+        },
+    },
+    "action_whip_tilt": {
+        "id": "action_whip_tilt",
+        "name": "Whip Tilt",
+        "family": "action",
+        "description": "Swings the picture briefly in both directions before settling level.",
+        "config": {
+            "effect_type": "action_whip_tilt",
+            "start_fraction": 0.24,
+            "end_fraction": 0.56,
+            "max_angle_degrees": 13.0,
+            "contrast": 1.06,
+            "action_accents": {
+                "whip_blur_mix": 0.75,
+                "whip_blur_degrees": 1.50,
+            },
+        },
+    },
+    "action_velocity_streak": {
+        "id": "action_velocity_streak",
+        "name": "Velocity Streak",
+        "family": "action",
+        "description": "Creates a short burst of outward blur around the edges while keeping the center clear.",
+        "config": {
+            "effect_type": "action_velocity_streak",
+            "start_fraction": 0.30,
+            "end_fraction": 0.65,
+            "streak_zoom": 0.24,
+            "streak_mix": 0.90,
+            "contrast": 1.12,
+            "action_accents": {
+                "edge_release": 0.60,
+                "center_clarity": 0.35,
+                "settle_seconds": 0.22,
+            },
+        },
+    },
+    "action_double_rush": {
+        "id": "action_double_rush",
+        "name": "Double Rush",
+        "family": "action",
+        "description": "Adds two separate speed bursts with normal playback between them.",
+        "config": {
+            "effect_type": "action_double_rush",
+            "contrast": 1.07,
+            "speed_unit": "fraction",
+            "speed_windows": [(0.15, 0.31, 1.6), (0.58, 0.80, 2.0)],
+            "action_accents": {
+                "rush_zoom_amounts": [0.022, 0.035],
+                "rush_nudge_seconds": 0.22,
+            },
+        },
+    },
+
 }
