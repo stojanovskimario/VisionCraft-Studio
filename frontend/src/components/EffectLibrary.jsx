@@ -9,6 +9,7 @@ const familyNames = {
     futuristic: 'Futuristic Effects',
     retro: 'Retro Effects',
     cinematic: 'Cinematic Effects',
+    noir: 'Noir Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {

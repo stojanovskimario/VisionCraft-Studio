@@ -21,6 +21,10 @@ from VisionCraftStudio.processors.families.cinematic_processor import (
     process_cinematic_family,
 )
 
+from VisionCraftStudio.processors.families.noir_processor import (
+    process_noir_family,
+)
+
 
 FAMILY_PROCESSORS = {
     "underwater": process_underwater_effect,
@@ -28,6 +32,7 @@ FAMILY_PROCESSORS = {
     "futuristic": process_futuristic_effect,
     "retro": process_retro_family,
     "cinematic": process_cinematic_family,
+    "noir": process_noir_family,
 }
 
 

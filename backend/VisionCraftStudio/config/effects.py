@@ -651,4 +651,83 @@ EFFECTS = {
         },
     },
 
+    # NOIR
+
+    "classic_noir": {
+        "id": "classic_noir",
+        "name": "Classic Noir",
+        "family": "noir",
+        "description": "Black-and-white footage with gradually increasing contrast and visible film grain.",
+        "config": {
+            "effect_type": "classic_noir",
+            "contrast": 1.20,
+            "contrast_ramp_seconds": 3.0,
+            "vignette_strength": 0.25,
+            "vignette_start_seconds": 2.0,
+            "vignette_end_seconds": 4.0,
+            "grain_strength": 8.0,
+        },
+    },
+    "focus_pull": {
+        "id": "focus_pull",
+        "name": "Focus Pull",
+        "family": "noir",
+        "description": "A band of sharp focus sweeps across softly blurred black-and-white footage.",
+        "config": {
+            "effect_type": "focus_pull",
+            "sweep_seconds": 6.0,
+            "focus_width": 0.30,
+            "feather_width": 0.18,
+            "blur_radius": 9.0,
+        },
+    },
+    "staccato_noir": {
+        "id": "staccato_noir",
+        "name": "Staccato Noir",
+        "family": "noir",
+        "description": (
+            "Black-and-white footage with deliberately stepped motion "
+            "and unchanged playback duration and audio."
+        ),
+        "config": {
+            "effect_type": "staccato_noir",
+            "motion_fps": 8.0,
+            "contrast": 1.05,
+        },
+    },
+    "midnight_blue": {
+        "id": "midnight_blue",
+        "name": "Midnight Blue",
+        "family": "noir",
+        "description": "A near-monochrome look with steel-blue shadows and neutral highlights.",
+        "config": {
+            "effect_type": "midnight_blue",
+            "contrast": 1.10,
+            "tint_strength": 1.0,
+        },
+    },
+    "evidence_triptych": {
+        "id": "evidence_triptych",
+        "name": "Evidence Triptych",
+        "family": "noir",
+        "description": "A three-panel black-and-white layout with the full shot framed by two close-ups.",
+        "config": {
+            "effect_type": "evidence_triptych",
+            "center_share": 0.50,
+            "gutter_ratio": 0.012,
+            "background_level": 22,
+        },
+    },
+    "red_evidence": {
+        "id": "red_evidence",
+        "name": "Red Evidence",
+        "family": "noir",
+        "description": "Keeps reds from the original footage visible while turning the rest black and white.",
+        "config": {
+            "effect_type": "red_evidence",
+            "red_hue_width_degrees": 31.0,
+            "minimum_saturation": 0.20,
+        },
+    },
+
 }

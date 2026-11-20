@@ -254,7 +254,56 @@ export const effects = [
         preview: '/effects/cinematic/technicolor_pop.gif',
     },
 
+    // NOIR
 
+    {
+        id: 'classic_noir',
+        name: 'Classic Noir',
+        family: 'noir',
+        //description: 'Turns footage black and white, builds contrast, and adds visible film grain.',
+        thumbnail: '/effects/noir/classic_noir.jpg',
+        preview: '/effects/noir/classic_noir.gif',
+    },
+    {
+        id: 'focus_pull',
+        name: 'Focus Pull',
+        family: 'noir',
+        //description: 'Moves a band of sharp focus across softly blurred black-and-white footage.',
+        thumbnail: '/effects/noir/focus_pull.jpg',
+        preview: '/effects/noir/focus_pull.gif',
+    },
+    {
+        id: 'staccato_noir',
+        name: 'Staccato Noir',
+        family: 'noir',
+        //description: 'Gives black-and-white footage deliberately stepped motion without changing the audio or video duration.',
+        thumbnail: '/effects/noir/staccato_noir.jpg',
+        preview: '/effects/noir/staccato_noir.gif',
+    },
+    {
+        id: 'midnight_blue',
+        name: 'Midnight Blue',
+        family: 'noir',
+        //description: 'Adds steel-blue shadows while keeping bright areas neutral.',
+        thumbnail: '/effects/noir/midnight_blue.jpg',
+        preview: '/effects/noir/midnight_blue.gif',
+    },
+    {
+        id: 'evidence_triptych',
+        name: 'Evidence Triptych',
+        family: 'noir',
+        //description: 'Shows the full shot in the center with two synchronized close-ups on either side.',
+        thumbnail: '/effects/noir/evidence_triptych.jpg',
+        preview: '/effects/noir/evidence_triptych.gif',
+    },
+    {
+        id: 'red_evidence',
+        name: 'Red Evidence',
+        family: 'noir',
+        //description: 'Preserves reds from the original footage while turning the rest black and white.',
+        thumbnail: '/effects/noir/red_evidence.jpg',
+        preview: '/effects/noir/red_evidence.gif',
+    },
 
 
 
