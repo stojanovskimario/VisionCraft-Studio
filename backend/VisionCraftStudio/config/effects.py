@@ -1028,4 +1028,151 @@ EFFECTS = {
         },
     },
 
+    # TRAVEL
+
+    "classic_travel": {
+        "id": "classic_travel",
+        "name": "Classic Travel",
+        "family": "travel",
+        "description": "Gradually enriches colors, adds warm tones, zooms gently into the scene, and fades out.",
+        "config": {
+            "effect_type": "classic_travel",
+            "saturation_peak": 1.24,
+            "saturation_end_seconds": 2.0,
+            "warm_start_seconds": 2.0,
+            "warm_end_seconds": 4.0,
+            "warm_tint": [12, 5, -9],
+            "zoom_start_seconds": 4.0,
+            "zoom_end_seconds": 6.0,
+            "zoom_amount": 0.07,
+            "fade_seconds": 2.0,
+        },
+    },
+
+    "tropical_escape": {
+        "id": "tropical_escape",
+        "name": "Tropical Escape",
+        "family": "travel",
+        "description": "Enhances tropical landscapes with turquoise water, vibrant greenery, and bright sunny colors.",
+        "config": {
+            "effect_type": "tropical_escape",
+            "saturation": 1.12,
+            "vibrance": 0.22,
+            "contrast": 1.06,
+            "brightness": 1.04,
+            "shadow_lift": 5,
+            "highlight_recovery": 6,
+            "highlight_tint": [6, 3, -3],
+            "aqua_red_reduction": 7,
+            "aqua_green_boost": 9,
+            "aqua_blue_boost": 12,
+            "leaf_boost": 8,
+            "clarity": 0.35,
+        },
+    },
+
+    "mountain_air": {
+        "id": "mountain_air",
+        "name": "Mountain Air",
+        "family": "travel",
+        "description": "Adds crisp detail, cool shadows, natural colors, and clarity to scenic landscapes.",
+        "config": {
+            "effect_type": "mountain_air",
+            "saturation": 1.06,
+            "vibrance": 0.12,
+            "contrast": 1.10,
+            "brightness": 1.01,
+            "shadow_lift": 9,
+            "highlight_recovery": 10,
+            "shadow_tint": [-2, 2, 7],
+            "clarity": 0.75,
+            "detail_radius": 1.6,
+        },
+    },
+
+    "miniature_world": {
+        "id": "miniature_world",
+        "name": "Miniature World",
+        "family": "travel",
+        "description": (
+            "Creates a tilt-shift miniature appearance with a sharp "
+            "center band, blurred surroundings, and enhanced colors."
+        ),
+        "config": {
+            "effect_type": "miniature_world",
+            "saturation": 1.15,
+            "vibrance": 0.18,
+            "contrast": 1.06,
+            "brightness": 1.02,
+            "shadow_lift": 5,
+            "highlight_recovery": 7,
+            "clarity": 0.45,
+            "detail_radius": 1.3,
+
+            "focus_center_x": 0.50,
+            "focus_center_y": 0.52,
+
+            "ellipse_width": 0.92,
+            "ellipse_height": 0.82,
+
+            "focus_feather": 0.62,
+
+            "blur_radius": 10.0,
+            "blur_mix": 0.82,
+        },
+    },
+
+    "blue_hour_journey": {
+        "id": "blue_hour_journey",
+        "name": "Blue Hour Journey",
+        "family": "travel",
+        "description": (
+            "Gradually transforms daylight footage into an atmospheric "
+            "twilight scene with blue shadows and soft violet-pink highlights."
+        ),
+        "config": {
+            "effect_type": "blue_hour_journey",
+            "saturation": 1.04,
+            "vibrance": 0.10,
+            "contrast": 1.04,
+            "brightness": 1.02,
+            "shadow_lift": 6,
+            "highlight_recovery": 10,
+            "transition_start_percent": 10,
+            "transition_end_percent": 82,
+            "twilight_darken": 0.10,
+            "shadow_tint": [-12, 0, 27],
+            "highlight_tint": [5, -1, 14],
+            "horizon_y": 0.43,
+            "horizon_width": 0.16,
+            "horizon_tint": [36, 5, 20],
+            "horizon_strength": 1.0,
+            "sky_color_bias": 18,
+            "sky_color_range": 65,
+            "sky_min_brightness": 90,
+            "sky_brightness_range": 90,
+        },
+    },
+
+
+    "travel_postcard": {
+        "id": "travel_postcard",
+        "name": "Travel Postcard",
+        "family": "travel",
+        "description": "Creates a vibrant vacation postcard with a clean white border and gentle camera movement.",
+        "config": {
+            "effect_type": "travel_postcard",
+            "saturation": 1.12,
+            "vibrance": 0.12,
+            "contrast": 1.02,
+            "brightness": 1.04,
+            "shadow_lift": 7,
+            "highlight_recovery": 10,
+            "zoom_amount": 0.045,
+            "pan_amount": 0.35,
+            "border_ratio": 0.027,
+            "border_color": [249, 246, 238],
+        },
+    },
+
 }

@@ -458,4 +458,58 @@ export const effects = [
         preview: '/effects/action/action_double_rush.gif',
     },
 
+
+    // TRAVEL
+
+    {
+        id: 'classic_travel',
+        name: 'Classic Travel',
+        family: 'travel',
+        //description: 'Enriches colors, adds warm tones, gently zooms into the scene, and fades out.',
+        thumbnail: '/effects/travel/classic_travel.jpg',
+        preview: '/effects/travel/classic_travel.gif',
+    },
+    {
+        id: 'tropical_escape',
+        name: 'Tropical Escape',
+        family: 'travel',
+        //description: 'Enhances turquoise water, lush greenery, and sunny vacation colors.',
+        thumbnail: '/effects/travel/tropical_escape.jpg',
+        preview: '/effects/travel/tropical_escape.gif',
+    },
+    {
+        id: 'mountain_air',
+        name: 'Mountain Air',
+        family: 'travel',
+        //description: 'Adds crisp details, cooler shadows, and natural colors to scenic landscapes.',
+        thumbnail: '/effects/travel/mountain_air.jpg',
+        preview: '/effects/travel/mountain_air.gif',
+    },
+    {
+        id: 'miniature_world',
+        name: 'Miniature World',
+        family: 'travel',
+        //description: 'Creates a miniature tilt-shift appearance with sharp focus in the center and softly blurred surroundings.',
+        thumbnail: '/effects/travel/miniature_world.jpg',
+        preview: '/effects/travel/miniature_world.gif',
+    },
+    {
+        id: 'blue_hour_journey',
+        name: 'Blue Hour Journey',
+        family: 'travel',
+        //description: 'Gradually turns daylight footage into a cool twilight scene with blue shadows and soft pink-violet highlights.',
+        thumbnail: '/effects/travel/blue_hour_journey.jpg',
+        preview: '/effects/travel/blue_hour_journey.gif',
+    },
+
+    {
+        id: 'travel_postcard',
+        name: 'Travel Postcard',
+        family: 'travel',
+        //description: 'Frames vibrant vacation footage in a white border with gentle camera movement.',
+        thumbnail: '/effects/travel/travel_postcard.jpg',
+        preview: '/effects/travel/travel_postcard.gif',
+    },
+
+
 ]

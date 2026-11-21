@@ -37,6 +37,10 @@ from VisionCraftStudio.processors.families.action_processor import (
     process_action_family,
 )
 
+from VisionCraftStudio.processors.families.travel_processor import (
+    process_travel_family,
+)
+
 
 FAMILY_PROCESSORS = {
     "underwater": process_underwater_effect,
@@ -48,6 +52,7 @@ FAMILY_PROCESSORS = {
     "vhs": process_vhs_family,
     "dreamy": process_dreamy_family,
     "action": process_action_family,
+    "travel": process_travel_family,
 }
 
 

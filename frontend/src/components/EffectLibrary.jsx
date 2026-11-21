@@ -13,6 +13,7 @@ const familyNames = {
     vhs: 'VHS Effects',
     dreamy: 'Dreamy Effects',
     action: 'Action Effects',
+    travel: 'Travel Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {
