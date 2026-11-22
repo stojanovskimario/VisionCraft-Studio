@@ -131,8 +131,10 @@ EFFECTS = {
                 "angle": 90,
                 "start_percent": 20,
                 "rotate_in_percent": 5,
-                "hold_percent": 15,
+                "hold_percent": 20,
                 "rotate_out_percent": 5,
+                "max_zoom": 2.0,
+                "background_blur": 0.025,
             },
             "speed": {
                 "factor": 1.25,
@@ -158,8 +160,10 @@ EFFECTS = {
                 "angle": 45,
                 "start_percent": 20,
                 "in_percent": 5,
-                "hold_percent": 5,
-                "out_percent": 5
+                "hold_percent": 10,
+                "out_percent": 5,
+                "max_zoom": 1.96,
+                "background_blur": 0.025,
             },
             "speed": {
                 "factor": 1.5,
@@ -213,6 +217,8 @@ EFFECTS = {
                 "rotate_in_percent": 5,
                 "hold_percent": 25,
                 "rotate_out_percent": 5,
+                "max_zoom": 2.0,
+                "background_blur": 0.025,
             },
             "speed": {
                 "factor": 1.25,
@@ -237,7 +243,7 @@ EFFECTS = {
             "dust": 6,
             "scratches": 5,
             "rotation": {
-                "angle": 90,
+                "angle": 0,
                 "start_percent": 30,
                 "rotate_in_percent": 5,
                 "hold_percent": 35,
@@ -268,7 +274,9 @@ EFFECTS = {
                 "start_percent": 40,
                 "in_percent": 5,
                 "hold_percent": 10,
-                "out_percent": 5
+                "out_percent": 5,
+                "max_zoom": 1.96,
+                "background_blur": 0.025,
             },
             "speed": {
                 "factor": 1.25,

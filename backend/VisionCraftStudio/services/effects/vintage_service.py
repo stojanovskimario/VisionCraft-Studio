@@ -246,66 +246,114 @@ def apply_light_leak(frame, intensity, t):
     )
 
 
+
 def apply_rotation(frame, t, duration, rotation):
     if not rotation:
         return frame
 
+    angle = float(rotation.get("angle", 0))
+
+    if angle == 0:
+        return frame
+
     start = duration * rotation.get("start_percent", 20) / 100
-    rotate_in = duration * rotation.get("rotate_in_percent", 5) / 100
+
+    # Support both naming styles used in effects.py.
+    in_percent = rotation.get(
+        "rotate_in_percent",
+        rotation.get("in_percent", 5)
+    )
+    out_percent = rotation.get(
+        "rotate_out_percent",
+        rotation.get("out_percent", 5)
+    )
+
+    rotate_in = duration * in_percent / 100
     hold = duration * rotation.get("hold_percent", 15) / 100
-    rotate_out = duration * rotation.get("rotate_out_percent", 5) / 100
+    rotate_out = duration * out_percent / 100
 
-    angle = rotation.get("angle", 90)
+    rotation_end = start + rotate_in + hold + rotate_out
 
-    if t < start or t > start + rotate_in + hold + rotate_out:
-        current_angle = 0
+    if t < start or t >= rotation_end:
+        return frame
 
-    elif t < start + rotate_in:
-        progress = (t - start) / rotate_in
+    if t < start + rotate_in:
+        progress = (t - start) / max(rotate_in, 0.0001)
         current_angle = angle * progress
 
     elif t < start + rotate_in + hold:
         current_angle = angle
 
     else:
-        progress = (t - start - rotate_in - hold) / rotate_out
-        current_angle = angle * (1 - progress)
+        progress = (
+            t - start - rotate_in - hold
+        ) / max(rotate_out, 0.0001)
+
+        current_angle = angle * (1.0 - progress)
 
     image = Image.fromarray(frame).convert("RGB")
+    width, height = image.size
 
-    original_width, original_height = image.size
+    # Calculate zoom needed to cover the rotated frame.
+    radians = np.deg2rad(current_angle)
+    cos_a = abs(np.cos(radians))
+    sin_a = abs(np.sin(radians))
 
-    rotated = image.rotate(
+    required_zoom = max(
+        cos_a + sin_a * (height / width),
+        cos_a + sin_a * (width / height),
+    )
+
+    # Limit zoom to preserve the scene.
+    max_zoom = float(rotation.get("max_zoom", 1.25))
+    zoom = min(
+        max(1.0, max_zoom),
+        1.0 + (required_zoom - 1.0) * 1.02,
+    )
+
+    # Zoom the video before rotating it.
+    zoomed = image.resize(
+        (
+            max(1, round(width * zoom)),
+            max(1, round(height * zoom)),
+        ),
+        Image.Resampling.BICUBIC,
+    ).convert("RGBA")
+
+    # Rotate with transparency instead of black corners.
+    rotated = zoomed.rotate(
         current_angle,
         resample=Image.Resampling.BICUBIC,
         expand=True,
     )
 
-    scale = min(
-        original_width / rotated.width,
-        original_height / rotated.height,
+    # Center-crop to the original video dimensions.
+    left = (rotated.width - width) // 2
+    top = (rotated.height - height) // 2
+
+    foreground = rotated.crop(
+        (left, top, left + width, top + height)
     )
 
-    new_width = int(rotated.width * scale)
-    new_height = int(rotated.height * scale)
-
-    rotated = rotated.resize(
-        (new_width, new_height),
-        Image.Resampling.LANCZOS,
+    # Fill uncovered areas with the same video, blurred.
+    blur_radius = float(
+        rotation.get("background_blur", 0.025)
     )
 
-    canvas = Image.new(
-        "RGB",
-        (original_width, original_height),
-        (0, 0, 0),
+    background = image.filter(
+        ImageFilter.GaussianBlur(
+            radius=max(3, height * blur_radius)
+        )
+    ).convert("RGBA")
+
+    # Composite the rotated foreground over the background.
+    result = Image.alpha_composite(
+        background,
+        foreground,
     )
 
-    x = (original_width - new_width) // 2
-    y = (original_height - new_height) // 2
+    return np.asarray(result.convert("RGB"))
 
-    canvas.paste(rotated, (x, y))
-
-    return np.asarray(canvas)
 
 
 def apply_vintage_effect(frame, t, duration, config):
