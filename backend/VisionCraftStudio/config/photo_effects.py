@@ -44,3 +44,30 @@ PHOTO_EFFECTS = {
         "config": {},
     },
 }
+PHOTO_EFFECTS.update({
+    effect_id: {
+        "name": name,
+        "family": family,
+        "config": {},
+    }
+    for effect_id, name, family in [
+        ("abyss", "Abyss", "underwater"),
+        ("deep_ocean", "Deep Ocean", "underwater"),
+        ("faded_memories", "Faded Memories", "vintage"),
+        ("wireframe_reality", "Wireframe Reality", "futuristic"),
+        ("synthwave", "Synthwave", "retro"),
+        ("camcorder_90s", "90s Camcorder", "retro"),
+        ("golden_hour_cinema", "Golden Hour Cinema", "cinematic"),
+        ("dark_moody", "Dark & Moody", "cinematic"),
+        ("midnight_blue", "Midnight Blue", "noir"),
+        ("evidence_triptych", "Evidence Triptych", "noir"),
+        ("chroma_bleed", "Chroma Bleed", "vhs"),
+        ("window_light", "Window Light", "dreamy"),
+        ("wildflower", "Wildflower", "dreamy"),
+        ("miniature_world", "Miniature World", "travel"),
+        ("pencil_sketch", "Pencil Sketch", "artistic"),
+        ("oil_painting", "Oil Painting", "artistic"),
+        ("watercolor", "Watercolor", "artistic"),
+        ("photo_stack", "Photo Stack", "creative_motion"),
+    ]
+})

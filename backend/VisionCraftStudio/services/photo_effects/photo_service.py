@@ -10,6 +10,10 @@ from PIL import (
     ImageOps,
 )
 
+from VisionCraftStudio.services.photo_effects.extended_photo_effects import (
+    apply_extended_photo_effect,
+)
+
 
 RESAMPLE = Image.Resampling.LANCZOS
 
@@ -288,6 +292,8 @@ def apply_photo_effect(image, effect_id, config):
             )
         )
 
-    raise ValueError(
-        f"Unknown photo effect: {effect_id}"
+    return apply_extended_photo_effect(
+        image,
+        effect_id,
+        config,
     )

@@ -42,6 +42,116 @@ const PHOTO_EFFECTS = [
         family: "futuristic",
         match: "cyberpunk neon",
     },
+
+    {
+        id: "abyss",
+        name: "Abyss",
+        family: "underwater",
+        match: "abyss",
+    },
+    {
+        id: "deep_ocean",
+        name: "Deep Ocean",
+        family: "underwater",
+        match: "deep ocean",
+    },
+    {
+        id: "faded_memories",
+        name: "Faded Memories",
+        family: "vintage",
+        match: "faded",
+    },
+    {
+        id: "wireframe_reality",
+        name: "Wireframe Reality",
+        family: "futuristic",
+        match: "wireframe",
+    },
+    {
+        id: "synthwave",
+        name: "Synthwave",
+        family: "retro",
+        match: "synthwave",
+    },
+    {
+        id: "camcorder_90s",
+        name: "90s Camcorder",
+        family: "retro",
+        match: "camcorder",
+    },
+    {
+        id: "golden_hour_cinema",
+        name: "Golden Hour Cinema",
+        family: "cinematic",
+        match: "golden hour",
+    },
+    {
+        id: "dark_moody",
+        name: "Dark & Moody",
+        family: "cinematic",
+        match: "dark",
+    },
+    {
+        id: "midnight_blue",
+        name: "Midnight Blue",
+        family: "noir",
+        match: "midnight blue",
+    },
+    {
+        id: "evidence_triptych",
+        name: "Evidence Triptych",
+        family: "noir",
+        match: "evidence triptych",
+    },
+    {
+        id: "chroma_bleed",
+        name: "Chroma Bleed",
+        family: "vhs",
+        match: "chroma bleed",
+    },
+    {
+        id: "window_light",
+        name: "Window Light",
+        family: "dreamy",
+        match: "window light",
+    },
+    {
+        id: "wildflower",
+        name: "Wildflower",
+        family: "dreamy",
+        match: "wildflower",
+    },
+    {
+        id: "miniature_world",
+        name: "Miniature World",
+        family: "travel",
+        match: "miniature world",
+    },
+    {
+        id: "pencil_sketch",
+        name: "Pencil Sketch",
+        family: "artistic",
+        match: "pencil sketch",
+    },
+    {
+        id: "oil_painting",
+        name: "Oil Painting",
+        family: "artistic",
+        match: "oil painting",
+    },
+    {
+        id: "watercolor",
+        name: "Watercolor",
+        family: "artistic",
+        match: "watercolor",
+    },
+    {
+        id: "photo_stack",
+        name: "Photo Stack",
+        family: "creative_motion",
+        match: "photo stack",
+    },
+
 ];
 
 const existingVideoEffects = Object.values(
