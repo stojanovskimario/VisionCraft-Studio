@@ -563,5 +563,58 @@ export const effects = [
     },
 
 
+    // CREATIVE MOTION & COMPOSITION
+
+    {
+        id: 'motion_filmstrip_journey',
+        name: 'Filmstrip Journey',
+        family: 'creative_motion',
+        //description: 'Scrolls through different moments in a cinematic moving filmstrip.',
+        thumbnail: '/effects/creative_motion/motion_filmstrip_journey.jpg',
+        preview: '/effects/creative_motion/motion_filmstrip_journey.gif',
+    },
+    {
+        id: 'motion_time_windows',
+        name: 'Time Windows',
+        family: 'creative_motion',
+        //description: 'Shows the present beside nearby moments from before and after.',
+        thumbnail: '/effects/creative_motion/motion_time_windows.jpg',
+        preview: '/effects/creative_motion/motion_time_windows.gif',
+    },
+    {
+        id: 'motion_page_turn',
+        name: 'Page Turn',
+        family: 'creative_motion',
+        //description: 'Creates a curved animated page reveal with subtle shadows.',
+        thumbnail: '/effects/creative_motion/motion_page_turn.jpg',
+        preview: '/effects/creative_motion/motion_page_turn.gif',
+    },
+    {
+        id: 'motion_sliding_panels',
+        name: 'Sliding Panels',
+        family: 'creative_motion',
+        //description: 'Sliding vertical panels reveal different moments before coming together.',
+        thumbnail: '/effects/creative_motion/motion_sliding_panels.jpg',
+        preview: '/effects/creative_motion/motion_sliding_panels.gif',
+    },
+    {
+        id: 'motion_photo_stack',
+        name: 'Photo Stack',
+        family: 'creative_motion',
+        //description: 'Shows moving footage in a layered collage of animated photo frames.',
+        thumbnail: '/effects/creative_motion/motion_photo_stack.jpg',
+        preview: '/effects/creative_motion/motion_photo_stack.gif',
+    },
+    {
+        id: 'motion_kinetic_storyboard',
+        name: 'Kinetic Storyboard',
+        family: 'creative_motion',
+        //description: 'Turns six moments into a storyboard, then expands a panel full-screen.',
+        thumbnail: '/effects/creative_motion/motion_kinetic_storyboard.jpg',
+        preview: '/effects/creative_motion/motion_kinetic_storyboard.gif',
+    },
+
+
+
 
 ]

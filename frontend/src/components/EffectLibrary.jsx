@@ -15,6 +15,7 @@ const familyNames = {
     action: 'Action Effects',
     travel: 'Travel Effects',
     artistic: 'Artistic Effects',
+    creative_motion: 'Creative Motion & Composition Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {

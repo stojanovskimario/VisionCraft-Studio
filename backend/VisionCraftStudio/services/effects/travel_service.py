@@ -145,8 +145,6 @@ def _center_zoom(frame, factor, pan_x=0.0, pan_y=0.0):
     )
 
 
-# 1. CLASSIC TRAVEL
-
 def _classic_travel(frame, t, duration, config):
     saturation = 1.0 + (
         config["saturation_peak"] - 1.0
@@ -185,7 +183,6 @@ def _classic_travel(frame, t, duration, config):
 
     image = _center_zoom(image, zoom)
 
-    # Fade out at the end of the clip.
     fade_length = min(
         config["fade_seconds"],
         duration,
@@ -203,8 +200,6 @@ def _classic_travel(frame, t, duration, config):
         image.astype(np.float32) * fade
     )
 
-
-# 2. TROPICAL ESCAPE
 
 def _tropical_escape(frame, t, duration, config):
     image = _grade(frame, config).astype(np.float32)
@@ -248,8 +243,6 @@ def _tropical_escape(frame, t, duration, config):
     )
 
 
-# 3. MOUNTAIN AIR
-
 def _mountain_air(frame, t, duration, config):
     image = _grade(frame, config)
 
@@ -259,8 +252,6 @@ def _mountain_air(frame, t, duration, config):
         radius=config["detail_radius"],
     )
 
-
-# 4. MINIATURE WORLD
 
 def _miniature_world(frame, t, duration, config):
     image = _grade(frame, config)
@@ -273,7 +264,6 @@ def _miniature_world(frame, t, duration, config):
 
     height, width = image.shape[:2]
 
-    # Reduced blur intensity
     blur_radius = max(
         0.5,
         config["blur_radius"] * min(width, height) / 720.0,
@@ -286,7 +276,6 @@ def _miniature_world(frame, t, duration, config):
         dtype=np.float32,
     )
 
-    # Normalized coordinates
     y, x = np.ogrid[
         0:1:complex(height),
         0:1:complex(width)
@@ -305,13 +294,11 @@ def _miniature_world(frame, t, duration, config):
         config["ellipse_height"] / 2.0
     )
 
-    # Elliptical distance from the focus center
     distance = np.sqrt(
         ((x - center_x) / radius_x) ** 2
         + ((y - center_y) / radius_y) ** 2
     )
 
-    # Gradual transition from sharp to blurred
     feather = max(
         0.01,
         config["focus_feather"]
@@ -321,7 +308,6 @@ def _miniature_world(frame, t, duration, config):
         (distance - 0.78) / feather
     )
 
-    # Control how much blur is actually mixed in
     blur_weight *= config["blur_mix"]
 
     blur_weight = blur_weight[..., None]
@@ -336,12 +322,9 @@ def _miniature_world(frame, t, duration, config):
     return _uint8(result)
 
 
-# 5. BLUE HOUR JOURNEY
-
 def _blue_hour_journey(frame, t, duration, config):
     image = _grade(frame, config).astype(np.float32)
 
-    # Daylight gradually transitions into a twilight grade.
     start = (
         duration
         * config["transition_start_percent"]
@@ -373,7 +356,6 @@ def _blue_hour_journey(frame, t, duration, config):
         1.0,
     )
 
-    # Slightly reduce exposure as evening approaches.
     image *= (
         1.0 - config["twilight_darken"] * progress
     )
@@ -388,14 +370,11 @@ def _blue_hour_journey(frame, t, duration, config):
         dtype=np.float32,
     )
 
-    # Cool the shadows without losing all the original colors.
     image += progress * (
         shadow_weight * shadow_tint
         + highlight_weight * highlight_tint
     )
 
-    # Add a soft pink-violet glow around the upper horizon.
-    # The glow favors brighter, bluish areas of the image.
     height = image.shape[0]
 
     y = np.linspace(
@@ -450,8 +429,6 @@ def _blue_hour_journey(frame, t, duration, config):
 
     return _uint8(image)
 
-
-# 6. TRAVEL POSTCARD
 
 def _travel_postcard(frame, t, duration, config):
     image = _grade(frame, config)

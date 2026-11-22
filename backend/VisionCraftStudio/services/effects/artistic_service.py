@@ -20,7 +20,6 @@ def _luma(frame):
 
 
 def _edge_strength(gray):
-    # Outline extraction without OpenCV.
     dx = np.zeros_like(gray)
     dy = np.zeros_like(gray)
 
@@ -28,9 +27,6 @@ def _edge_strength(gray):
     dy[1:, :] = np.abs(gray[1:, :] - gray[:-1, :])
 
     return dx + dy
-
-
-# 1. WATERCOLOR
 
 def _build_watercolor(video, config):
     radius = max(
@@ -63,7 +59,6 @@ def _build_watercolor(video, config):
 
         colors = np.asarray(wash, dtype=np.float32)
 
-        # Flatten nearby colors to create painted regions.
         step = max(2, config["color_step"])
         flattened = np.floor(
             colors / step + 0.5
@@ -93,9 +88,6 @@ def _build_watercolor(video, config):
         return _uint8(colors)
 
     return transform
-
-
-# 2. PENCIL SKETCH
 
 def _build_pencil_sketch(video, config):
     paper = np.asarray(
@@ -137,11 +129,7 @@ def _build_pencil_sketch(video, config):
 
     return transform
 
-
-# 3. OIL PAINTING
-
 def _build_oil_painting(video, config):
-    # Work at a controlled resolution for faster rendering.
     short_side = min(video.w, video.h)
 
     scale = min(
@@ -210,9 +198,6 @@ def _build_oil_painting(video, config):
 
     return transform
 
-
-# 4. PIXEL ART
-
 def _build_pixel_art(video, config):
     block_size = max(
         2,
@@ -245,7 +230,6 @@ def _build_pixel_art(video, config):
             dtype=np.float32,
         )
 
-        # Consistent palette levels across video frames.
         colors = (
             np.round(
                 colors * ((levels - 1) / 255.0)
@@ -264,9 +248,6 @@ def _build_pixel_art(video, config):
         )
 
     return transform
-
-
-# 5. INK ILLUSTRATION
 
 def _build_ink_illustration(video, config):
     paper = np.asarray(
@@ -331,9 +312,6 @@ def _build_ink_illustration(video, config):
 
     return transform
 
-
-# 6. MOSAIC
-
 def _build_mosaic(video, config):
     width, height = video.w, video.h
 
@@ -354,7 +332,6 @@ def _build_mosaic(video, config):
         for i in range(6)
     ]
 
-    # Calculate hexagonal tile positions once per video.
     tiles = []
 
     for row in range(
