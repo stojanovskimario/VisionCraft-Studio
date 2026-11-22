@@ -1175,4 +1175,118 @@ EFFECTS = {
         },
     },
 
+    # ARTISTIC
+
+    "art_watercolor": {
+        "id": "art_watercolor",
+        "name": "Watercolor",
+        "family": "artistic",
+        "description": (
+            "Transforms footage into a soft watercolor painting "
+            "with blended colors, simplified details, and subtle paper texture."
+        ),
+        "config": {
+            "effect_type": "art_watercolor",
+            "wash_radius": 1.7,
+            "saturation": 1.16,
+            "color_step": 35,
+            "wash_mix": 0.68,
+            "paper_color": [248, 246, 238],
+            "paper_opacity": 0.08,
+            "paper_grain": 1.2,
+            "paper_seed": 12,
+        },
+    },
+
+    "art_pencil_sketch": {
+        "id": "art_pencil_sketch",
+        "name": "Pencil Sketch",
+        "family": "artistic",
+        "description": (
+            "Recreates a hand-drawn pencil sketch with "
+            "graphite outlines, grayscale shading, and a light paper background."
+        ),
+        "config": {
+            "effect_type": "art_pencil_sketch",
+            "paper_color": [250, 248, 240],
+            "graphite_color": [35, 36, 43],
+            "shading_strength": 0.42,
+            "edge_range": 40,
+            "line_strength": 0.92,
+        },
+    },
+
+    "art_oil_painting": {
+        "id": "art_oil_painting",
+        "name": "Oil Painting",
+        "family": "artistic",
+        "description": (
+            "Creates a vivid painterly appearance with rich colors, "
+            "simplified surfaces, and defined brush-like details."
+        ),
+        "config": {
+            "effect_type": "art_oil_painting",
+            "working_short_side": 480,
+            "saturation": 1.30,
+            "contrast": 1.12,
+            "color_step": 23,
+            "brush_radius": 1.6,
+            "brush_definition": 140,
+        },
+    },
+
+    "art_pixel_art": {
+        "id": "art_pixel_art",
+        "name": "Pixel Art",
+        "family": "artistic",
+        "description": (
+            "Converts footage into retro-style pixel art with "
+            "large square pixels and a limited color palette."
+        ),
+        "config": {
+            "effect_type": "art_pixel_art",
+            "block_ratio": 0.012,
+            "color_levels": 6,
+        },
+    },
+
+    "art_ink_illustration": {
+        "id": "art_ink_illustration",
+        "name": "Ink Illustration",
+        "family": "artistic",
+        "description": (
+            "Turns footage into a hand-inked illustration "
+            "with dark outlines, crosshatched shadows, and warm paper tones."
+        ),
+        "config": {
+            "effect_type": "art_ink_illustration",
+            "paper_color": [250, 241, 224],
+            "ink_color": [28, 35, 42],
+            "edge_range": 35,
+            "shadow_cutoff": 165,
+            "shadow_ink": 0.35,
+            "hatch_spacing": 11,
+            "hatch_width": 1,
+            "hatch_strength": 0.57,
+        },
+    },
+
+    "art_mosaic": {
+        "id": "art_mosaic",
+        "name": "Mosaic",
+        "family": "artistic",
+        "description": (
+            "Recreates footage as a colorful mosaic of "
+            "hexagonal tiles separated by dark grout."
+        ),
+        "config": {
+            "effect_type": "art_mosaic",
+            "tile_radius_ratio": 0.012,
+            "grout_ratio": 0.12,
+            "grout_color": [25, 27, 37],
+            "sample_blur_ratio": 0.40,
+            "saturation": 1.18,
+        },
+    },
+
 }

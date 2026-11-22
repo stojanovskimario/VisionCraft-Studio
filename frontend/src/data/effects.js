@@ -501,7 +501,6 @@ export const effects = [
         thumbnail: '/effects/travel/blue_hour_journey.jpg',
         preview: '/effects/travel/blue_hour_journey.gif',
     },
-
     {
         id: 'travel_postcard',
         name: 'Travel Postcard',
@@ -510,6 +509,59 @@ export const effects = [
         thumbnail: '/effects/travel/travel_postcard.jpg',
         preview: '/effects/travel/travel_postcard.gif',
     },
+
+
+    // ARTISTIC
+
+    {
+        id: 'art_watercolor',
+        name: 'Watercolor',
+        family: 'artistic',
+        //description: 'Transforms footage into a soft watercolor painting with blended colors and a paper-like texture.',
+        thumbnail: '/effects/artistic/art_watercolor.jpg',
+        preview: '/effects/artistic/art_watercolor.gif',
+    },
+    {
+        id: 'art_pencil_sketch',
+        name: 'Pencil Sketch',
+        family: 'artistic',
+        //description: 'Recreates a pencil drawing with graphite outlines, subtle shading, and a light paper background.',
+        thumbnail: '/effects/artistic/art_pencil_sketch.jpg',
+        preview: '/effects/artistic/art_pencil_sketch.gif',
+    },
+    {
+        id: 'art_oil_painting',
+        name: 'Oil Painting',
+        family: 'artistic',
+        //description: 'Adds rich painted colors, simplified shapes, and defined brush-like details.',
+        thumbnail: '/effects/artistic/art_oil_painting.jpg',
+        preview: '/effects/artistic/art_oil_painting.gif',
+    },
+    {
+        id: 'art_pixel_art',
+        name: 'Pixel Art',
+        family: 'artistic',
+        //description: 'Transforms the scene into retro-style pixel art with blocky pixels and fewer colors.',
+        thumbnail: '/effects/artistic/art_pixel_art.jpg',
+        preview: '/effects/artistic/art_pixel_art.gif',
+    },
+    {
+        id: 'art_ink_illustration',
+        name: 'Ink Illustration',
+        family: 'artistic',
+        //description: 'Creates a hand-inked appearance with dark outlines, textured shadows, and cream-colored paper.',
+        thumbnail: '/effects/artistic/art_ink_illustration.jpg',
+        preview: '/effects/artistic/art_ink_illustration.gif',
+    },
+    {
+        id: 'art_mosaic',
+        name: 'Mosaic',
+        family: 'artistic',
+        //description: 'Recreates the footage using colorful hexagonal tiles separated by dark grout.',
+        thumbnail: '/effects/artistic/art_mosaic.jpg',
+        preview: '/effects/artistic/art_mosaic.gif',
+    },
+
 
 
 ]

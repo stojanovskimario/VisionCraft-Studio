@@ -14,6 +14,7 @@ const familyNames = {
     dreamy: 'Dreamy Effects',
     action: 'Action Effects',
     travel: 'Travel Effects',
+    artistic: 'Artistic Effects',
 }
 
 function EffectLibrary({ selectedEffectId, onSelectEffect }) {
