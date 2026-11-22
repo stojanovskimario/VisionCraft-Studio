@@ -21,11 +21,18 @@ from django.urls import path
 
 from VisionCraftStudio.views import api_test, process_video, process_effect
 
+from VisionCraftStudio.views_photo import process_photo_effect
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/test/', api_test),
     path('api/process-video/', process_video),
     path('api/process-effect/', process_effect),
+    path(
+        "api/process-photo-effect/",
+        process_photo_effect,
+        name="process_photo_effect",
+    ),
 ]
 
 if settings.DEBUG:
