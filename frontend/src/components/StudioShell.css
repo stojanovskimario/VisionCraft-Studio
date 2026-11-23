@@ -1,0 +1,174 @@
+
+.studio-shell {
+    width: 100%;
+    min-width: 0;
+}
+
+.studio-shell__video,
+.studio-shell__photo {
+    width: 100%;
+    min-width: 0;
+}
+
+.studio-header {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    background: linear-gradient(
+        115deg,
+        #101827 0%,
+        #101625 55%,
+        #151b30 100%
+    );
+    border-bottom: 1px solid rgba(160, 180, 210, 0.15);
+}
+
+.studio-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 28px;
+}
+
+.studio-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.studio-brand__symbol {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    color: #8fdcff;
+    background: linear-gradient(145deg, #203f60, #243054);
+    border: 1px solid rgba(126, 207, 255, 0.25);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.studio-brand__symbol svg {
+    width: 31px;
+    height: 31px;
+}
+
+.studio-brand__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+}
+
+.studio-brand__text strong {
+    color: #f7faff;
+    font-size: 20px;
+    font-weight: 750;
+    line-height: 1.1;
+    letter-spacing: -0.8px;
+    white-space: nowrap;
+}
+
+.studio-brand__text strong span {
+    color: #78caff;
+}
+
+.studio-brand__text small {
+    color: #8d9db5;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2.1px;
+    white-space: nowrap;
+}
+
+.studio-navigation {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    background: rgba(5, 10, 20, 0.42);
+    border: 1px solid rgba(160, 180, 210, 0.12);
+    border-radius: 13px;
+}
+
+.studio-navigation__button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    min-height: 43px;
+    padding: 10px 17px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: #a8b4c8;
+    background: transparent;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 650;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.studio-navigation__button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.studio-navigation__button:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.studio-navigation__button--active,
+.studio-navigation__button--active:hover {
+    color: #fff;
+    background: linear-gradient(135deg, #267eb5, #355ca9);
+    border-color: rgba(135, 206, 255, 0.35);
+    box-shadow: 0 3px 14px rgba(28, 109, 190, 0.25);
+}
+
+.studio-navigation__button:focus-visible {
+    outline: 2px solid #8fdcff;
+    outline-offset: 3px;
+}
+
+@media (max-width: 700px) {
+    .studio-header__inner {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .studio-brand {
+        justify-content: center;
+    }
+
+    .studio-navigation {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .studio-navigation__button {
+        flex: 1;
+        padding: 10px 8px;
+    }
+}
+
+@media (max-width: 380px) {
+    .studio-brand__text strong {
+        font-size: 17px;
+    }
+
+    .studio-navigation__button {
+        gap: 5px;
+        font-size: 12px;
+    }
+}

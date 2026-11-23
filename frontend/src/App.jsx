@@ -1,5 +1,7 @@
-import { useState } from 'react'
+
+import { useEffect, useState } from 'react'
 import { processVideo, processEffect } from './services/api'
+import { effects } from './data/effects'
 
 import VideoUpload from './components/VideoUpload'
 import ThemeSelector from './components/ThemeSelector'
@@ -18,11 +20,23 @@ import TravelSteps from './components/TravelSteps.jsx'
 import SilentFilmSteps from './components/SilentFilmSteps.jsx'
 import UnderwaterSteps from './components/UnderwaterSteps.jsx'
 
+import './VideoStudio.css'
+
+
+function formatFileSize(bytes) {
+    if (typeof bytes !== 'number') {
+        return ''
+    }
+
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+}
+
+
 function App() {
     const [video, setVideo] = useState(null)
     const [theme, setTheme] = useState('')
 
-    // New effect library state
+    // Individual effect library
     const [selectedEffectId, setSelectedEffectId] = useState('')
 
     const [choices, setChoices] = useState({
@@ -55,7 +69,26 @@ function App() {
     const [error, setError] = useState('')
     const [watermark, setWatermark] = useState(null)
 
-    // Existing theme processing
+    // Source video preview — visual only
+    const [videoPreviewUrl, setVideoPreviewUrl] = useState(null)
+
+    useEffect(() => {
+        if (!video) {
+            setVideoPreviewUrl(null)
+            return
+        }
+
+        const url = URL.createObjectURL(video)
+        setVideoPreviewUrl(url)
+
+        return () => URL.revokeObjectURL(url)
+    }, [video])
+
+    const selectedEffect = effects.find(
+        (effect) => effect.id === selectedEffectId
+    )
+
+    // ORIGINAL THEME PROCESSING — UNCHANGED
     const handleProcess = async () => {
         if (!video) {
             setError('Please select a video.')
@@ -88,7 +121,7 @@ function App() {
         }
     }
 
-    // New individual effect processing
+    // INDIVIDUAL EFFECT PROCESSING — UNCHANGED
     const handleProcessEffect = async () => {
         if (!video) {
             setError('Please select a video.')
@@ -127,179 +160,508 @@ function App() {
     }
 
     return (
-        <div>
-            <h1>VisionCraftStudio</h1>
+        <div className="video-studio">
 
-            <VideoUpload
-                video={video}
-                setVideo={setVideo}
-            />
+            {/* HERO */}
+            <section className="video-studio__hero">
+                <div className="video-studio__eyebrow">
+                    <span className="video-studio__eyebrow-dot" />
+                    VIDEO WORKSPACE
+                </div>
 
-            {/* New effect library */}
-            <EffectLibrary
-                selectedEffectId={selectedEffectId}
-                onSelectEffect={(effectId) => {
-                    setSelectedEffectId(effectId)
-                    setError('')
-                    setResult(null)
-                }}
-            />
+                <h1>
+                    Bring your videos{' '}
+                    <span>to life.</span>
+                </h1>
 
-            <button
-                type="button"
-                onClick={handleProcessEffect}
-                disabled={processing || !selectedEffectId}
-            >
-                {processing ? 'Processing...' : 'Apply Selected Effect'}
-            </button>
+                <p>
+                    Transform ordinary footage into something
+                    extraordinary. Explore cinematic looks,
+                    artistic styles, and creative motion effects.
+                </p>
 
-            <hr />
+                <div className="video-studio__hero-stats">
+                    <span>
+                        <strong>{effects.length}</strong>
+                        {' '}Video effects
+                    </span>
+                    <span>12 Creative families</span>
+                    <span>Custom visual transformations</span>
+                </div>
+            </section>
 
-            {/* Original theme workflow - kept temporarily */}
-            <details>
-                <summary>Original Theme Workflow</summary>
 
-                <ThemeSelector
-                    theme={theme}
-                    setTheme={setTheme}
+            {/* VIDEO WORKSPACE */}
+            <section className="video-studio__workspace">
+                <div className="video-studio__section-heading">
+                    <div>
+                        <span className="video-studio__kicker">
+                            YOUR WORKSPACE
+                        </span>
+
+                        <h2>Start creating</h2>
+
+                        <p>
+                            Upload your footage and choose
+                            the perfect effect.
+                        </p>
+                    </div>
+
+                    <span className="video-studio__status">
+                        <span />
+                        {video ? 'Video ready' : 'Ready to create'}
+                    </span>
+                </div>
+
+                <div className="video-studio__workspace-grid">
+
+                    {/* UPLOAD PANEL */}
+                    <div className="video-studio__panel">
+                        <div className="video-studio__panel-heading">
+                            <span className="video-studio__step-number">
+                                01
+                            </span>
+
+                            <div>
+                                <h3>Upload your video</h3>
+                                <p>Select the footage you want to edit</p>
+                            </div>
+                        </div>
+
+                        <div className="video-studio__upload-body">
+                            <VideoUpload
+                                video={video}
+                                setVideo={setVideo}
+                            />
+                        </div>
+
+                        {video && (
+                            <div className="video-studio__file-info">
+                                <div className="video-studio__file-icon">
+                                    <svg
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        strokeWidth="1.8"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        aria-hidden="true"
+                                    >
+                                        <rect
+                                            x="3" y="5"
+                                            width="14" height="14"
+                                            rx="3"
+                                        />
+                                        <path d="m17 10 4-3v10l-4-3" />
+                                    </svg>
+                                </div>
+
+                                <div className="video-studio__file-text">
+                                    <strong title={video.name}>
+                                        {video.name}
+                                    </strong>
+
+                                    <span>
+                                        {formatFileSize(video.size)}
+                                    </span>
+                                </div>
+
+                                <span className="video-studio__file-check">
+                                    ✓
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+
+                    {/* VIDEO PREVIEW */}
+                    <div className="video-studio__panel">
+                        <div className="video-studio__panel-heading">
+                            <span className="video-studio__step-number">
+                                02
+                            </span>
+
+                            <div>
+                                <h3>Source preview</h3>
+                                <p>Review your original footage</p>
+                            </div>
+                        </div>
+
+                        <div className="video-studio__preview">
+                            {videoPreviewUrl ? (
+                                <video
+                                    src={videoPreviewUrl}
+                                    controls
+                                    playsInline
+                                    preload="metadata"
+                                    className="video-studio__preview-video"
+                                />
+                            ) : (
+                                <div className="video-studio__preview-empty">
+                                    <div className="video-studio__preview-icon">
+                                        <svg
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="1.5"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            aria-hidden="true"
+                                        >
+                                            <rect
+                                                x="3" y="5"
+                                                width="14" height="14"
+                                                rx="3"
+                                            />
+                                            <path d="m17 10 4-3v10l-4-3" />
+                                        </svg>
+                                    </div>
+
+                                    <strong>
+                                        Your video preview
+                                    </strong>
+
+                                    <p>
+                                        Upload a video to see
+                                        it here.
+                                    </p>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="video-studio__preview-footer">
+                            <span>
+                                {video
+                                    ? 'Original footage'
+                                    : 'No video selected'}
+                            </span>
+
+                            <span>
+                                {video
+                                    ? 'Ready for editing'
+                                    : 'Awaiting upload'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            {/* VIDEO EFFECT LIBRARY */}
+            <section className="video-studio__library">
+                <div className="video-studio__library-intro">
+                    <div>
+                        <span className="video-studio__kicker">
+                            DISCOVER YOUR STYLE
+                        </span>
+
+                        <h2>Explore video effects</h2>
+
+                        <p>
+                            Browse the collection and select
+                            an effect for your video.
+                        </p>
+                    </div>
+                </div>
+
+                <EffectLibrary
+                    selectedEffectId={selectedEffectId}
+                    onSelectEffect={(effectId) => {
+                        setSelectedEffectId(effectId)
+                        setError('')
+                        setResult(null)
+                    }}
                 />
+            </section>
 
-                {theme === 'vintage' && (
-                    <VintageSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
 
-                {theme === 'futuristic' && (
-                    <FuturisticSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                        onProcess={handleProcess}
-                        processing={processing}
-                    />
-                )}
+            {/* PROCESSING BAR */}
+            <div className="video-studio__apply-bar">
+                <div className="video-studio__apply-info">
+                    <span>SELECTED EFFECT</span>
 
-                {theme === 'retro' && (
-                    <RetroSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                        onProcess={handleProcess}
-                        processing={processing}
-                    />
-                )}
+                    <strong>
+                        {selectedEffect
+                            ? selectedEffect.name
+                            : 'No effect selected'}
+                    </strong>
 
-                {theme === 'cinematic' && (
-                    <CinematicSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
+                    <small>
+                        {selectedEffect
+                            ? 'Ready to apply to your footage'
+                            : 'Choose an effect from the library'}
+                    </small>
+                </div>
 
-                {theme === 'noir' && (
-                    <NoirSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
+                <button
+                    type="button"
+                    className="video-studio__apply-button"
+                    onClick={handleProcessEffect}
+                    disabled={processing || !selectedEffectId}
+                >
+                    {processing ? (
+                        <>
+                            <span className="video-studio__spinner" />
+                            Processing...
+                        </>
+                    ) : (
+                        <>
+                            Apply Selected Effect
 
-                {theme === 'vhs' && (
-                    <VHSSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M5 12h14" />
+                                <path d="m13 6 6 6-6 6" />
+                            </svg>
+                        </>
+                    )}
+                </button>
+            </div>
 
-                {theme === 'dreamy' && (
-                    <DreamySteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
+            {error && (
+                <div
+                    className="video-studio__error"
+                    role="alert"
+                >
+                    {error}
+                </div>
+            )}
 
-                {theme === 'action' && (
-                    <ActionSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
 
-                {theme === 'cyberpunk' && (
-                    <CyberpunkSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
+            {/* PROCESSED VIDEO */}
+            <section className="video-studio__result">
+                <div className="video-studio__section-heading">
+                    <div>
+                        <span className="video-studio__kicker">
+                            YOUR FINAL CREATION
+                        </span>
 
-                {theme === 'travel' && (
-                    <TravelSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
+                        <h2>Processed video</h2>
 
-                {theme === 'silent_film' && (
-                    <SilentFilmSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
+                        <p>
+                            Preview and download your
+                            transformed footage.
+                        </p>
+                    </div>
 
-                {theme === 'underwater' && (
-                    <UnderwaterSteps
-                        choices={choices}
-                        setChoices={setChoices}
-                        onProcess={handleProcess}
-                        processing={processing}
-                        watermark={watermark}
-                        setWatermark={setWatermark}
-                    />
-                )}
-            </details>
+                    {result && (
+                        <span className="video-studio__result-ready">
+                            ✓ Ready
+                        </span>
+                    )}
+                </div>
 
-            {error && <p>{error}</p>}
+                <div className="video-studio__result-panel">
+                    {processing ? (
+                        <div className="video-studio__result-empty">
+                            <span className="video-studio__spinner video-studio__spinner--large" />
 
-            <ProcessedVideo result={result} />
+                            <strong>
+                                Transforming your video
+                            </strong>
+
+                            <p>
+                                Your selected effect is being applied.
+                            </p>
+                        </div>
+                    ) : !result ? (
+                        <div className="video-studio__result-empty">
+                            <div className="video-studio__result-icon">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <rect
+                                        x="3" y="3"
+                                        width="18" height="18"
+                                        rx="3"
+                                    />
+                                    <path d="m3 17 5-5 4 4 3-3 6 6" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                </svg>
+                            </div>
+
+                            <strong>
+                                Your finished video will appear here
+                            </strong>
+
+                            <p>
+                                Upload footage, select an effect,
+                                and start processing.
+                            </p>
+                        </div>
+                    ) : null}
+
+                    <ProcessedVideo result={result} />
+                </div>
+            </section>
+
+
+            {/* ORIGINAL THEME WORKFLOW — PRESERVED */}
+            <section className="video-studio__legacy">
+                <details>
+                    <summary>
+                        <span>
+                            Original Theme Workflow
+                        </span>
+
+                        <small>
+                            Legacy editing controls
+                        </small>
+                    </summary>
+
+                    <div className="video-studio__legacy-content">
+                        <ThemeSelector
+                            theme={theme}
+                            setTheme={setTheme}
+                        />
+
+                        {theme === 'vintage' && (
+                            <VintageSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'futuristic' && (
+                            <FuturisticSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                                onProcess={handleProcess}
+                                processing={processing}
+                            />
+                        )}
+
+                        {theme === 'retro' && (
+                            <RetroSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                                onProcess={handleProcess}
+                                processing={processing}
+                            />
+                        )}
+
+                        {theme === 'cinematic' && (
+                            <CinematicSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'noir' && (
+                            <NoirSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'vhs' && (
+                            <VHSSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'dreamy' && (
+                            <DreamySteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'action' && (
+                            <ActionSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'cyberpunk' && (
+                            <CyberpunkSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'travel' && (
+                            <TravelSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'silent_film' && (
+                            <SilentFilmSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+
+                        {theme === 'underwater' && (
+                            <UnderwaterSteps
+                                choices={choices}
+                                setChoices={setChoices}
+                                onProcess={handleProcess}
+                                processing={processing}
+                                watermark={watermark}
+                                setWatermark={setWatermark}
+                            />
+                        )}
+                    </div>
+                </details>
+            </section>
         </div>
     )
 }
