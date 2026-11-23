@@ -99,9 +99,32 @@ function EffectLibrary({
                     </p>
                 </div>
 
-                <span className="effect-library__count">
-                    {filteredEffects.length} / {effects.length} effects
-                </span>
+                <div className="effect-library__count">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                    </svg>
+
+                    <span className="effect-library__count-numbers">
+                        <strong>{filteredEffects.length}</strong>
+                        <span>/</span>
+                        {effects.length}
+                    </span>
+
+                    <span className="effect-library__count-label">
+                        effects
+                    </span>
+                </div>
             </div>
 
 
@@ -163,7 +186,9 @@ function EffectLibrary({
                         aria-pressed={activeFamily === family}
                         onClick={() => setActiveFamily(family)}
                     >
-                        {familyNames[family] || family}
+                        <span>
+                            {familyNames[family]?.replace(/ Effects$/, '') || family}
+                        </span>
                     </button>
                 ))}
             </div>
@@ -186,11 +211,13 @@ function EffectLibrary({
                             </h3>
 
                             <span className="effect-library__family-count">
-                                {familyEffects.length}
-                                {' '}
-                                {familyEffects.length === 1
-                                    ? 'effect'
-                                    : 'effects'}
+                                <strong>{familyEffects.length}</strong>
+
+                                <span>
+                                    {familyEffects.length === 1
+                                        ? 'effect'
+                                        : 'effects'}
+                                </span>
                             </span>
                         </div>
 

@@ -5,6 +5,7 @@ import App from "../App";
 import PhotoEditor from "./PhotoEditor";
 
 import "./StudioShell.css";
+import "./StudioPalette.css";
 
 
 function EditorIcon({ type }) {
