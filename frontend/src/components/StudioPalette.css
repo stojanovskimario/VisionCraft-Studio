@@ -830,3 +830,108 @@
         font-size: 15px;
     }
 }
+
+.studio-shell .video-studio__hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+
+.studio-shell .video-studio__hero-video {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    z-index: 0;
+    pointer-events: none;
+}
+
+.studio-shell .video-studio__hero::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        90deg,
+        rgba(10, 13, 23, 0.97) 0%,
+        rgba(13, 16, 29, 0.85) 38%,
+        rgba(19, 17, 37, 0.63) 70%,
+        rgba(22, 18, 43, 0.38) 100%
+    );
+
+    z-index: 1;
+    pointer-events: none;
+}
+
+
+.studio-shell .video-studio__hero
+> :not(.video-studio__hero-video) {
+    position: relative;
+    z-index: 2;
+}
+
+
+.studio-shell .video-studio__hero::before {
+    z-index: 3;
+}
+
+
+.studio-shell .photo-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(10, 13, 23, 0.97) 0%,
+            rgba(13, 16, 29, 0.84) 38%,
+            rgba(19, 17, 37, 0.62) 70%,
+            rgba(22, 18, 43, 0.35) 100%
+        ),
+        url("/hero/photo-hero.jpg")
+        center / cover no-repeat;
+
+    border-color: rgba(148, 137, 255, 0.25);
+}
+
+@media (max-width: 600px) {
+    .studio-shell .photo-hero {
+        background:
+            linear-gradient(
+                90deg,
+                rgba(10, 13, 23, 0.91),
+                rgba(18, 16, 34, 0.76)
+            ),
+            url("/hero/photo-hero.jpg")
+            center / cover no-repeat;
+    }
+
+    .studio-shell .video-studio__hero::after {
+        background: rgba(10, 13, 23, 0.78);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .studio-shell .video-studio__hero-video {
+        display: none;
+    }
+}
+
+.studio-shell .effect-library__search:focus,
+.studio-shell .effect-library__search:focus-visible,
+.studio-shell .effect-library__search input:focus,
+.studio-shell .effect-library__search input:focus-visible,
+.studio-shell .photo-library__search:focus,
+.studio-shell .photo-library__search:focus-visible,
+.studio-shell .photo-library__search input:focus,
+.studio-shell .photo-library__search input:focus-visible {
+    outline: none;
+}

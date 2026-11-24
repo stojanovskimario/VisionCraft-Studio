@@ -164,6 +164,21 @@ function App() {
 
             {/* HERO */}
             <section className="video-studio__hero">
+                <video
+                    className="video-studio__hero-video"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    aria-hidden="true"
+                    tabIndex={-1}
+                >
+                    <source
+                        src="/hero/video-hero.mp4"
+                        type="video/mp4"
+                    />
+                </video>
                 <div className="video-studio__eyebrow">
                     <span className="video-studio__eyebrow-dot" />
                     VIDEO WORKSPACE
