@@ -1083,18 +1083,24 @@ EFFECTS = {
         "id": "mountain_air",
         "name": "Mountain Air",
         "family": "travel",
-        "description": "Adds crisp detail, cool shadows, natural colors, and clarity to scenic landscapes.",
+        "description": (
+            "A cinematic mountain-inspired reveal with a gentle pullback, "
+            "soft drifting haze and a moving sunlight sweep."
+        ),
         "config": {
-            "effect_type": "mountain_air",
-            "saturation": 1.06,
-            "vibrance": 0.12,
-            "contrast": 1.10,
-            "brightness": 1.01,
-            "shadow_lift": 9,
-            "highlight_recovery": 10,
-            "shadow_tint": [-2, 2, 7],
-            "clarity": 0.75,
-            "detail_radius": 1.6,
+            "effect_type": "summit_reveal",
+            "start_zoom": 1.08,
+            "end_zoom": 1.00,
+            "drift_x_ratio": 0.012,
+            "drift_y_ratio": 0.008,
+            "haze_strength": 0.38,
+            "sun_strength": 0.30,
+            "red": 0.98,
+            "green": 1.03,
+            "blue": 1.08,
+            "contrast": 1.04,
+            "brightness": 1.03,
+            "saturation": 1.08,
         },
     },
 
@@ -1162,24 +1168,51 @@ EFFECTS = {
         },
     },
 
-
     "travel_postcard": {
         "id": "travel_postcard",
         "name": "Travel Postcard",
         "family": "travel",
-        "description": "Creates a vibrant vacation postcard with a clean white border and gentle camera movement.",
+        "description": (
+            "Full-screen travel memories swoop across the video "
+            "in quick succession, revealing snapshots from "
+            "different moments before returning to the footage."
+        ),
         "config": {
-            "effect_type": "travel_postcard",
-            "saturation": 1.12,
-            "vibrance": 0.12,
-            "contrast": 1.02,
-            "brightness": 1.04,
-            "shadow_lift": 7,
-            "highlight_recovery": 10,
-            "zoom_amount": 0.045,
-            "pan_amount": 0.35,
-            "border_ratio": 0.027,
-            "border_color": [249, 246, 238],
+            "effect_type": "postcard_memories",
+
+            "card_scale": 1.10,
+
+            "tilt_angles": [
+                -5.0,
+                4.5,
+                -3.5,
+            ],
+
+            "swoop_blur": 14.0,
+
+            "video_saturation": 1.13,
+            "video_contrast": 1.04,
+            "video_brightness": 1.01,
+
+            "snapshot_saturation": 1.15,
+            "snapshot_contrast": 1.09,
+            "snapshot_warmth": 0.045,
+
+            "sequence_start_seconds": 2.0,
+
+            "cycle_seconds": 5.0,
+
+            "swoop_seconds": 0.23,
+
+            "hold_seconds": 0.42,
+
+            "exit_seconds": 0.22,
+
+            "sample_offsets_seconds": [
+                0.65,
+                1.55,
+                2.45,
+            ],
         },
     },
 
