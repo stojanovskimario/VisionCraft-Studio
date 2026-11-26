@@ -440,76 +440,49 @@ def apply_extended_photo_effect(image, effect_id, config=None):
 
         return _vignette(result, 0.47)
 
-
     if effect_id == "evidence_triptych":
+        gray = ImageOps.grayscale(image).convert("RGB")
+
         canvas = Image.new(
             "RGB",
             (w, h),
-            (17, 20, 24),
+            (23, 23, 23),
         )
 
-        draw = ImageDraw.Draw(canvas)
+        center_w = max(1, int(w * 0.55))
+        left_w = max(1, (w - center_w) // 2)
+        right_w = max(1, w - center_w - left_w)
 
-        border = max(5, w // 80)
-        gap = max(3, w // 120)
+        side_image = ImageEnhance.Brightness(gray).enhance(0.65)
 
-        pane_w = max(
-            1,
-            (w - 2*border - 2*gap) // 3,
+        left_panel = ImageOps.fit(
+            side_image,
+            (left_w, h),
+            method=RESAMPLE,
+            centering=(0.30, 0.5),
         )
 
-        pane_h = max(
-            1,
-            h - 2*border,
+        canvas.paste(left_panel, (0, 0))
+
+        right_panel = ImageOps.fit(
+            side_image,
+            (right_w, h),
+            method=RESAMPLE,
+            centering=(0.70, 0.5),
         )
 
-        variants = [
-            ImageEnhance.Contrast(
-                ImageOps.grayscale(image).convert("RGB")
-            ).enhance(1.45),
+        canvas.paste(right_panel, (left_w + center_w, 0))
 
-            _tone(
-                image, 0.68, 1.04, 1.18,
-                1.25, 0.9, 0.68,
-            ),
+        center_image = ImageOps.contain(
+            gray,
+            (center_w, h),
+            method=RESAMPLE,
+        )
 
-            _tone(
-                image, 1.28, 0.71, 0.68,
-                1.30, 0.8, 0.55,
-            ),
-        ]
+        center_x = left_w + (center_w - center_image.width) // 2
+        center_y = (h - center_image.height) // 2
 
-        for index, source in enumerate(variants):
-            x0 = border + index * (pane_w + gap)
-
-            pane = ImageOps.fit(
-                source,
-                (pane_w, pane_h),
-                method=RESAMPLE,
-            )
-
-            canvas.paste(pane, (x0, border))
-
-            draw.rectangle(
-                (
-                    x0, border,
-                    x0 + pane_w - 1,
-                    border + pane_h - 1,
-                ),
-                outline=(195, 195, 191),
-                width=max(1, border // 4),
-            )
-
-            draw.rectangle(
-                (x0+5, border+5, x0+40, border+19),
-                fill=(17, 20, 24),
-            )
-
-            draw.text(
-                (x0+9, border+6),
-                f"0{index+1}",
-                fill=(240, 234, 219),
-            )
+        canvas.paste(center_image, (center_x, center_y))
 
         return canvas
 
